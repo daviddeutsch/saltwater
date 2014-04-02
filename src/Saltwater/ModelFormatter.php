@@ -8,7 +8,7 @@ class ModelFormatter implements RedBean_IModelFormatter
 {
 	public function formatModel( $model )
 	{
-		return 'MangroveServer\Models\\'
+		return 'Saltwater\Models\\'
 		. str_replace( ' ', '', ucwords(str_replace('_', ' ', $model)) );
 	}
 }

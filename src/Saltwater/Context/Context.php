@@ -30,11 +30,11 @@ class Context
 
 	public function getServiceClass( $service )
 	{
-		$class = 'MangroveServer\Service\\' . ucfirst($service);
+		$class = 'Saltwater\Service\\' . ucfirst($service);
 
 		if ( !class_exists($class) ) {
 			if ( in_array($service, $this->services) ) {
-				$class = 'MangroveServer\Service\Rest';
+				$class = 'Saltwater\Service\Rest';
 			} else {
 				return '';
 			}

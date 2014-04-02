@@ -88,7 +88,7 @@ class Router
 			return;
 		}
 
-		$c = 'MangroveServer\Context\\' . ucfirst($root);
+		$c = 'Saltwater\Context\\' . ucfirst($root);
 
 		if ( class_exists($c) ) {
 			// This is for switching into a child context
