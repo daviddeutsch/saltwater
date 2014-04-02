@@ -1,7 +1,7 @@
 <?php
-namespace MangroveServer\Service;
+namespace Saltwater\Service;
 
-class Info extends AbstractService
+class Info extends Service
 {
 	public function getInfo()
 	{

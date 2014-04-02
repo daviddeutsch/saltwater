@@ -1,8 +1,8 @@
 <?php
 
-namespace MangroveServer\Service;
+namespace Saltwater\Service;
 
-class AbstractService
+class Service
 {
 	protected $context;
 

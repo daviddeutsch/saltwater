@@ -1,8 +1,8 @@
 <?php
 
-namespace MangroveServer\Service;
+namespace Saltwater\Service;
 
-class Rest extends AbstractService
+class Rest extends Service
 {
 	public function call( $call, $data=null )
 	{
@@ -15,21 +15,13 @@ class Rest extends AbstractService
 
 	protected function restCall( $call, $data=null )
 	{
-		$root = strtolower( str_replace($call->http, '', $call->method) );
+		$path = strtolower( str_replace($call->http, '', $call->method) );
 
 		if ( is_numeric($call->path) ) {
-			return $this->callPath(
-				$call->http,
-				$root . '/' . $call->path,
-				$data
-			);
-		} else {
-			return $this->callPath(
-				$call->http,
-				$root,
-				$data
-			);
+			$path .= '/' . $call->path;
 		}
+
+		return $this->callPath($call->http, $path, $data);
 	}
 
 	protected function callPath( $http, $path, $data=null )
