@@ -4,7 +4,7 @@ namespace Saltwater\Context;
 
 use Saltwater\Server as S;
 
-class Generic
+class Context
 {
 	public $root = false;
 
