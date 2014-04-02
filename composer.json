@@ -1,0 +1,25 @@
+{
+	"name" : "daviddeutsch/saltwater",
+	"description" : "A minimal, portable scaffolding for deploying functionality in harsh environments.",
+	"authors" : [{
+			"name" : "David Deutsch",
+			"email" : "skore@valanx.org",
+			"homepage" : "http://valanx.org",
+			"role" : "Chief Botanist"
+		}
+	],
+	"keywords" : [],
+	"license" : "GPL-3.0+",
+	"minimum-stability": "dev",
+	"require" : {
+		"php" : ">=5.3",
+		"daviddeutsch/redbean-adaptive": "dev-master",
+		"psr/log": "dev-master",
+		"ircmaxell/password-compat": "dev-master"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"Saltwater" : "/src/Saltwater"
+		}
+	}
+}

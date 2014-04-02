@@ -27,41 +27,15 @@ class Server
 
 	public static function init()
 	{
-		self::$config = json_decode(
-			file_get_contents( __DIR__.'/../../config/config.json' )
-		);
-
 		self::db();
-
-		self::$streams = self::$r->x->all->stream->find();
-
-		if ( empty(self::$streams) ) {
-			foreach ( self::$config->streams as $cfg ) {
-				$stream = self::$r->_('stream');
-
-				$stream->fromConfig($cfg);
-
-				self::$r->_($stream);
-			}
-
-			self::$streams = self::$r->x->all->stream->find();
-		}
 
 		self::$log = new Logger();
 
-		self::$route = new MangroveRouter();
+		self::$route = new Router();
 	}
 
 	public static function route()
 	{
-		IntrusionCheck::call();
-
-		RouteCheck::call();
-
-		SubjectCheck::call();
-
-		PermissionCheck::call();
-
 		self::$route->go();
 	}
 
