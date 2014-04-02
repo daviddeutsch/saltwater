@@ -25,13 +25,13 @@ class Server
 	 */
 	public static $log;
 
-	public static function init()
+	public static function init( $context )
 	{
 		self::db();
 
 		self::$log = new Logger();
 
-		self::$route = new Router();
+		self::$route = new Router($context);
 	}
 
 	public static function route()
