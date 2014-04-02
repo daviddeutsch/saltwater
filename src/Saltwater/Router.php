@@ -12,15 +12,13 @@ class Router
 
 	public $chain = array();
 
-	public function __construct()
+	public function __construct( $root_context )
 	{
 		$this->uri = $this->getURI();
 
 		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
 
-		$context = new Context\Root();
-
-		$this->explode( $context, $this->http, explode('/', $this->uri) );
+		$this->explode( $root_context, $this->http, explode('/', $this->uri) );
 	}
 
 	protected function getURI()
