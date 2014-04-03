@@ -8,6 +8,8 @@ class Context
 {
 	public $root = false;
 
+	public $namespace;
+
 	public $parent;
 
 	public $data;
@@ -21,6 +23,12 @@ class Context
 		} else {
 			$this->parent = $parent;
 		}
+
+		$namespace = explode('\\', __NAMESPACE__ );
+
+		unset($namespace[count($namespace)]);
+
+		$this->namespace = implode('\\', $namespace);
 	}
 
 	public function pushData( $data )
@@ -28,16 +36,21 @@ class Context
 
 	}
 
-	public function getServiceClass( $service )
+	public function findService( $name )
 	{
-		$class = 'Saltwater\Service\\' . ucfirst($service);
+		$class = $this->namespace . '\Service\\' . ucfirst($name);
 
-		if ( !class_exists($class) ) {
-			if ( in_array($service, $this->services) ) {
-				$class = 'Saltwater\Service\Rest';
-			} else {
-				return '';
+		if ( class_exists($class) ) return $class;
+
+		if ( in_array($name, $this->services) ) {
+			$class = $this->namespace . '\Service\Rest';
+
+			if ( !class_exists($class) ) {
+				$class = $this->namespace . '\Service\Rest';
 			}
+
+		} else {
+			return '';
 		}
 
 		return $class;
@@ -56,6 +69,38 @@ class Context
 		} else {
 			return $this->parent->getDB();
 		}
+	}
+
+	public function db()
+	{
+		if ( empty(self::$r) ) {
+			self::$r = new \RedBean_Instance();
+		}
+
+		$cfg = self::$config->database;
+
+		if ( empty(self::$r->toolboxes) ) {
+			self::$r->setup(
+				'mysql:host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
+				$cfg->user,
+				$cfg->password
+			);
+
+			self::$r->setupPipeline();
+		}
+
+		if ( !isset(self::$r->toolboxes[$cfg->name]) ) {
+			self::$r->addDatabase(
+				$cfg->name,
+				'mysql:host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
+				$cfg->user,
+				$cfg->password
+			);
+		}
+
+		self::$r->selectDatabase($cfg->name);
+
+		self::$r->useWriterCache(true);
 	}
 
 	public function getInfo()

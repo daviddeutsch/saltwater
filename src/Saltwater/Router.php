@@ -19,6 +19,8 @@ class Router
 		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
 
 		$this->explode( $root_context, $this->http, explode('/', $this->uri) );
+
+		$root_context->verifyRoute();
 	}
 
 	protected function getURI()
@@ -86,9 +88,9 @@ class Router
 			return;
 		}
 
-		$c = 'Saltwater\Context\\' . ucfirst($root);
+		$c = S::findContext($root);
 
-		if ( class_exists($c) ) {
+		if ( $c ) {
 			// This is for switching into a child context
 			$context = new $c($context);
 

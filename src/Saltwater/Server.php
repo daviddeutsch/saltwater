@@ -2,6 +2,9 @@
 
 namespace Saltwater;
 
+use Saltwater\Logger as Logger;
+use Saltwater\Router as Router;
+
 class Server
 {
 	public static $config;
@@ -16,17 +19,19 @@ class Server
 	public static $route;
 
 	/**
-	 * @var \RedBean_Instance
-	 */
-	public static $r;
-
-	/**
 	 * @var Logger
 	 */
 	public static $log;
 
+	/**
+	 * @var \RedBean_Instance
+	 */
+	public static $r;
+
 	public static function init( $context )
 	{
+		self::$config = $context->config;
+
 		self::db();
 
 		self::$log = new Logger();
@@ -69,8 +74,15 @@ class Server
 		self::$r->selectDatabase($cfg->name);
 
 		self::$r->useWriterCache(true);
+	}
 
-		self::$r->redbean->beanhelper->setModelFormatter(new ModelFormatter);
+	public static function findContext( $name )
+	{
+		$class = 'Saltwater\Context\\' . ucfirst($name);
+
+		if ( !class_exists($class) ) return false;
+
+		return $class;
 	}
 
 	public static function returnRedirect( $url )
