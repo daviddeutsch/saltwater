@@ -8,7 +8,7 @@ class Context
 {
 	public $root = false;
 
-	public $namespace;
+	public $namespace = 'Saltwater';
 
 	public $parent;
 
@@ -23,12 +23,6 @@ class Context
 		} else {
 			$this->parent = $parent;
 		}
-
-		$namespace = explode('\\', __NAMESPACE__ );
-
-		unset($namespace[count($namespace)]);
-
-		$this->namespace = implode('\\', $namespace);
 	}
 
 	public function pushData( $data )
