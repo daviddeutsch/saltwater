@@ -4,11 +4,12 @@ namespace Saltwater;
 
 use RedBean_IModelFormatter;
 
+use Saltwater\Server as S;
+
 class ModelFormatter implements RedBean_IModelFormatter
 {
-	public function formatModel( $model )
+	public function formatModel( $name )
 	{
-		return 'Saltwater\Models\\'
-		. str_replace( ' ', '', ucwords(str_replace('_', ' ', $model)) );
+		return S::formatModel($name);
 	}
 }

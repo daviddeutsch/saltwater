@@ -94,6 +94,8 @@ class Router
 			// This is for switching into a child context
 			$context = new $c($context);
 
+			S::pushContext($context);
+
 			$root = array_shift($path);
 		}
 

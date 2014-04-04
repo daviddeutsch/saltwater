@@ -2,9 +2,6 @@
 
 namespace Saltwater;
 
-use Saltwater\Logger as Logger;
-use Saltwater\Router as Router;
-
 class Server
 {
 	public static $config;
@@ -12,6 +9,8 @@ class Server
 	public static $subject;
 
 	public static $session;
+
+	public static $context;
 
 	/**
 	 * @var Router
@@ -44,6 +43,24 @@ class Server
 		self::$route->go();
 	}
 
+	public static function pushContext( $context )
+	{
+		array_unshift(self::$context, $context);
+	}
+
+	public static function formatModel( $name )
+	{
+		foreach ( self::$context as $context ) {
+			$model = $context->formatModel($name);
+
+			if ( !empty($model) ) {
+				return $model;
+			}
+		}
+
+		return $name;
+	}
+
 	public static function db()
 	{
 		if ( empty(self::$r) ) {
@@ -72,6 +89,8 @@ class Server
 		}
 
 		self::$r->selectDatabase($cfg->name);
+
+		self::$r->redbean->beanhelper->setModelFormatter(new ModelFormatter);
 
 		self::$r->useWriterCache(true);
 	}

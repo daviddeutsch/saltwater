@@ -62,6 +62,14 @@ class Context
 		return new $service($this, $result);
 	}
 
+	public function formatModel( $name )
+	{
+		return $this->namespace .'\Models\\'
+			. str_replace(' ', '',
+				ucwords( str_replace('_', ' ', $name) )
+			);
+	}
+
 	public function getDB()
 	{
 		if ( $this->root ) {
