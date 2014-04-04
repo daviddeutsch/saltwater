@@ -10,7 +10,7 @@ class Server
 
 	public static $session;
 
-	public static $context;
+	public static $context = array();
 
 	/**
 	 * @var Router
@@ -36,6 +36,8 @@ class Server
 		self::$log = new Logger();
 
 		self::$route = new Router($context);
+
+		self::$route->verify($context);
 	}
 
 	public static function route()

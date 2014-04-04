@@ -21,7 +21,10 @@ class Router
 		S::pushContext($root_context);
 
 		$this->explode( $root_context, $this->http, explode('/', $this->uri) );
+	}
 
+	public function verify($root_context)
+	{
 		$root_context->verifyRoute();
 	}
 
@@ -123,7 +126,7 @@ class Router
 			$path = null;
 		}
 
-		$class = $context->getServiceClass($service);
+		$class = $context->findService($service);
 
 		if ( strpos($method, '-') ) {
 			$method = $cmd . str_replace(' ', '',
