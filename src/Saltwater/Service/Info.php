@@ -7,5 +7,4 @@ class Info extends Service
 	{
 		return $this->context->getInfo();
 	}
-
 }

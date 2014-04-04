@@ -2,7 +2,4 @@
 
 namespace Saltwater\Model;
 
-class AssociationModel extends \RedBean_PipelineAssociationModel
-{
-
-}
+class AssociationModel extends \RedBean_PipelineAssociationModel {}
