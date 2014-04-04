@@ -18,6 +18,8 @@ class Router
 
 		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
 
+		S::pushContext($root_context);
+
 		$this->explode( $root_context, $this->http, explode('/', $this->uri) );
 
 		$root_context->verifyRoute();
