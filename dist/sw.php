@@ -76,9 +76,15 @@ class Saltwater_Server
 
 		$cfg = self::$config->database;
 
+		if ( isset($cfg->type) ) {
+			$type = $cfg->type;
+		} else {
+			$type = 'mysql';
+		}
+
 		if ( empty(self::$r->toolboxes) ) {
 			self::$r->setup(
-				'mysql:host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
+				$type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
 				$cfg->user,
 				$cfg->password
 			);
@@ -89,7 +95,7 @@ class Saltwater_Server
 		if ( !isset(self::$r->toolboxes[$cfg->name]) ) {
 			self::$r->addDatabase(
 				$cfg->name,
-				'mysql:host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
+				$type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
 				$cfg->user,
 				$cfg->password
 			);
