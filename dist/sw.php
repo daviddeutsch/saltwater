@@ -412,7 +412,7 @@ class Saltwater_Context_Context
 
 	public function pushData( $data )
 	{
-
+		$this->data = $data;
 	}
 
 	public function findService( $name )

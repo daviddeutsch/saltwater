@@ -27,7 +27,7 @@ class Context
 
 	public function pushData( $data )
 	{
-
+		$this->data = $data;
 	}
 
 	public function findService( $name )
