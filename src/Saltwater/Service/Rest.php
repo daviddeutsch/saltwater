@@ -28,34 +28,7 @@ class Rest extends Service
 	{
 		$rest = $this->restHandler();
 
-		$return = $rest->handleRESTRequest($http, $path, $data);
-
-		if ( $http != 'get' ) return $return;
-
-		if ( is_array($return) ) {
-			foreach ( $return as $k => $v ) {
-				$return[$k] = $this->convertNumeric($v);
-			}
-		} else {
-			$return = $this->convertNumeric($return);
-		}
-
-		return $return;
-	}
-
-	protected function convertNumeric( $object )
-	{
-		foreach ( get_object_vars($object) as $k => $v ) {
-			if ( !is_numeric($v) ) continue;
-
-			if ( strpos($v, '.') !== false ) {
-				$object->$k = (float) $v;
-			} else {
-				$object->$k = (int) $v;
-			}
-		}
-
-		return $object;
+		return $rest->handleRESTRequest($http, $path, $data);
 	}
 
 	protected function restHandler()

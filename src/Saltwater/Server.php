@@ -127,7 +127,7 @@ class Server
 
 		header('Content-type: application/json');
 
-		echo json_encode($data);
+		echo json_encode( self::prepareOutput($data) );
 
 		exit;
 	}
@@ -147,4 +147,38 @@ class Server
 
 		exit;
 	}
+
+	private static function prepareOutput( $input )
+	{
+		if ( is_array($input) ) {
+			$return = array();
+			foreach ( $input as $k => $v ) {
+				$return[$k] = self::convertNumeric($v);
+			}
+		} else {
+			$return = self::convertNumeric($input);
+		}
+
+		return $return;
+	}
+
+	protected static function convertNumeric( $object )
+	{
+		if ( $object instanceof \RedBean_OODBBean ) {
+			$object = $object->export();
+		}
+
+		foreach ( get_object_vars($object) as $k => $v ) {
+			if ( !is_numeric($v) ) continue;
+
+			if ( strpos($v, '.') !== false ) {
+				$object->$k = (float) $v;
+			} else {
+				$object->$k = (int) $v;
+			}
+		}
+
+		return $object;
+	}
+
 }
