@@ -39,27 +39,40 @@ S::route();
 
 // --- NOTICE: THE STUFF AFTER THIS LINE IS NOT YET FULLY IMPLEMENTED ----
 
+/*
+ * This service wraps a standard REST service to also create a discussion
+ * entry when an article is saved
+ */
 class Example_Service_Article extends Saltwater_Service_Rest
 {
-	public function call( $call, $data=null )
+	/*
+	 * POST /article
+	 */
+	public function postArticle( $call, $data=null )
 	{
 		// Query the standard REST service
-		$return = parent::call($call, $data);
+		$return = $this->restCall($call, $data);
 
-		if ( $call->http == 'post' ) {
-			// Get the article we've just created
-			$article = S::$r->_('article', $return->id);
+		// Get the article we've just created
+		$article = S::$r->_('article', $return->id);
 
-			// Create a new discussion related to the article if there is none
-			S::$r->x->one->discussion->related($article)->find(true);
-		}
+		// Create a new discussion related to the article if there is none
+		S::$r->x->one->discussion->related($article)->find(true);
 
 		return $return;
 	}
 }
 
-class Example_Context_Discussion extends Saltwater_Context_Context
+/*
+ * Next up, we create a new context that can respond to the 'Info' Service
+ *
+ * (note that contexts always sit in the main saltwater namespace)
+ */
+class Saltwater_Context_Discussion extends Saltwater_Context_Context
 {
+	/*
+	 * GET {...}/discussion/info
+	 */
 	public function getInfo() {
 		// Get the article that was passed in
 		$article = S::$r->_('article', $this->data->id);
@@ -79,18 +92,26 @@ class Example_Service_Comment extends Saltwater_Service_Rest
 /*
  * Now, you can also:
  *
- * POST /article/:id/discussion/comment
- *
+ *                                               What's happening here?
  * GET /article/:id/discussion/info
+ *         └───────────────────────   Take the article with the id :id
+ *                      │       │
+ *                      └───────────╴   Hand it into a discussion context
+ *                              │
+ *                              └────╴   What do we know about this?
  *
  * Which returns
  *
  * {id:#}
  *
- * Then, you can do
+ * So now we know the id of the discussion.
+ *
+ * Then, you can do:
  *
  * GET /discussion/:id/comment
- *
+ *         └───────────────────────   For the discussion with the id :id
+ *                      │
+ *                      └───────────╴   Give me a list of all the comments
  */
 
 
@@ -104,7 +125,9 @@ class Example_Service_Comment extends Saltwater_Service_Rest
  *
  * POST /session {}
  *
- * which returns: {token:"randomtoken"}
+ * Which returns:
+ *
+ * {token:"randomtoken"}
  *
  * From now on, we will include this in our header like so:
  *
@@ -119,25 +142,3 @@ class Example_Service_Comment extends Saltwater_Service_Rest
  *
  * GET /hook/updates
  */
-
-class Example_Model_Comment extends \RedBean_PipelineModel
-{
-	protected function makePath( $bean )
-	{
-		return $this->makeType($bean). '/' . $bean->id;
-	}
-
-	protected function makeType( $bean )
-	{
-		return 'hotbox/' . $this->getPrefix() . $bean->getMeta('type');
-	}
-
-	protected function getPrefix()
-	{
-		if ( Hb::$r->writer->getPrefix() != 'hbx_' && !empty(Hb::$stream->id) ) {
-			return 'stream/' . Hb::$stream->id . '/';
-		} else {
-			return '';
-		}
-	}
-}
