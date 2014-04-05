@@ -28,7 +28,7 @@ class Saltwater_Server
 	public static $log;
 
 	/**
-	 * @var \RedBean_Instance
+	 * @var RedBean_Instance
 	 */
 	public static $r;
 
@@ -71,7 +71,7 @@ class Saltwater_Server
 	public static function db()
 	{
 		if ( empty(self::$r) ) {
-			self::$r = new \RedBean_Instance();
+			self::$r = new RedBean_Instance();
 		}
 
 		$cfg = self::$config->database;
@@ -106,7 +106,7 @@ class Saltwater_Server
 
 	public static function findContext( $name )
 	{
-		$class = 'Saltwater\Context\\' . ucfirst($name);
+		$class = 'Saltwater_Context_' . ucfirst($name);
 
 		if ( !class_exists($class) ) return false;
 
@@ -572,7 +572,7 @@ class Saltwater_Rest extends Saltwater_Service
 
 	protected function restHandler()
 	{
-		return new \RedBean_Plugin_BeanCan($this->context->getDB());
+		return new RedBean_Plugin_BeanCan($this->context->getDB());
 	}
 }
 
