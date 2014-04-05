@@ -311,72 +311,49 @@ class Saltwater_Router
  *
  * See https://github.com/php-fig/fig-standards
  */
-class Psr_LogLevel
-{
-	const EMERGENCY = 'emergency';
-	const ALERT = 'alert';
-	const CRITICAL = 'critical';
-	const ERROR = 'error';
-	const WARNING = 'warning';
-	const NOTICE = 'notice';
-	const INFO = 'info';
-	const DEBUG = 'debug';
-}
-
-interface Psr_LoggerInterface
-{
-	public function emergency($message, array $context = array());
-	public function alert($message, array $context = array());
-	public function critical($message, array $context = array());
-	public function error($message, array $context = array());
-	public function warning($message, array $context = array());
-	public function notice($message, array $context = array());
-	public function info($message, array $context = array());
-	public function debug($message, array $context = array());
-	public function log($level, $message, array $context = array());
-}
-
-abstract class Psr_AbstractLogger implements Psr_LoggerInterface
+abstract class Psr_AbstractLogger
 {
 	public function emergency($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::EMERGENCY, $message, $context);
+		$this->log('emergency', $message, $context);
 	}
 
 	public function alert($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::ALERT, $message, $context);
+		$this->log('alert', $message, $context);
 	}
 
 	public function critical($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::CRITICAL, $message, $context);
+		$this->log('critical', $message, $context);
 	}
 
 	public function error($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::ERROR, $message, $context);
+		$this->log('error', $message, $context);
 	}
 
 	public function warning($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::WARNING, $message, $context);
+		$this->log('warning', $message, $context);
 	}
 
 	public function notice($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::NOTICE, $message, $context);
+		$this->log('notice', $message, $context);
 	}
 
 	public function info($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::INFO, $message, $context);
+		$this->log('info', $message, $context);
 	}
 
 	public function debug($message, array $context = array())
 	{
-		$this->log(Psr_LogLevel::DEBUG, $message, $context);
+		$this->log('debug', $message, $context);
 	}
+
+	public function log($level, $message, $context) {}
 }
 
 class Saltwater_Logger extends Psr_AbstractLogger
