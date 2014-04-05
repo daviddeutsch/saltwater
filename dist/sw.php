@@ -383,7 +383,7 @@ class Saltwater_ModelFormatter implements RedBean_IModelFormatter
 	}
 }
 
-class Saltwater_Context
+class Saltwater_Context_Context
 {
 	public $root = false;
 
@@ -450,7 +450,7 @@ class Saltwater_Context
 	}
 }
 
-class Root extends Saltwater_Context
+class Saltwater_Context_Root extends Saltwater_Context_Context
 {
 	public $root = true;
 }
@@ -461,7 +461,7 @@ class Saltwater_AssociationModel extends RedBean_PipelineAssociationModel {}
 
 class Saltwater_Log extends Saltwater_Model {}
 
-class Saltwater_Service
+class Saltwater_Service_Service
 {
 	protected $context;
 
@@ -491,7 +491,7 @@ class Saltwater_Service
 	}
 }
 
-class Saltwater_Rest extends Saltwater_Service
+class Saltwater_Service_Rest extends Saltwater_Service_Service
 {
 	public function call( $call, $data=null )
 	{
@@ -553,7 +553,7 @@ class Saltwater_Rest extends Saltwater_Service
 	}
 }
 
-class Saltwater_Info extends Saltwater_Service
+class Saltwater_Service_Info extends Saltwater_Service_Service
 {
 	public function getInfo()
 	{
