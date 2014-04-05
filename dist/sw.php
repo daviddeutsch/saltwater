@@ -5,7 +5,7 @@
  *
  * @license GNU GPL v3
  *
- * copyright (c) David Deutsch
+ * copyright (c) 2014 David Deutsch
  */
 class Saltwater_Server
 {
@@ -38,9 +38,9 @@ class Saltwater_Server
 
 		self::db();
 
-		self::$log = new Logger();
+		self::$log = new Saltwater_Logger();
 
-		self::$route = new Router($context, $uri);
+		self::$route = new Saltwater_Router($context, $uri);
 
 		self::$route->verify($context);
 	}
@@ -134,7 +134,7 @@ class Saltwater_Server
 
 		header('Content-type: application/json');
 
-		echo json_encode($data);
+		echo json_encode( self::prepareOutput($data) );
 
 		exit;
 	}
@@ -153,6 +153,39 @@ class Saltwater_Server
 		header("HTTP/1.1 " . $code . " " . $message);
 
 		exit;
+	}
+
+	private static function prepareOutput( $input )
+	{
+		if ( is_array($input) ) {
+			$return = array();
+			foreach ( $input as $k => $v ) {
+				$return[$k] = self::convertNumeric($v);
+			}
+		} else {
+			$return = self::convertNumeric($input);
+		}
+
+		return $return;
+	}
+
+	protected static function convertNumeric( $object )
+	{
+		if ( $object instanceof \RedBean_OODBBean ) {
+			$object = $object->export();
+		}
+
+		foreach ( get_object_vars($object) as $k => $v ) {
+			if ( !is_numeric($v) ) continue;
+
+			if ( strpos($v, '.') !== false ) {
+				$object->$k = (float) $v;
+			} else {
+				$object->$k = (int) $v;
+			}
+		}
+
+		return $object;
 	}
 }
 
@@ -422,7 +455,11 @@ class Saltwater_Context_Context
 		if ( class_exists($class) ) return $class;
 
 		if ( in_array($name, $this->services) ) {
-			return 'Saltwater_Service_Rest';
+			return 'Saltwater\Service\Rest';
+		} elseif ( !empty($this->parent) ) {
+			return $this->parent->findService($name);
+		} elseif ( class_exists('Saltwater_Service_' . ucfirst($name)) ) {
+			return 'Saltwater_Service_' . ucfirst($name);
 		} else {
 			return '';
 		}
@@ -523,39 +560,12 @@ class Saltwater_Service_Rest extends Saltwater_Service_Service
 	{
 		$rest = $this->restHandler();
 
-		$return = $rest->handleRESTRequest($http, $path, $data);
-
-		if ( $http != 'get' ) return $return;
-
-		if ( is_array($return) ) {
-			foreach ( $return as $k => $v ) {
-				$return[$k] = $this->convertNumeric($v);
-			}
-		} else {
-			$return = $this->convertNumeric($return);
-		}
-
-		return $return;
-	}
-
-	protected function convertNumeric( $object )
-	{
-		foreach ( get_object_vars($object) as $k => $v ) {
-			if ( !is_numeric($v) ) continue;
-
-			if ( strpos($v, '.') !== false ) {
-				$object->$k = (float) $v;
-			} else {
-				$object->$k = (int) $v;
-			}
-		}
-
-		return $object;
+		return $rest->handleRESTRequest($http, $path, $data);
 	}
 
 	protected function restHandler()
 	{
-		return new RedBean_Plugin_BeanCan($this->context->getDB());
+		return new \RedBean_Plugin_BeanCan($this->context->getDB());
 	}
 }
 

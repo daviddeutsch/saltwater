@@ -180,5 +180,4 @@ class Server
 
 		return $object;
 	}
-
 }

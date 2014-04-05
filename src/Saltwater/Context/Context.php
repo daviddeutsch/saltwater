@@ -38,6 +38,10 @@ class Context
 
 		if ( in_array($name, $this->services) ) {
 			return 'Saltwater\Service\Rest';
+		} elseif ( !empty($this->parent) ) {
+			return $this->parent->findService($name);
+		} elseif ( class_exists('Saltwater\Service\\' . ucfirst($name)) ) {
+			return 'Saltwater\Service\\' . ucfirst($name);
 		} else {
 			return '';
 		}
