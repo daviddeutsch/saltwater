@@ -27,7 +27,7 @@ class Server
 	 */
 	public static $r;
 
-	public static function init( $context )
+	public static function init( $context, $uri=null )
 	{
 		self::$config = $context->config;
 
@@ -35,7 +35,7 @@ class Server
 
 		self::$log = new Logger();
 
-		self::$route = new Router($context);
+		self::$route = new Router($context, $uri);
 
 		self::$route->verify($context);
 	}

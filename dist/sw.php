@@ -32,15 +32,15 @@ class Saltwater_Server
 	 */
 	public static $r;
 
-	public static function init( $context )
+	public static function init( $context, $uri=null )
 	{
 		self::$config = $context->config;
 
 		self::db();
 
-		self::$log = new Saltwater_Logger();
+		self::$log = new Logger();
 
-		self::$route = new Saltwater_Router($context);
+		self::$route = new Router($context, $uri);
 
 		self::$route->verify($context);
 	}
@@ -160,9 +160,13 @@ class Saltwater_Router
 
 	public $chain = array();
 
-	public function __construct( $root_context )
+	public function __construct( $root_context, $uri=null )
 	{
-		$this->uri = $this->getURI();
+		if ( empty($uri) ) {
+			$this->uri = $this->getURI();
+		} else {
+			$this->uri = $uri;
+		}
 
 		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
 

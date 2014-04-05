@@ -12,9 +12,13 @@ class Router
 
 	public $chain = array();
 
-	public function __construct( $root_context )
+	public function __construct( $root_context, $uri=null )
 	{
-		$this->uri = $this->getURI();
+		if ( empty($uri) ) {
+			$this->uri = $this->getURI();
+		} else {
+			$this->uri = $uri;
+		}
 
 		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
 
