@@ -4,8 +4,13 @@
 require 'path/rb.php';
 require 'path/sw.php';
 
+/*
+ * Sorry, using the one-file library, also why class names are underspaced
+ * instead of namespaced
+ */
+
 // Creating our root context
-class Context_Example extends Saltwater_Context_Context
+class Example_Context extends Saltwater_Context_Context
 {
 	public $service = array(
 		'article', 'comment'
@@ -22,7 +27,7 @@ class Context_Example extends Saltwater_Context_Context
 	}
 }
 
-S::init(new Context_Example());
+S::init( new Example_Context() );
 
 S::route();
 
@@ -31,92 +36,80 @@ S::route();
  *
  * GET|POST|DELETE /article{/:id}
  * GET|POST|DELETE /comment{/:id}
+ */
+
+/*
+ * That's neat, but comments should be related to things, so let's make it
+ * possible to relate them to stuff:
+ */
+
+class Example_Service_Comment extends Saltwater_Service_Rest
+{
+	/*
+	 * GET /comment
+	 * GET /article/:id/comment
+	 */
+	public function getComment( $call, $data=null )
+	{
+		if ( !empty($this->context->data) ) {
+			$comments = S::$r->related($this->context->data, 'comment');
+
+			if ( !is_array($comments) ) $comments = array($comments);
+
+			foreach ( $comments as $i => $comment ) {
+				$comments[$i] = $comment->export();
+			}
+
+			return $comments;
+		} else {
+			return $this->restCall($call, $data);
+		}
+	}
+
+	/*
+	 * POST /comment
+	 * POST /article/:id/comment
+	 */
+	public function postComment( $call, $data=null )
+	{
+		$comment = $this->restCall($call, $data);
+
+		if ( !empty($this->context->data) ) {
+			S::$r->associate($this->context->data, $comment);
+		}
+	}
+}
+
+/*
+ * Now that we have this in place, we can also declare further services, because
+ * unless you limit the capabilities, everything in the system can now be
+ * commented on:
+ */
+
+class Extended_Example_Context extends Saltwater_Context_Context
+{
+	public $service = array(
+		'article', 'video', 'thread', 'comment' //...
+	);
+}
+
+/*
+ * POST /article/:id/comment
+ * POST /video/:id/comment
+ * POST /thread/:id/comment
+ * etc.
  *
- * That's neat, but comments should be related to articles.
+ * ...even comments:
  *
- * To do that, let's create the concept of a 'discussion':
+ * POST /comment/:id/comment
  */
 
 // --- NOTICE: THE STUFF AFTER THIS LINE IS NOT YET FULLY IMPLEMENTED ----
 
 /*
- * This service wraps a standard REST service to also create a discussion
- * entry when an article is saved
- */
-class Example_Service_Article extends Saltwater_Service_Rest
-{
-	/*
-	 * POST /article
-	 */
-	public function postArticle( $call, $data=null )
-	{
-		// Query the standard REST service
-		$return = $this->restCall($call, $data);
-
-		// Get the article we've just created
-		$article = S::$r->_('article', $return->id);
-
-		// Create a new discussion related to the article if there is none
-		S::$r->x->one->discussion->related($article)->find(true);
-
-		return $return;
-	}
-}
-
-/*
- * Next up, we create a new context that can respond to the 'Info' Service
- *
- * (note that contexts always sit in the main saltwater namespace)
- */
-class Saltwater_Context_Discussion extends Saltwater_Context_Context
-{
-	/*
-	 * GET {...}/discussion/info
-	 */
-	public function getInfo() {
-		// Get the article that was passed in
-		$article = S::$r->_('article', $this->data->id);
-
-		return S::$r->x->one->discussion->related($article->id);
-	}
-}
-
-class Example_Service_Comment extends Saltwater_Service_Rest
-{
-	public function postComment()
-	{
-
-	}
-}
-
-/*
- * Now, you can also:
- *
- *                                               What's happening here?
- * GET /article/:id/discussion/info
- *         └───────────────────────   Take the article with the id :id
- *                      │       │
- *                      └───────────╴   Hand it into a discussion context
- *                              │
- *                              └────╴   What do we know about this?
- *
- * Which returns
- *
- * {id:#}
- *
- * So now we know the id of the discussion.
- *
- * Then, you can do:
- *
- * GET /discussion/:id/comment
- *         └───────────────────────   For the discussion with the id :id
- *                      │
- *                      └───────────╴   Give me a list of all the comments
- */
-
-
-/*
  * But what if we want to listen on the changes in realtime?
+ *
+ * For that, we have a basic Pub/Sub Hook system set up.
  *
  * Let's tell the server that want to hear if new comments have been added or
  * changed related to a certain article.
@@ -133,12 +126,30 @@ class Example_Service_Comment extends Saltwater_Service_Rest
  *
  * Authorization: Basic randomtoken
  *
- * Now that the server knows us, we can subscribe to the comment thread:
+ * To have the server track changes in the pipeline, we need to create
+ * RedBean models for them:
+ */
+
+class Example_Model_Article extends Saltwater_Model_Model {}
+class Example_Model_Comment extends Saltwater_Model_Model {}
+
+/*
+ * We also want models for the associations:
+ */
+
+class Example_Model_Article_Comment extends Saltwater_Model_AssociationModel {}
+class Example_Model_Comment_Comment extends Saltwater_Model_AssociationModel {}
+
+/*
+ * Now that the server knows us and we have the models in place, we can
+ * subscribe to the comment thread:
  *
- * POST /hook/subscribe {resource:'discussion/:id/comment'}
+ * POST /hook/subscribe {resource:'article/:id/comment'}
  *
  * No matter what we are subscribed to, we can use this to query the server for
  * all new updates that are available:
  *
  * GET /hook/updates
+ *
+ * and receive a list with individual objects for all our subscriptions
  */
