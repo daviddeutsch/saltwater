@@ -1,5 +1,7 @@
 <?php
 
+// -- /src/Example/Context/Example.php
+
 namespace Saltwater\Context;
 
 // Creating our root context
@@ -49,6 +51,8 @@ S::route();
  * possible to relate them to stuff:
  */
 
+// -- /src/Example/Service/Comment.php
+
 namespace Example\Service;
 
 use Saltwater\Service\Rest as Rest;
@@ -90,13 +94,17 @@ class Comment extends Rest
  * commented on:
  */
 
+// -- /src/Example/Context/Example.php
+
 namespace Saltwater\Context;
 
-class Extended extends Context
+class Example extends Context
 {
 	public $service = array(
 		'article', 'video', 'thread', 'comment' //...
 	);
+
+	//...
 }
 
 /*
@@ -135,6 +143,9 @@ class Extended extends Context
  * To have the server track changes in the pipeline, we need to create
  * RedBean models for them:
  */
+
+// -- /src/Example/Model/Article.php, Comment.php,
+//                       ArticleComment.php, CommentComment.php
 
 namespace Example\Model;
 
