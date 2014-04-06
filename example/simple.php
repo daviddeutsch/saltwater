@@ -54,15 +54,7 @@ class Example_Service_Comment extends Saltwater_Service_Rest
 	public function getComment( $call, $data=null )
 	{
 		if ( !empty($this->context->data) ) {
-			$comments = S::$r->related($this->context->data, 'comment');
-
-			if ( !is_array($comments) ) $comments = array($comments);
-
-			foreach ( $comments as $i => $comment ) {
-				$comments[$i] = $comment->export();
-			}
-
-			return $comments;
+			return S::$r->related($this->context->data, 'comment');
 		} else {
 			return $this->restCall($call, $data);
 		}
