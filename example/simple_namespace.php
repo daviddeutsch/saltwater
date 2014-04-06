@@ -55,6 +55,7 @@ S::route();
 
 namespace Example\Service;
 
+use Saltwater\Server as S;
 use Saltwater\Service\Rest as Rest;
 
 class Comment extends Rest
