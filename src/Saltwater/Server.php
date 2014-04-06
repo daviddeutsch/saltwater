@@ -35,9 +35,11 @@ class Server
 
 		self::$log = new Logger();
 
-		self::$route = new Router($context, $uri);
+		self::pushContext($context);
 
-		self::$route->verify($context);
+		self::$route = new Router($uri);
+
+		$context->verifyRoute();
 	}
 
 	public static function route()

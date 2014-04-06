@@ -12,7 +12,7 @@ class Router
 
 	public $chain = array();
 
-	public function __construct( $root_context, $uri=null )
+	public function __construct( $uri=null )
 	{
 		if ( empty($uri) ) {
 			$this->uri = $this->getURI();
@@ -22,14 +22,7 @@ class Router
 
 		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
 
-		S::pushContext($root_context);
-
-		$this->explode( $root_context, $this->http, explode('/', $this->uri) );
-	}
-
-	public function verify($root_context)
-	{
-		$root_context->verifyRoute();
+		$this->explode( S::$context[0], $this->http, explode('/', $this->uri) );
 	}
 
 	protected function getURI()
