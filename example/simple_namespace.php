@@ -64,6 +64,7 @@ class Comment extends Rest
 	 *
 	 * GET /comment
 	 * GET /article/:id/comment
+	 * GET /comment/:id/comment <- sure, why not?
 	 */
 	public function getComment( $call, $data=null )
 	{
@@ -77,6 +78,7 @@ class Comment extends Rest
 	/*
 	 * POST /comment
 	 * POST /article/:id/comment
+	 * POST /comment/:id/comment
 	 */
 	public function postComment( $call, $data=null )
 	{
@@ -112,10 +114,6 @@ class Example extends Context
  * POST /video/:id/comment
  * POST /thread/:id/comment
  * etc.
- *
- * ...even comments:
- *
- * POST /comment/:id/comment
  */
 
 // --- NOTICE: THE STUFF AFTER THIS LINE IS NOT YET FULLY IMPLEMENTED ----

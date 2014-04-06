@@ -58,6 +58,7 @@ class Example_Service_Comment extends Saltwater_Service_Rest
 	 *
 	 * GET /comment
 	 * GET /article/:id/comment
+	 * GET /comment/:id/comment <- sure, why not?
 	 */
 	public function getComment( $call, $data=null )
 	{
@@ -71,6 +72,7 @@ class Example_Service_Comment extends Saltwater_Service_Rest
 	/*
 	 * POST /comment
 	 * POST /article/:id/comment
+	 * POST /comment/:id/comment
 	 */
 	public function postComment( $call, $data=null )
 	{
@@ -100,10 +102,6 @@ class Extended_Example_Context extends Saltwater_Context_Context
  * POST /video/:id/comment
  * POST /thread/:id/comment
  * etc.
- *
- * ...even comments:
- *
- * POST /comment/:id/comment
  */
 
 // --- NOTICE: THE STUFF AFTER THIS LINE IS NOT YET FULLY IMPLEMENTED ----
