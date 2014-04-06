@@ -46,6 +46,8 @@ S::route();
 class Example_Service_Comment extends Saltwater_Service_Rest
 {
 	/*
+	 * (docblocks only for showing the URLs, there's no magic comment parsing)
+	 *
 	 * GET /comment
 	 * GET /article/:id/comment
 	 */
