@@ -1,12 +1,8 @@
 <?php
 
-// Include daviddeutsch/redbean-adaptive and ../saltwater
-require 'path/rb.php';
-require 'path/sw.php';
-
 /*
  * Sorry, using the one-file library, also why class names are underspaced
- * instead of namespaced
+ * instead of namespaced - check simple_namespaced.php for a namespaced example
  */
 
 // Creating our root context
@@ -26,6 +22,18 @@ class Example_Context extends Saltwater_Context_Context
 		$this->config->database = new stdClass();
 	}
 }
+
+/*
+ * The following five lines would be your index.php with the usual rewrite like:
+ *
+ * RewriteEngine On
+ * RewriteCond %{REQUEST_FILENAME} !-f
+ * RewriteRule ^ index.php [QSA,L]
+ */
+
+// Include daviddeutsch/redbean-adaptive and ../saltwater
+require 'path/rb.php';
+require 'path/sw.php';
 
 S::init( new Example_Context() );
 

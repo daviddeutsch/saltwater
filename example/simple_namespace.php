@@ -2,15 +2,6 @@
 
 namespace Saltwater\Context;
 
-// Include daviddeutsch/redbean-adaptive and ../saltwater
-require 'path/rb.php';
-require 'path/sw.php';
-
-/*
- * Sorry, using the one-file library, also why class names are underspaced
- * instead of namespaced
- */
-
 // Creating our root context
 class Example extends Context
 {
@@ -29,6 +20,19 @@ class Example extends Context
 	}
 }
 
+/*
+ * The following five lines would be your index.php with the usual rewrite
+ *
+ * RewriteEngine On
+ * RewriteCond %{REQUEST_FILENAME} !-f
+ * RewriteRule ^ index.php [QSA,L]
+ */
+
+// Including daviddeutsch/redbean-adaptive and ../saltwater via composer
+require 'path/autoload.php';
+
+use Saltwater\Server as S;
+
 S::init( new Example() );
 
 S::route();
@@ -45,7 +49,7 @@ S::route();
  * possible to relate them to stuff:
  */
 
-// namespace Example\Service;
+namespace Example\Service;
 
 use Saltwater\Service\Rest as Rest;
 
@@ -86,7 +90,7 @@ class Comment extends Rest
  * commented on:
  */
 
-// namespace Saltwater\Context;
+namespace Saltwater\Context;
 
 class Extended extends Context
 {
@@ -132,7 +136,7 @@ class Extended extends Context
  * RedBean models for them:
  */
 
-// namespace Example\Model;
+namespace Example\Model;
 
 use Saltwater\Model\Model as Model;
 use Saltwater\Model\AssociationModel as AssociationModel;
@@ -144,8 +148,8 @@ class Comment extends Model {}
  * We also want models for the associations:
  */
 
-class Article_Comment extends AssociationModel {}
-class Comment_Comment extends AssociationModel {}
+class ArticleComment extends AssociationModel {}
+class CommentComment extends AssociationModel {}
 
 /*
  * Now that the server knows us and we have the models in place, we can
