@@ -498,9 +498,9 @@ class Saltwater_Context_Root extends Saltwater_Context_Context
 	public $root = true;
 }
 
-class Saltwater_Model extends RedBean_PipelineModel {}
+class Saltwater_Model_Model extends RedBean_PipelineModel {}
 
-class Saltwater_AssociationModel extends RedBean_PipelineAssociationModel {}
+class Saltwater_Model_AssociationModel extends RedBean_PipelineAssociationModel {}
 
 class Saltwater_Log extends Saltwater_Model {}
 
