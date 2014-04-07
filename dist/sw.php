@@ -40,7 +40,7 @@ class Saltwater_Server
 
 		self::$log = new Logger();
 
-		self::pushContext($context);
+		self::pushContext('root', $context);
 
 		self::$route = new Router($uri);
 
@@ -52,9 +52,38 @@ class Saltwater_Server
 		self::$route->go();
 	}
 
-	public static function pushContext( $context )
+	public static function getContext( $name, $parent=null )
 	{
-		array_unshift(self::$context, $context);
+		if ( isset(self::$context[$name]) ) {
+			return self::$context[$name];
+		}
+
+		$c = self::findContext($name);
+
+		if ( !$c ) return false;
+
+		$context = new $c($parent);
+
+		self::pushContext($name, $context);
+
+		return $context;
+	}
+
+	public static function findContext( $name )
+	{
+		$class = 'Saltwater_Context_' . ucfirst($name);
+
+		if ( !class_exists($class) ) return false;
+
+		return $class;
+	}
+
+	public static function pushContext( $handle, $context )
+	{
+		self::$context = array_merge(
+			array( $handle => $context ),
+			self::$context
+		);
 	}
 
 	public static function formatModel( $name )
@@ -114,15 +143,6 @@ class Saltwater_Server
 		);
 
 		self::$r->useWriterCache(true);
-	}
-
-	public static function findContext( $name )
-	{
-		$class = 'Saltwater_Context_' . ucfirst($name);
-
-		if ( !class_exists($class) ) return false;
-
-		return $class;
 	}
 
 	public static function returnRedirect( $url )
