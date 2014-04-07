@@ -105,6 +105,10 @@ class Saltwater_Server
 
 		self::$r->selectDatabase($cfg->name);
 
+		if ( !empty($cfg->prefix) ) {
+			self::$r->prefix($cfg->prefix);
+		}
+
 		self::$r->redbean->beanhelper->setModelFormatter(
 			new Saltwater_ModelFormatter
 		);
