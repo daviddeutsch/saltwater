@@ -22,7 +22,7 @@ class Router
 
 		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
 
-		$this->explode( S::$context[0], $this->http, explode('/', $this->uri) );
+		$this->explode( S::$context['root'], $this->http, explode('/', $this->uri) );
 	}
 
 	protected function getURI()

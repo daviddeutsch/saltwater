@@ -3,7 +3,7 @@
 /**
  * Saltwater
  *
- * @license GNU GPL v3
+ * @license GNU GPL v3 or later
  *
  * copyright (c) 2014 David Deutsch
  */
@@ -303,13 +303,10 @@ class Saltwater_Router
 			return;
 		}
 
-		$c = S::findContext($root);
+		$c = S::getContext($root, $context);
 
 		if ( $c ) {
-			// This is for switching into a child context
-			$context = new $c($context);
-
-			S::pushContext($context);
+			$context = $c;
 
 			$root = array_shift($path);
 		}
