@@ -1,10 +1,12 @@
 <?php
 
-namespace Saltwater\Context;
+namespace Saltwater\Module\Root\Context;
 
-use Saltwater\Server as S;
+use Saltwater\Context as Context;
 
 class Root extends Context
 {
 	public $root = true;
+
+	public $namespace = 'Saltwater\Module\Root';
 }

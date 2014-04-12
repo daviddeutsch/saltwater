@@ -81,7 +81,7 @@ class Server
 		);
 	}
 
-	public static function formatModel( $name )
+	public static function formatModel( $name, $bean=null )
 	{
 		foreach ( self::$context as $context ) {
 			$model = $context->formatModel($name);
@@ -133,7 +133,9 @@ class Server
 			self::$r->prefix($cfg->prefix);
 		}
 
-		self::$r->redbean->beanhelper->setModelFormatter(new ModelFormatter);
+		self::$r->redbean->beanhelper->setModelFormatter(
+			'Saltwater\Server::formatModel'
+		);
 
 		self::$r->useWriterCache(true);
 	}

@@ -36,12 +36,14 @@ class Context
 
 		if ( class_exists($class) ) return $class;
 
+		$root = 'Saltwater\Module\Root';
+
 		if ( in_array($name, $this->services) ) {
-			return 'Saltwater\Service\Rest';
+			return $root.'\Service\Rest';
 		} elseif ( !empty($this->parent) ) {
 			return $this->parent->findService($name);
-		} elseif ( class_exists('Saltwater\Service\\' . ucfirst($name)) ) {
-			return 'Saltwater\Service\\' . ucfirst($name);
+		} elseif ( class_exists($root.'\Service\\' . ucfirst($name)) ) {
+			return $root.'\Service\\' . ucfirst($name);
 		} else {
 			return '';
 		}
@@ -54,7 +56,7 @@ class Context
 
 	public function formatModel( $name )
 	{
-		return $this->namespace .'\Models\\'
+		return $this->namespace .'\Entity\\'
 			. str_replace(' ', '',
 				ucwords( str_replace('_', ' ', $name) )
 			);

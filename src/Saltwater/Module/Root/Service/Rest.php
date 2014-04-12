@@ -1,6 +1,8 @@
 <?php
 
-namespace Saltwater\Service;
+namespace Saltwater\Module\Root\Service;
+
+use Saltwater\Service as Service;
 
 class Rest extends Service
 {

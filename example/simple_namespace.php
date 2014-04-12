@@ -2,7 +2,9 @@
 
 // -- /src/Example/Context/Example.php
 
-namespace Saltwater\Context;
+namespace ExampleModule;
+
+use Saltwater\Context as Context;
 
 // Creating our root context
 class Example extends Context
@@ -56,7 +58,7 @@ S::route();
 namespace Example\Service;
 
 use Saltwater\Server as S;
-use Saltwater\Service\Rest as Rest;
+use Saltwater\Root\Service\Rest as Rest;
 
 class Comment extends Rest
 {
