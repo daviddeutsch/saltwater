@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Context;
+namespace Saltwater;
 
 use Saltwater\Server as S;
 
