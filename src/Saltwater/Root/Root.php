@@ -1,8 +1,10 @@
 <?php
 
-namespace Saltwater\Module;
+namespace Saltwater;
 
-class Root
+use Saltwater\Module as Module;
+
+class Root extends Module
 {
 
 }

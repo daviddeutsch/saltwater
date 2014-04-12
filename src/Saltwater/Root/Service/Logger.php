@@ -1,9 +1,9 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Root\Service;
 
 use Saltwater\Server as S;
-use Saltwater\Module\Root\Service\Rest as Rest;
+use Saltwater\Root\Service\Rest as Rest;
 use Psr\Log\LoggerInterface;
 
 class Logger extends Rest implements LoggerInterface

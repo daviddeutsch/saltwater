@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Module\Root\Service;
+namespace Saltwater\Root\Service;
 
 use Saltwater\Service as Service;
 

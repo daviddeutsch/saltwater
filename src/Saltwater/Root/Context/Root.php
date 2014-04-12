@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Module\Root\Context;
+namespace Saltwater\Root\Context;
 
 use Saltwater\Context as Context;
 

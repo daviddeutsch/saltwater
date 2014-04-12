@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Module\Root\Entity;
+namespace Saltwater\Root\Entity;
 
 use Saltwater\Entity;
 
