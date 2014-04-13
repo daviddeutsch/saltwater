@@ -3,6 +3,7 @@
 namespace Saltwater;
 
 use Saltwater\Server as S;
+use Saltwater\Utils as U;
 
 class Context
 {
@@ -36,14 +37,12 @@ class Context
 
 		if ( class_exists($class) ) return $class;
 
-		$root = 'Saltwater\Module\Root';
+		$root = 'Saltwater\Root';
 
 		if ( in_array($name, $this->services) ) {
-			return $root.'\Service\Rest';
+			return $root . '\Service\Rest';
 		} elseif ( !empty($this->parent) ) {
 			return $this->parent->findService($name);
-		} elseif ( class_exists($root.'\Service\\' . ucfirst($name)) ) {
-			return $root.'\Service\\' . ucfirst($name);
 		} else {
 			return '';
 		}
@@ -56,10 +55,17 @@ class Context
 
 	public function formatModel( $name )
 	{
-		return $this->namespace .'\Entity\\'
-			. str_replace(' ', '',
-				ucwords( str_replace('_', ' ', $name) )
-			);
+		$name = U::snakeToCamelCase($name);
+
+		$self = $this->namespace . '\Entity\\' . $name;
+
+		if ( class_exists($self) ) {
+			return $self;
+		} elseif ( !empty($this->parent) ) {
+			return $this->parent->formatModel($name);
+		} else {
+			return $name;
+		}
 	}
 
 	public function getDB()

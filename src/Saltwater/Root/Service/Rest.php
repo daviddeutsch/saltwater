@@ -2,7 +2,7 @@
 
 namespace Saltwater\Root\Service;
 
-use Saltwater\Service as Service;
+use Saltwater\Service;
 
 class Rest extends Service
 {

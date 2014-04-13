@@ -10,6 +10,8 @@ class Server
 
 	public static $session;
 
+	private static $modules = array();
+
 	public static $context = array();
 
 	/**
@@ -47,7 +49,15 @@ class Server
 		self::$route->go();
 	}
 
-	public static function getContext( $name, $parent=null )
+	/**
+	 * Return a context from our stack of modules
+	 *
+	 * @param string  $name
+	 * @param Context $parent
+	 *
+	 * @return Context
+	 */
+	public static function context( $name, $parent=null )
 	{
 		if ( isset(self::$context[$name]) ) {
 			return self::$context[$name];
@@ -66,11 +76,13 @@ class Server
 
 	public static function findContext( $name )
 	{
-		$class = 'Saltwater\Context\\' . ucfirst($name);
+		foreach ( self::$modules as $module ) {
+			$context = $module->findContext($name);
 
-		if ( !class_exists($class) ) return false;
+			if ( !empty($context) ) return $context;
+		}
 
-		return $class;
+		return false;
 	}
 
 	public static function pushContext( $handle, $context )
@@ -208,4 +220,5 @@ class Server
 
 		return $object;
 	}
+
 }

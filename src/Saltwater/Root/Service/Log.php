@@ -3,10 +3,10 @@
 namespace Saltwater\Root\Service;
 
 use Saltwater\Server as S;
-use Saltwater\Root\Service\Rest as Rest;
+use Saltwater\Root\Service\Rest;
 use Psr\Log\LoggerInterface;
 
-class Logger extends Rest implements LoggerInterface
+class Log extends Rest implements LoggerInterface
 {
 	public function emergency($message, array $context = array())
 	{

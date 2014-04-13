@@ -1,10 +1,12 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Root;
 
-use Saltwater\Module as Module;
+use Saltwater\Module;
 
 class Root extends Module
 {
-
+	protected $contexts = array(
+		'Root'
+	);
 }

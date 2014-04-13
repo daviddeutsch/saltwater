@@ -2,11 +2,11 @@
 
 namespace Saltwater\Root\Context;
 
-use Saltwater\Context as Context;
+use Saltwater\Context;
 
 class Root extends Context
 {
 	public $root = true;
 
-	public $namespace = 'Saltwater\Module\Root';
+	public $namespace = 'Saltwater\Root';
 }

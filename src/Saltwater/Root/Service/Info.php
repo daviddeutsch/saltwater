@@ -1,7 +1,7 @@
 <?php
 namespace Saltwater\Root\Service;
 
-use Saltwater\Service as Service;
+use Saltwater\Service;
 
 class Info extends Service
 {

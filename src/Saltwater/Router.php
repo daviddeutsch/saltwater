@@ -3,6 +3,7 @@
 namespace Saltwater;
 
 use Saltwater\Server as S;
+use Saltwater\Utils as U;
 
 class Router
 {
@@ -79,6 +80,11 @@ class Router
 		}
 	}
 
+	/**
+	 * @param Context $context
+	 * @param string  $cmd
+	 * @param string  $path
+	 */
 	protected function explode( $context, $cmd, $path )
 	{
 		$root = array_shift($path);
@@ -90,7 +96,7 @@ class Router
 			return;
 		}
 
-		$c = S::getContext($root, $context);
+		$c = S::context($root, $context);
 
 		if ( $c ) {
 			$context = $c;
@@ -110,6 +116,12 @@ class Router
 		}
 	}
 
+	/**
+	 * @param Context $context
+	 * @param string  $cmd
+	 * @param string  $service
+	 * @param string  $path
+	 */
 	protected function push( $context, $cmd, $service, $path=null )
 	{
 		$method = $service;
@@ -122,13 +134,7 @@ class Router
 
 		$class = $context->findService($service);
 
-		if ( strpos($method, '-') ) {
-			$method = $cmd . str_replace(' ', '',
-					ucwords( str_replace('-', ' ', $method) )
-				);
-		} else {
-			$method = $cmd . ucfirst($method);
-		}
+		$method = $cmd . U::dashedToCamelCase($method);
 
 		if ( !method_exists($class, $method) ) {
 			$plain = true;
