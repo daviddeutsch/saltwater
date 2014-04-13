@@ -2,6 +2,6 @@
 
 namespace Saltwater\Root\Entity;
 
-use Saltwater\Entity;
+use Saltwater\Thing\Entity;
 
 class Log extends Entity {}

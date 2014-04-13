@@ -1,27 +1,18 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
+use Saltwater\Common\Route as AbstractRoute;
 
-class Router
+class Route extends AbstractRoute
 {
-	public $http;
-
-	public $uri;
-
-	public $chain = array();
-
-	public function __construct( $uri=null )
+	public function __construct()
 	{
-		if ( empty($uri) ) {
-			$this->uri = $this->getURI();
-		} else {
-			$this->uri = $uri;
-		}
+		$this->uri = $this->getURI();
 
-		$this->http = strtolower($_SERVER['REQUEST_METHOD']);
+		$this->http = $this->getHTTP();
 
 		$this->explode( S::$context['root'], $this->http, explode('/', $this->uri) );
 	}
@@ -49,6 +40,11 @@ class Router
 		return $path;
 	}
 
+	protected function getHTTP()
+	{
+		return strtolower($_SERVER['REQUEST_METHOD']);
+	}
+
 	public function go()
 	{
 		$input = @file_get_contents('php://input');
@@ -73,11 +69,7 @@ class Router
 			}
 		}
 
-		if ( is_object($result) || is_array($result) ) {
-			S::returnJSON($result);
-		} else {
-			S::returnEcho($result);
-		}
+		S::response()->response($result);
 	}
 
 	/**

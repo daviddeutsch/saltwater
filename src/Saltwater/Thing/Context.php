@@ -5,10 +5,11 @@ namespace Saltwater\Thing;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 
+/**
+ * A context accepts and returns services, decides provider priority
+ */
 class Context
 {
-	public $root = false;
-
 	public $namespace = 'Saltwater';
 
 	public $parent;

@@ -2,11 +2,17 @@
 
 namespace Saltwater\Root;
 
-use Saltwater\Module;
+use Saltwater\Thing\Module;
 
 class Root extends Module
 {
-	protected static $contexts = array(
-		'Root'
+	protected $providers = array(
+		'Db', 'Entity', 'Log', 'Route', 'Service', 'Response'
 	);
+
+	protected $contexts = array('Root');
+
+	protected $services = array('Rest', 'Info');
+
+	protected $entities = array('Log');
 }

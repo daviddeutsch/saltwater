@@ -17,7 +17,7 @@ class Service
 		if ( in_array($name, $context->services) ) {
 			return $root . '\Service\Rest';
 		} elseif ( !empty($context->parent) ) {
-			return S::service($context->parent, $name);
+			return S::service($name, $context->parent);
 		} else {
 			return '';
 		}
