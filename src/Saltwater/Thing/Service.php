@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Thing;
 
 class Service
 {

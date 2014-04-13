@@ -6,7 +6,7 @@ use Saltwater\Module;
 
 class Root extends Module
 {
-	protected $contexts = array(
+	protected static $contexts = array(
 		'Root'
 	);
 }

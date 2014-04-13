@@ -1,16 +1,16 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Thing;
 
 use Saltwater\Utils as U;
 
 class Module
 {
-	protected $contexts = array();
+	protected static $contexts = array();
 
-	public function findContext()
+	public static function findContext()
 	{
-		foreach ( $this->contexts as $context ) {
+		foreach ( self::$contexts as $context ) {
 			$class = 'Saltwater\\' . U::dashedToCamelCase($context);
 
 			if ( !class_exists($class) ) return $class;

@@ -4,14 +4,14 @@ namespace Saltwater;
 
 class Server
 {
-	public static $config;
-
-	public static $subject;
-
-	public static $session;
-
+	/**
+	 * @var array|Module
+	 */
 	private static $modules = array();
 
+	/**
+	 * @var array|Context
+	 */
 	public static $context = array();
 
 	/**
@@ -20,16 +20,31 @@ class Server
 	public static $route;
 
 	/**
-	 * @var Logger
+	 * @var \Saltwater\Common\Log
 	 */
 	public static $log;
+
+	/**
+	 * @var \Saltwater\Common\Config
+	 */
+	public static $config;
+
+	/**
+	 * @var \Saltwater\Common\Subject
+	 */
+	public static $subject;
+
+	/**
+	 * @var \Saltwater\Common\Session
+	 */
+	public static $session;
 
 	/**
 	 * @var \RedBean_Instance
 	 */
 	public static $r;
 
-	public static function init( $context, $uri=null )
+	public static function init( $modules, $uri=null )
 	{
 		self::$config = $context->config;
 
@@ -42,6 +57,12 @@ class Server
 		self::$route = new Router($uri);
 
 		$context->verifyRoute();
+
+		self::$db      = self::provider('db');
+		self::$config  = self::provider('config');
+		self::$log     = self::provider('log');
+		self::$subject = self::provider('subject');
+		self::$session = self::provider('session');
 	}
 
 	public static function route()
@@ -52,10 +73,10 @@ class Server
 	/**
 	 * Return a context from our stack of modules
 	 *
-	 * @param string  $name
-	 * @param Context $parent
+	 * @param string        $name
+	 * @param Thing\Context $parent
 	 *
-	 * @return Context
+	 * @return Thing\Context
 	 */
 	public static function context( $name, $parent=null )
 	{
@@ -74,10 +95,25 @@ class Server
 		return $context;
 	}
 
+	public static function service( $context, $name )
+	{
+		return self::provide( 'service', $name, array($context) );
+	}
+
+	public static function provider( $name )
+	{
+		return self::provide( 'provider', $name );
+	}
+
+	public static function provide( $type, $name, $input=null )
+	{
+
+	}
+
 	public static function findContext( $name )
 	{
 		foreach ( self::$modules as $module ) {
-			$context = $module->findContext($name);
+			$context = $module::findContext($name);
 
 			if ( !empty($context) ) return $context;
 		}
@@ -95,15 +131,7 @@ class Server
 
 	public static function formatModel( $name, $bean=null )
 	{
-		foreach ( self::$context as $context ) {
-			$model = $context->formatModel($name);
-
-			if ( !empty($model) ) {
-				return $model;
-			}
-		}
-
-		return $name;
+		return self::provide('entity', $name, array($bean));
 	}
 
 	public static function db()

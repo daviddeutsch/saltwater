@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Thing;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
