@@ -14,8 +14,7 @@
 	"require" : {
 		"php" : ">=5.3",
 		"daviddeutsch/redbean-adaptive": "dev-master",
-		"psr/log": "dev-master",
-		"ircmaxell/password-compat": "dev-master"
+		"psr/log": "dev-master"
 	},
 	"autoload" : {
 		"psr-0" : {
