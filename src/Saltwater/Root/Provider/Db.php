@@ -8,9 +8,9 @@ class Db
 {
 	private static $r;
 
-	public static function __construct()
+	private function __construct()
 	{
-		$cfg = S::config()->database;
+		$cfg = S::$n->config->database;
 
 		if ( empty(self::$r) ) {
 			self::$r = new \RedBean_Instance();
@@ -56,6 +56,8 @@ class Db
 
 	public static function get()
 	{
+		self::__construct();
+
 		return self::$r;
 	}
 }

@@ -5,81 +5,58 @@ namespace Saltwater\Thing;
 use Saltwater\Utils as U;
 
 /**
- * A module is a static object that can register providers and declare contexts
+ * An object that can register and return providers, contexts and services
  *
  * @package Saltwater\Thing
  */
 class Module
 {
+	public $namespace;
+
 	protected $providers = array();
 
 	protected $contexts = array();
 
 	protected $services = array();
 
-	protected $entities = array();
-
-	protected $instances = array(
-		'providers' => array(),
-		'contexts' => array()
-	);
-
-	public function context( $name, $parent=null )
+	public function provide( $type, $name, $args=null )
 	{
-		if ( isset($this->instances['context'][$name]) ) {
-			return self::$context[$name];
+		$class = $this->className($type, $name);
+
+		if ( is_null($args) ) {
+			return $class::get();
+		} elseif ( is_array($args) ) {
+			return $class::get($args[0], $args[1]);
+		} else {
+			return $class::get($args);
 		}
 
-		$context = self::findContext($name);
-
-		if ( !$context ) return false;
-
-		self::$context[$name] = new $context($parent);
-
-		return self::$context[$name];
+		// TODO: Might be a good idea to inject the module after loading
 	}
 
-	public function findContext()
+	public function providers() { return $this->provideList('providers'); }
+
+	public function contexts() { return $this->provideList('contexts'); }
+
+	public function services() { return $this->provideList('services'); }
+
+	public function provideList( $type )
 	{
-		foreach ( self::$context as $context ) {
-			$class = 'Saltwater\\' . U::dashedToCamelCase($context);
+		if ( empty($this->$type) ) return array();
 
-			if ( class_exists($class) ) return $class;
-		}
-
-		return false;
+		return $this->$type;
 	}
 
-	public function providers()
+	/**
+	 * @param $type
+	 * @param $name
+	 *
+	 * @return \Saltwater\Common\Provider
+	 */
+	protected function className( $type, $name )
 	{
-		if ( empty($this->providers) ) return array();
-
-		return $this->providers;
-	}
-
-	public function provider( $name )
-	{
-
-	}
-
-	public function contexts()
-	{
-		if ( empty($this->contexts) ) return array();
-
-		return $this->contexts;
-	}
-
-	public function services()
-	{
-		if ( empty($this->services) ) return array();
-
-		return $this->services;
-	}
-
-	public function entities()
-	{
-		if ( empty($this->entities) ) return array();
-
-		return $this->entities;
+		return $this->namespace
+			. '\\' . ucfirst($type)
+			. '\\' . U::dashedToCamelCase($name);
 	}
 }

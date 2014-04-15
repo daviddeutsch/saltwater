@@ -10,7 +10,7 @@ use Saltwater\Utils as U;
  */
 class Context
 {
-	public $namespace = 'Saltwater';
+	private $namespace;
 
 	public $parent;
 
@@ -20,11 +20,7 @@ class Context
 
 	public function __construct( $parent=null )
 	{
-		if ( is_null($parent) ) {
-			$this->root = true;
-		} else {
-			$this->parent = $parent;
-		}
+		if ( !is_null($parent) ) $this->parent = $parent;
 	}
 
 	public function pushData( $data )
@@ -66,15 +62,6 @@ class Context
 			return $this->parent->formatModel($name);
 		} else {
 			return $name;
-		}
-	}
-
-	public function getDB()
-	{
-		if ( $this->root ) {
-			return S::$r;
-		} else {
-			return $this->parent->getDB();
 		}
 	}
 

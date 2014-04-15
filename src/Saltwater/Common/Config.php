@@ -2,7 +2,6 @@
 
 namespace Saltwater\Common;
 
-abstract class Config
+abstract class Config implements Provider
 {
-	public $database;
 }

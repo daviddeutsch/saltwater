@@ -2,8 +2,16 @@
 
 namespace Saltwater\Root\Provider;
 
-class Response
+use Saltwater\Common\Provider;
+
+class Response implements Provider
 {
+	private function __construct() {}
+
+	public static function get( $input=null )
+	{
+		return new Response();
+	}
 
 	public function returnRedirect( $url )
 	{
@@ -25,18 +33,20 @@ class Response
 		exit;
 	}
 
+	public function response( $data )
+	{
+		if ( is_object($data) || is_array($data) ) {
+			$this->returnJSON($data);
+		} else {
+			$this->returnEcho($data);
+		}
+	}
+
 	public function returnEcho( $data )
 	{
 		header('HTTP/1.0 200 OK');
 
 		echo $data;
-
-		exit;
-	}
-
-	public function halt( $code, $message )
-	{
-		header("HTTP/1.1 " . $code . " " . $message);
 
 		exit;
 	}

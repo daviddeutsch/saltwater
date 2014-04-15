@@ -12,12 +12,10 @@ class Service
 
 		if ( class_exists($class) ) return $class;
 
-		$root = 'Saltwater\Root';
-
 		if ( in_array($name, $context->services) ) {
-			return $root . '\Service\Rest';
+			return S::$n->service('rest', $context);
 		} elseif ( !empty($context->parent) ) {
-			return S::service($name, $context->parent);
+			return S::$n->service($name, $context->parent);
 		} else {
 			return '';
 		}

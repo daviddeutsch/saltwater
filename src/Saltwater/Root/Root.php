@@ -15,4 +15,6 @@ class Root extends Module
 	protected $services = array('Rest', 'Info');
 
 	protected $entities = array('Log');
+
+	protected $namespace = 'Saltwater\Root';
 }

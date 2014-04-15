@@ -3,10 +3,11 @@
 namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
+use Saltwater\Common\Factory;
 
-class Entity
+class Entity implements Factory
 {
-	public function get( $name )
+	public static function get( $name, $input=null )
 	{
 		foreach ( S::$context as $context ) {
 			$model = $context->formatModel($name);

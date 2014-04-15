@@ -8,27 +8,34 @@ use Saltwater\Common\Route as AbstractRoute;
 
 class Route extends AbstractRoute
 {
-	public function __construct()
+	private function __construct()
 	{
 		$this->uri = $this->getURI();
 
 		$this->http = $this->getHTTP();
 
-		$this->explode( S::$context['root'], $this->http, explode('/', $this->uri) );
+		$this->explode( S::$n->context('root'), $this->http, explode('/', $this->uri) );
+	}
+
+	public static function get( $index=null )
+	{
+		return new Route();
 	}
 
 	protected function getURI()
 	{
 		$path = $_SERVER['SCRIPT_NAME'];
 
-		if ( strpos($_SERVER['REQUEST_URI'], $path) === false ) {
+		$uri = $_SERVER['REQUEST_URI'];
+
+		if ( strpos($uri, $path) === false ) {
 			$path = str_replace( '\\', '', dirname($path) );
 		}
 
-		$path = substr_replace( $_SERVER['REQUEST_URI'], '', 0, strlen($path) );
+		$path = substr_replace( $uri, '', 0, strlen($path) );
 
-		if ( isset($_SERVER['QUERY_STRING']) ) {
-			$path = str_replace('?' . $_SERVER['QUERY_STRING'], '', $path);
+		if ( isset($_SERVER['REQUEST_URI']) ) {
+			$path = str_replace('?' . $_SERVER['REQUEST_URI'], '', $path);
 		}
 
 		$path = preg_replace('`[^a-z0-9/._-]+`', '', strtolower($path));
@@ -58,7 +65,7 @@ class Route extends AbstractRoute
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
-			$service = $call->context->getService($call->class, $result);
+			$service = S::$n->service($call->class, $call->context);
 
 			// TODO: Middleware for individual Services
 
@@ -69,7 +76,7 @@ class Route extends AbstractRoute
 			}
 		}
 
-		S::response()->response($result);
+		S::$n->response->response($result);
 	}
 
 	/**
@@ -88,7 +95,7 @@ class Route extends AbstractRoute
 			return;
 		}
 
-		$c = S::context($root, $context);
+		$c = S::$n->context($root, $context);
 
 		if ( $c ) {
 			$context = $c;
