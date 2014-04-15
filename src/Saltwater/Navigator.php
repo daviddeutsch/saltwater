@@ -143,4 +143,9 @@ class Navigator
 		return $this->provider($name);
 	}
 
+	public function __call( $name, $args )
+	{
+		return $this->provider($name, $args);
+	}
+
 }
