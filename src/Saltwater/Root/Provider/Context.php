@@ -2,7 +2,7 @@
 
 namespace Saltwater\Root\Provider;
 
-use Saltwater\Server as S;
+use Saltwater\Utils as U;
 use Saltwater\Common\Factory;
 
 class Context implements Factory
@@ -15,7 +15,9 @@ class Context implements Factory
 			$namespace = $context->namespace;
 		}
 
-		$class = $namespace . '\Context\\' . ucfirst($name);
+		$class = $namespace
+			. '\Context\\'
+			. U::dashedToCamelCase($name);
 
 		return new $class($context);
 	}

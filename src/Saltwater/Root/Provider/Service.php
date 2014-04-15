@@ -3,12 +3,15 @@
 namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
+use Saltwater\Utils as U;
 
 class Service
 {
 	public function get( $name, $context )
 	{
-		$class = $context->namespace . '\Service\\' . ucfirst($name);
+		$class = $context->namespace
+			. '\Service\\'
+			. U::dashedToCamelCase($name);
 
 		if ( class_exists($class) ) return $class;
 
