@@ -13,7 +13,7 @@ class Response implements Provider
 		return new Response();
 	}
 
-	public function returnRedirect( $url )
+	public function redirect( $url )
 	{
 		header('HTTP/1.1 307 Temporary Redirect');
 
@@ -22,7 +22,7 @@ class Response implements Provider
 		exit;
 	}
 
-	public function returnJSON( $data )
+	public function json( $data )
 	{
 		header('HTTP/1.0 200 OK');
 
@@ -42,7 +42,7 @@ class Response implements Provider
 		}
 	}
 
-	public function returnEcho( $data )
+	public function plain( $data )
 	{
 		header('HTTP/1.0 200 OK');
 
