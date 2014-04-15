@@ -4,7 +4,6 @@ namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Common\Log as AbstractLog;
-use Psr\Log\AbstractLogger;
 
 class Log extends AbstractLog
 {
