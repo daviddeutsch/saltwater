@@ -3,8 +3,9 @@
 namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
+use Saltwater\Thing\Provider;
 
-class Db
+class Db extends Provider
 {
 	private static $r;
 

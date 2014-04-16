@@ -2,6 +2,6 @@
 
 namespace Saltwater\Common;
 
-abstract class Config implements Provider
-{
-}
+use Saltwater\Thing\Provider;
+
+abstract class Config extends Provider {}

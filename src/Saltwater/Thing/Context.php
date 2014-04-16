@@ -50,21 +50,6 @@ class Context
 		return new $service($this, $result);
 	}
 
-	public function formatModel( $name )
-	{
-		$name = U::snakeToCamelCase($name);
-
-		$self = $this->namespace . '\Entity\\' . $name;
-
-		if ( class_exists($self) ) {
-			return $self;
-		} elseif ( !empty($this->parent) ) {
-			return $this->parent->formatModel($name);
-		} else {
-			return $name;
-		}
-	}
-
 	public function getInfo()
 	{
 		return null;

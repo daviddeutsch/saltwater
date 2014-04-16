@@ -3,11 +3,12 @@
 namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
+use Saltwater\Thing\Factory;
 use Saltwater\Utils as U;
 
-class Service
+class Service extends Factory
 {
-	public function get( $name, $context )
+	public static function get( $name, $context=null )
 	{
 		$class = $context->namespace
 			. '\Service\\'

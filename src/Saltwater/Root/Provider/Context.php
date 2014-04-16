@@ -3,9 +3,9 @@
 namespace Saltwater\Root\Provider;
 
 use Saltwater\Utils as U;
-use Saltwater\Common\Factory;
+use Saltwater\Thing\Factory;
 
-class Context implements Factory
+class Context extends Factory
 {
 	public static function get( $name, $context=null )
 	{

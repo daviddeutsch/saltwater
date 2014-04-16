@@ -3,8 +3,9 @@
 namespace Saltwater\Common;
 
 use Psr\Log\LoggerInterface;
+use Saltwater\Thing\Provider;
 
-abstract class Log implements Provider, LoggerInterface
+abstract class Log extends Provider implements LoggerInterface
 {
 	public function emergency($message, array $context = array())
 	{

@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Common;
+namespace Saltwater\Interfaces;
 
 /**
  * Interface Factory
@@ -9,5 +9,7 @@ namespace Saltwater\Common;
  */
 interface Factory
 {
+	public static function setModule( $module );
+
 	public static function get( $name, $input=null );
 }

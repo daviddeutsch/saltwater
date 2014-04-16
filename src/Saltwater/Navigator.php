@@ -58,6 +58,16 @@ class Navigator
 			$this->contexts[$pname] = $name;
 		}
 
+		foreach ( $module->entities() as $entity ) {
+			$pname = U::CamelTodashed($entity);
+
+			if ( !isset($this->providers[$pname]) ) {
+				$this->providers[$pname] = array();
+			}
+
+			$this->providers[$pname][] = $name;
+		}
+
 		return true;
 	}
 
@@ -66,7 +76,7 @@ class Navigator
 	 *
 	 * @return \Saltwater\Thing\Module
 	 */
-	private function getModule( $name )
+	public function getModule( $name )
 	{
 		return $this->modules[$name];
 	}
@@ -96,9 +106,9 @@ class Navigator
 		return $this->provide('entity', array($name, $thing));
 	}
 
-	public function provide( $type, $name, $input=null )
+	public function provide( $type, $args=null )
 	{
-		return $this->provider($type, $name, $input);
+		return $this->provider($type, $args);
 	}
 
 	/**

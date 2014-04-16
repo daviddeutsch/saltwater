@@ -9,7 +9,7 @@ class Log extends AbstractLog
 {
 	private function __construct() {}
 
-	public static function get( $input=null )
+	public static function get()
 	{
 		return new Log();
 	}

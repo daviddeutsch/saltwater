@@ -2,13 +2,13 @@
 
 namespace Saltwater\Root\Provider;
 
-use Saltwater\Common\Provider;
+use Saltwater\Thing\Provider;
 
-class Response implements Provider
+class Response extends Provider
 {
 	private function __construct() {}
 
-	public static function get( $input=null )
+	public static function get()
 	{
 		return new Response();
 	}

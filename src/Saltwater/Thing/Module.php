@@ -6,8 +6,6 @@ use Saltwater\Utils as U;
 
 /**
  * An object that can register and return providers, contexts and services
- *
- * @package Saltwater\Thing
  */
 class Module
 {
@@ -19,9 +17,20 @@ class Module
 
 	protected $services = array();
 
+	protected $entities = array();
+
+	/**
+	 * @param $type
+	 * @param $name
+	 * @param $args
+	 *
+	 * @return \Saltwater\Thing\Provider
+	 */
 	public function provide( $type, $name, $args=null )
 	{
 		$class = $this->className($type, $name);
+
+		$class::setModule( U::namespacedClassToDashed(get_class($this)) );
 
 		if ( is_null($args) ) {
 			return $class::get();
@@ -30,8 +39,6 @@ class Module
 		} else {
 			return $class::get($args);
 		}
-
-		// TODO: Might be a good idea to inject the module after loading
 	}
 
 	public function providers() { return $this->provideList('providers'); }
@@ -39,6 +46,8 @@ class Module
 	public function contexts() { return $this->provideList('contexts'); }
 
 	public function services() { return $this->provideList('services'); }
+
+	public function entities() { return $this->provideList('entities'); }
 
 	public function provideList( $type )
 	{
@@ -51,12 +60,27 @@ class Module
 	 * @param $type
 	 * @param $name
 	 *
-	 * @return \Saltwater\Common\Provider
+	 * @return \Saltwater\Thing\Provider
 	 */
 	protected function className( $type, $name )
 	{
 		return $this->namespace
 			. '\\' . ucfirst($type)
 			. '\\' . U::dashedToCamelCase($name);
+	}
+
+	public function formatModel( $name )
+	{
+		$name = U::snakeToCamelCase($name);
+
+		$self = $this->namespace . '\Entity\\' . $name;
+
+		if ( class_exists($self) ) {
+			return $self;
+		} elseif ( !empty($this->parent) ) {
+			return $this->parent->formatModel($name);
+		} else {
+			return $name;
+		}
 	}
 }

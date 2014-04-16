@@ -17,7 +17,7 @@ class Route extends AbstractRoute
 		$this->explode( S::$n->context('root'), $this->http, explode('/', $this->uri) );
 	}
 
-	public static function get( $index=null )
+	public static function get()
 	{
 		return new Route();
 	}
