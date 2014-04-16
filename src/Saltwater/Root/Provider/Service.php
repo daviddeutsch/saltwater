@@ -20,7 +20,7 @@ class Service extends Factory
 			. '\Service\\'
 			. U::dashedToCamelCase($name);
 
-		if ( class_exists($class) ) return $class;
+		if ( class_exists($class) ) return new $class($context);
 
 		if ( in_array($name, $context->services) ) {
 			return S::$n->service('rest', $context);
