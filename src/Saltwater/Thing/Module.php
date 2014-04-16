@@ -28,13 +28,22 @@ class Module
 	 *
 	 * @return \Saltwater\Thing\Provider
 	 */
-	public function provide( $name, $args=null )
+	public function provide( $module, $name, $args=null )
 	{
+		// TODO: Figure out why this, why that.
+		if ( is_array($name) ) {
+			$copy = $name;
+
+			$name = array_shift($copy);
+
+			$args = $copy;
+		}
+
 		$class = $this->className('provider', $name);
 
 		if ( !class_exists($class) ) return false;
 
-		$class::setModule( U::namespacedClassToDashed(get_class($this)) );
+		$class::setModule($module);
 
 		if ( is_null($args) ) {
 			return $class::get();
@@ -66,7 +75,7 @@ class Module
 	{
 		$contexts = $this->contexts();
 
-		return array_shift($contexts);
+		return U::CamelTodashed( array_shift($contexts) );
 	}
 
 	/**

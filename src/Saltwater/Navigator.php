@@ -175,7 +175,7 @@ class Navigator
 
 			$module = $this->getModule($key);
 
-			$return = $module->provide($name, $args);
+			$return = $module->provide($this->master, $name, $args);
 
 			if ( $return === false ) continue;
 
