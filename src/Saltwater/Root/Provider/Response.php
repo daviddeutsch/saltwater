@@ -36,9 +36,9 @@ class Response implements Provider
 	public function response( $data )
 	{
 		if ( is_object($data) || is_array($data) ) {
-			$this->returnJSON($data);
+			$this->json($data);
 		} else {
-			$this->returnEcho($data);
+			$this->plain($data);
 		}
 	}
 
