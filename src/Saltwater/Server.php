@@ -17,8 +17,8 @@ class Server
 
 		if ( empty($modules) ) return;
 
-		foreach ( $modules as $module ) {
-			self::$n->addModule($module);
+		foreach ( $modules as $i => $module ) {
+			self::$n->addModule($module, $i==0);
 		}
 	}
 

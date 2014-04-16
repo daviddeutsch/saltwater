@@ -13,7 +13,7 @@ class Navigator
 	private $modules = array();
 
 	/**
-	 * @var array|Common\Provider
+	 * @var array|Thing\Provider
 	 */
 	private $providers = array();
 
@@ -32,7 +32,7 @@ class Navigator
 	 */
 	private $master = '';
 
-	public function addModule( $class )
+	public function addModule( $class, $master=false )
 	{
 		if ( !class_exists($class) ) return false;
 
@@ -68,13 +68,15 @@ class Navigator
 			$this->providers[$pname][] = $name;
 		}
 
+		if ( $master ) $this->setMaster($name);
+
 		return true;
 	}
 
 	/**
 	 * @param $name
 	 *
-	 * @return \Saltwater\Thing\Module
+	 * @return Thing\Module
 	 */
 	public function getModule( $name )
 	{
@@ -114,7 +116,7 @@ class Navigator
 	/**
 	 * @param $name
 	 *
-	 * @return Common\Provider
+	 * @return Thing\Provider
 	 */
 	public function provider()
 	{
