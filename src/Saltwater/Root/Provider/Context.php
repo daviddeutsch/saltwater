@@ -18,8 +18,6 @@ class Context extends Factory
 
 		if ( !class_exists($class) ) return false;
 
-		S::setMaster(self::$module);
-
 		return new $class($context);
 	}
 }

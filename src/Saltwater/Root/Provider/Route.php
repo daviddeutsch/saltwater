@@ -143,6 +143,10 @@ class Route extends AbstractRoute
 		. '\Service\\'
 		. U::dashedToCamelCase($service);
 
+		if ( !class_exists($class) ) {
+			$class = 'Saltwater\Root\Service\Rest';
+		}
+
 		$method = $cmd . U::dashedToCamelCase($method);
 
 		if ( !method_exists($class, $method) ) {
@@ -154,7 +158,7 @@ class Route extends AbstractRoute
 		$this->chain[] = (object) array(
 			'context' => $context,
 			'http' => $cmd,
-			'service' => ucfirst($service),
+			'service' => $service,
 			'class' => $class,
 			'method' => $method,
 			'plain' => $plain,

@@ -75,7 +75,7 @@ class Module
 	{
 		$contexts = $this->contexts();
 
-		return U::CamelTodashed( array_shift($contexts) );
+		return array('root', U::CamelTodashed( array_shift($contexts) ) );
 	}
 
 	/**

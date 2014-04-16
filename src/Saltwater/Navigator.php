@@ -100,7 +100,18 @@ class Navigator
 	{
 		$module = $this->modules[$this->master];
 
-		return $this->context( $module->masterContext() );
+		$context = $module->masterContext();
+
+		if ( is_array($context) ) {
+			$parent = null;
+			foreach ( $context as $c ) {
+				$parent = $this->context($c, $parent);
+			}
+
+			return $parent;
+		} else {
+			return $this->context($context);
+		}
 	}
 
 	public function setRoot( $name )
@@ -177,14 +188,16 @@ class Navigator
 
 			$return = $module->provide($this->master, $name, $args);
 
-			if ( $return === false ) continue;
+			if ( $return !== false ) return $return;
 
-			return $return;
+			$return = $module->provide($key, $name, $args);
+
+			if ( $return !== false ) return $return;
 		}
 
 		$key = array_shift( array_values($this->providers[$name]) );
 
-		return $this->modules[$key]->provide($name, $args);
+		return $this->modules[$key]->provide($key, $name, $args);
 	}
 
 	private function providerPrecedence()
