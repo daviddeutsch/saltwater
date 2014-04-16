@@ -9,7 +9,7 @@ class Db extends Provider
 {
 	private static $r;
 
-	protected function __construct()
+	protected static function makeDB()
 	{
 		$cfg = S::$n->config->database;
 
@@ -57,7 +57,9 @@ class Db extends Provider
 
 	public static function get()
 	{
-		self::__construct();
+		if ( empty(self::$r) ) {
+			self::makeDB();
+		}
 
 		return self::$r;
 	}
