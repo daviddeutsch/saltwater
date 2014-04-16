@@ -38,9 +38,15 @@ class Navigator
 
 		$name = U::namespacedClassToDashed($class);
 
-		$this->modules[$name] = new $class();
+		$module = new $class();
 
-		$module =& $this->modules[$name];
+		$dependencies = $module->dependencies();
+
+		if ( !empty($dependencies) ) {
+			foreach ( $dependencies as $dependency ) {
+				$this->addModule($dependency);
+			}
+		}
 
 		foreach ( $module->providers() as $provider ) {
 			$pname = U::CamelTodashed($provider);
@@ -67,6 +73,8 @@ class Navigator
 
 			$this->providers[$pname][] = $name;
 		}
+
+		$this->modules[$name] = $module;
 
 		if ( $master ) $this->setMaster($name);
 

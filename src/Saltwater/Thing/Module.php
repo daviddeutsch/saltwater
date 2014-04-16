@@ -11,6 +11,8 @@ class Module
 {
 	public $namespace;
 
+	protected $dependencies = array();
+
 	protected $providers = array();
 
 	protected $contexts = array();
@@ -40,6 +42,8 @@ class Module
 			return $class::get($args);
 		}
 	}
+
+	public function dependencies() { return $this->dependencies; }
 
 	public function providers() { return $this->provideList('providers'); }
 

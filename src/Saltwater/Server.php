@@ -13,10 +13,6 @@ class Server
 	{
 		if ( empty(self::$n) ) self::$n = new Navigator();
 
-		self::$n->addModule('\Saltwater\Root\Root');
-
-		if ( empty($modules) ) return;
-
 		foreach ( $modules as $i => $module ) {
 			self::$n->addModule($module, $i==0);
 		}
