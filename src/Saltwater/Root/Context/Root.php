@@ -8,5 +8,5 @@ class Root extends Context
 {
 	public $namespace = 'Saltwater\Root';
 
-	protected $services = array('rest', 'info');
+	public $services = array('rest', 'info');
 }

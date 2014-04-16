@@ -7,7 +7,7 @@ use Saltwater\Thing\Module;
 class Root extends Module
 {
 	protected $providers = array(
-		'db', 'entity', 'log', 'route', 'service', 'response'
+		'db', 'entity', 'context', 'log', 'route', 'service', 'response'
 	);
 
 	protected $contexts = array('root');
@@ -16,5 +16,5 @@ class Root extends Module
 
 	protected $entities = array('log');
 
-	protected $namespace = 'Saltwater\Root';
+	public $namespace = 'Saltwater\Root';
 }

@@ -28,9 +28,11 @@ class Module
 	 *
 	 * @return \Saltwater\Thing\Provider
 	 */
-	public function provide( $type, $name, $args=null )
+	public function provide( $name, $args=null )
 	{
-		$class = $this->className($type, $name);
+		$class = $this->className('provider', $name);
+
+		if ( !class_exists($class) ) return false;
 
 		$class::setModule( U::namespacedClassToDashed(get_class($this)) );
 
@@ -58,6 +60,13 @@ class Module
 		if ( empty($this->$type) ) return array();
 
 		return $this->$type;
+	}
+
+	public function masterContext()
+	{
+		$contexts = $this->contexts();
+
+		return array_shift($contexts);
 	}
 
 	/**

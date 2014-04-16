@@ -14,7 +14,11 @@ class Route extends AbstractRoute
 
 		$this->http = $this->getHTTP();
 
-		$this->explode( S::$n->context('root'), $this->http, explode('/', $this->uri) );
+		$this->explode(
+			S::$n->masterContext(),
+			$this->http,
+			explode('/', $this->uri)
+		);
 	}
 
 	public static function get()
@@ -65,7 +69,7 @@ class Route extends AbstractRoute
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
-			$service = S::$n->service($call->class, $call->context);
+			$service = S::$n->service($call->service, $call->context);
 
 			// TODO: Middleware for individual Services
 
@@ -131,7 +135,9 @@ class Route extends AbstractRoute
 			$path = null;
 		}
 
-		$class = $context->findService($service);
+		$class = $context->namespace
+		. '\Service\\'
+		. U::dashedToCamelCase($service);
 
 		$method = $cmd . U::dashedToCamelCase($method);
 

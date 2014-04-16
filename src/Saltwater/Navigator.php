@@ -96,6 +96,13 @@ class Navigator
 		return $this->modules[$name];
 	}
 
+	public function masterContext()
+	{
+		$module = $this->modules[$this->master];
+
+		return $this->context( $module->masterContext() );
+	}
+
 	public function setRoot( $name )
 	{
 		$this->root = $name;
@@ -114,7 +121,7 @@ class Navigator
 	 */
 	public function context( $name, $parent=null )
 	{
-		return $this->provide('context', array($name, $parent));
+		return $this->provide('context', $name, $parent);
 	}
 
 	/**
@@ -125,7 +132,7 @@ class Navigator
 	 */
 	public function service( $name, $context )
 	{
-		return $this->provide('service', array($name, $context));
+		return $this->provide('service', $name, $context);
 	}
 
 	/**
@@ -136,12 +143,12 @@ class Navigator
 	 */
 	public function entity( $name, $input=null )
 	{
-		return $this->provide('entity', array($name, $input));
+		return $this->provide('entity', $name, $input);
 	}
 
-	public function provide( $type, $args=null )
+	public function provide( $type, $name, $args=null )
 	{
-		return $this->provider($type, $args);
+		return $this->provider($type, $name, $args);
 	}
 
 	/**
@@ -153,23 +160,31 @@ class Navigator
 	{
 		$args = func_get_args();
 
-		$type = array_shift($args);
+		$name = array_shift($args);
 
-		if ( !isset($this->providers[$type]) ) {
-			S::halt(500, 'Provider does not exist: ' . $type);
+		if ( $name == 'provider' ) {
+			$name = array_shift($args);
+		}
+
+		if ( !isset($this->providers[$name]) ) {
+			S::halt(500, 'Provider does not exist: ' . $name);
 		};
 
 		foreach ( self::providerPrecedence() as $key ) {
-			if ( !in_array($key, $this->providers[$type]) ) continue;
+			if ( !in_array($key, $this->providers[$name]) ) continue;
 
 			$module = $this->getModule($key);
 
-			return $module->provide($type, $args);
+			$return = $module->provide($name, $args);
+
+			if ( $return === false ) continue;
+
+			return $return;
 		}
 
-		$key = array_shift( array_keys($this->providers[$type]) );
+		$key = array_shift( array_values($this->providers[$name]) );
 
-		return $this->modules[$key]->provide($type, $args);
+		return $this->modules[$key]->provide($name, $args);
 	}
 
 	private function providerPrecedence()
@@ -183,12 +198,12 @@ class Navigator
 
 	public function __get( $name )
 	{
-		return $this->provider($name);
+		return $this->provider('provider', $name);
 	}
 
 	public function __call( $name, $args )
 	{
-		return $this->provider($name, $args);
+		return $this->provider('provider', $name, $args);
 	}
 
 }

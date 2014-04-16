@@ -13,6 +13,8 @@ class Server
 	{
 		if ( empty(self::$n) ) self::$n = new Navigator();
 
+		if ( !is_array($modules) ) $modules = array($modules);
+
 		foreach ( $modules as $i => $module ) {
 			self::$n->addModule($module, $i==0);
 		}
