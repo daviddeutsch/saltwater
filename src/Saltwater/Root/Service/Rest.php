@@ -2,6 +2,7 @@
 
 namespace Saltwater\Root\Service;
 
+use Saltwater\Server as S;
 use Saltwater\Thing\Service;
 
 class Rest extends Service
@@ -35,6 +36,6 @@ class Rest extends Service
 
 	protected function restHandler()
 	{
-		return new \RedBean_Plugin_BeanCan($this->context->getDB());
+		return new \RedBean_Plugin_BeanCan(S::$n->db);
 	}
 }
