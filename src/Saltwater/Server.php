@@ -39,6 +39,11 @@ class Server
 		self::$n->setMaster($name);
 	}
 
+	public static function entity( $name, $input=null )
+	{
+		return self::$n->entity($name, $input);
+	}
+
 	public static function halt( $code, $message )
 	{
 		header("HTTP/1.1 " . $code . " " . $message); exit;

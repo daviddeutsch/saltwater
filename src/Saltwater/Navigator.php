@@ -130,13 +130,13 @@ class Navigator
 
 	/**
 	 * @param      $name
-	 * @param null $thing
+	 * @param null $input
 	 *
 	 * @return Thing\Entity
 	 */
-	public function entity( $name, $thing=null )
+	public function entity( $name, $input=null )
 	{
-		return $this->provide('entity', array($name, $thing));
+		return $this->provide('entity', array($name, $input));
 	}
 
 	public function provide( $type, $args=null )

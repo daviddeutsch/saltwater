@@ -72,19 +72,4 @@ class Module
 			. '\\' . ucfirst($type)
 			. '\\' . U::dashedToCamelCase($name);
 	}
-
-	public function formatModel( $name )
-	{
-		$name = U::snakeToCamelCase($name);
-
-		$self = $this->namespace . '\Entity\\' . $name;
-
-		if ( class_exists($self) ) {
-			return $self;
-		} elseif ( !empty($this->parent) ) {
-			return $this->parent->formatModel($name);
-		} else {
-			return $name;
-		}
-	}
 }
