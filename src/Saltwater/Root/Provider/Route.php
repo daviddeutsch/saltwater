@@ -23,7 +23,11 @@ class Route extends AbstractRoute
 
 	public static function get()
 	{
-		return new Route();
+		$module = S::$n->getModule(self::$module);
+
+		$class = $module->namespace . '\Provider\Route';
+
+		return new $class();
 	}
 
 	protected function getURI()
