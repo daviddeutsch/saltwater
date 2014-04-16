@@ -8,6 +8,12 @@ use Saltwater\Utils as U;
 
 class Service extends Factory
 {
+	/**
+	 * @param string                   $name
+	 * @param \Saltwater\Thing\Context $context
+	 *
+	 * @return \Saltwater\Thing\Provider|string
+	 */
 	public static function get( $name, $context=null )
 	{
 		$class = $context->namespace

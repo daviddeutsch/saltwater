@@ -2,6 +2,7 @@
 
 namespace Saltwater\Root\Provider;
 
+use Saltwater\Server as S;
 use Saltwater\Utils as U;
 use Saltwater\Thing\Factory;
 
@@ -9,15 +10,15 @@ class Context extends Factory
 {
 	public static function get( $name, $context=null )
 	{
-		if ( empty($context->namespace) ) {
-			$namespace = str_replace('\Provider', '', __NAMESPACE__);
-		} else {
-			$namespace = $context->namespace;
-		}
+		$module = S::$n->getModule(self::$module);
 
-		$class = $namespace
+		$class = $module->namespace
 			. '\Context\\'
 			. U::dashedToCamelCase($name);
+
+		if ( !class_exists($class) ) return false;
+
+		S::setMaster(self::$module);
 
 		return new $class($context);
 	}

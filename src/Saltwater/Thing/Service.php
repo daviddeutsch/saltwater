@@ -2,6 +2,9 @@
 
 namespace Saltwater\Thing;
 
+/**
+ * Services provide data or functionality
+ */
 class Service
 {
 	protected $context;

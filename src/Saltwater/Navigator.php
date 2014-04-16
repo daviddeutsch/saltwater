@@ -23,6 +23,11 @@ class Navigator
 	private $contexts = array();
 
 	/**
+	 * @var array|Thing\Entity
+	 */
+	private $entities = array();
+
+	/**
 	 * @var string
 	 */
 	private $root = 'root';
@@ -67,11 +72,11 @@ class Navigator
 		foreach ( $module->entities() as $entity ) {
 			$pname = U::CamelTodashed($entity);
 
-			if ( !isset($this->providers[$pname]) ) {
-				$this->providers[$pname] = array();
+			if ( !isset($this->entities[$pname]) ) {
+				$this->entities[$pname] = array();
 			}
 
-			$this->providers[$pname][] = $name;
+			$this->entities[$pname][] = $name;
 		}
 
 		$this->modules[$name] = $module;
@@ -101,16 +106,34 @@ class Navigator
 		$this->master = $name;
 	}
 
+	/**
+	 * @param      $name
+	 * @param null $parent
+	 *
+	 * @return Thing\Context
+	 */
 	public function context( $name, $parent=null )
 	{
 		return $this->provide('context', array($name, $parent));
 	}
 
+	/**
+	 * @param $name
+	 * @param $context
+	 *
+	 * @return Thing\Service
+	 */
 	public function service( $name, $context )
 	{
 		return $this->provide('service', array($name, $context));
 	}
 
+	/**
+	 * @param      $name
+	 * @param null $thing
+	 *
+	 * @return Thing\Entity
+	 */
 	public function entity( $name, $thing=null )
 	{
 		return $this->provide('entity', array($name, $thing));

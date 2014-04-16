@@ -2,15 +2,14 @@
 
 namespace Saltwater\Thing;
 
-use Saltwater\Server as S;
-use Saltwater\Utils as U;
-
 /**
- * A context accepts and returns services, decides provider priority
+ * A context accepts and returns services, decides provider priority(?)
+ *
+ * In a path, contexts provide hierarchy and encapsulation
  */
 class Context
 {
-	private $namespace;
+	public $namespace;
 
 	public $parent;
 
@@ -26,28 +25,6 @@ class Context
 	public function pushData( $data )
 	{
 		$this->data = $data;
-	}
-
-	public function findService( $name )
-	{
-		$class = $this->namespace . '\Service\\' . ucfirst($name);
-
-		if ( class_exists($class) ) return $class;
-
-		$root = 'Saltwater\Root';
-
-		if ( in_array($name, $this->services) ) {
-			return $root . '\Service\Rest';
-		} elseif ( !empty($this->parent) ) {
-			return $this->parent->findService($name);
-		} else {
-			return '';
-		}
-	}
-
-	public function getService( $service, $result )
-	{
-		return new $service($this, $result);
 	}
 
 	public function getInfo()

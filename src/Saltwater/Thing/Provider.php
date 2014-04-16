@@ -16,5 +16,7 @@ abstract class Provider
 	public static function get()
 	{
 		// return new Provider();
+
+		return new \stdClass();
 	}
 }

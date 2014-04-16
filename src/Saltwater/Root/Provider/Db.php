@@ -9,7 +9,7 @@ class Db extends Provider
 {
 	private static $r;
 
-	private function __construct()
+	protected function __construct()
 	{
 		$cfg = S::$n->config->database;
 

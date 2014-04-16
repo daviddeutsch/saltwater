@@ -8,7 +8,7 @@ use Saltwater\Common\Route as AbstractRoute;
 
 class Route extends AbstractRoute
 {
-	private function __construct()
+	protected function __construct()
 	{
 		$this->uri = $this->getURI();
 
