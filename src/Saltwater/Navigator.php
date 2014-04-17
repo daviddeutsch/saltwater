@@ -43,6 +43,8 @@ class Navigator
 
 		$name = U::namespacedClassToDashed($class);
 
+		if ( isset($this->modules[$name]) ) return null;
+
 		$module = new $class();
 
 		$dependencies = $module->dependencies();
