@@ -8,24 +8,14 @@ use Saltwater\Utils as U;
 class Navigator
 {
 	/**
-	 * @var array|Thing\Module
+	 * @var Thing\Module[]
 	 */
 	private $modules = array();
 
 	/**
-	 * @var array|Thing\Provider
+	 * @var string[] array of things
 	 */
-	private $providers = array();
-
-	/**
-	 * @var array|Thing\Context
-	 */
-	private $contexts = array();
-
-	/**
-	 * @var array|Thing\Entity
-	 */
-	private $entities = array();
+	private $things = array();
 
 	/**
 	 * @var string
@@ -50,47 +40,31 @@ class Navigator
 
 		if ( isset($this->modules[$name]) ) return null;
 
-		$module = new $class();
+		$this->modules[$name] = new $class();
 
-		$dependencies = $module->dependencies();
-
-		if ( !empty($dependencies) ) {
-			foreach ( $dependencies as $dependency ) {
-				$this->addModule($dependency);
-			}
-		}
-
-		foreach ( $module->providers() as $provider ) {
-			$pname = U::CamelTodashed($provider);
-
-			if ( !isset($this->providers[$pname]) ) {
-				$this->providers[$pname] = array();
-			}
-
-			$this->providers[$pname][] = $name;
-		}
-
-		foreach ( $module->contexts() as $context ) {
-			$pname = U::CamelTodashed($context);
-
-			$this->contexts[$pname] = $name;
-		}
-
-		foreach ( $module->entities() as $entity ) {
-			$pname = U::CamelTodashed($entity);
-
-			if ( !isset($this->entities[$pname]) ) {
-				$this->entities[$pname] = array();
-			}
-
-			$this->entities[$pname][] = $name;
-		}
-
-		$this->modules[$name] = $module;
+		$this->modules[$name]->register($name);
 
 		if ( $master ) $this->setMaster($name);
 
 		return true;
+	}
+
+	public function isThing( $name )
+	{
+		return array_search($name, $this->things) !== false;
+	}
+
+	public function addThing( $name )
+	{
+		$id = array_search($name, $this->things);
+
+		if ( $id ) {
+			return ($id+1)^2;
+		} else {
+			$this->things[] = $name;
+
+			return count($this->things)^2;
+		}
 	}
 
 	/**
@@ -198,20 +172,16 @@ class Navigator
 
 		$name = array_shift($args);
 
-		if ( $name == 'provider' ) {
-			$name = array_shift($args);
-		}
+		$thing = 'provider.'.$name;
 
-		if ( !isset($this->providers[$name]) ) {
+		if ( !$this->isThing($thing) ) {
 			S::halt(500, 'Provider does not exist: ' . $name);
 		};
 
 		foreach ( $this->modulePrecedence() as $key ) {
-			if ( !in_array($key, $this->providers[$name]) ) continue;
+			if ( !$this->modules[$key]->hasThing($thing) ) continue;
 
-			$module = $this->getModule($key);
-
-			$return = $module->provide($key, $name, $args);
+			$return = $this->modules[$key]->provide($key, $name, $args);
 
 			if ( $return !== false ) {
 				$this->setMaster($key);
@@ -239,12 +209,12 @@ class Navigator
 
 	public function __get( $name )
 	{
-		return $this->provider('provider', $name);
+		return $this->provider($name);
 	}
 
 	public function __call( $name, $args )
 	{
-		return $this->provider('provider', $name, $args);
+		return $this->provider($name, $args);
 	}
 
 }

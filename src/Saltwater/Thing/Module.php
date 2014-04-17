@@ -2,6 +2,7 @@
 
 namespace Saltwater\Thing;
 
+use Saltwater\Server as S;
 use Saltwater\Utils as U;
 
 /**
@@ -20,6 +21,45 @@ class Module
 	protected $services = array();
 
 	protected $entities = array();
+
+	/**
+	 * @var int bitmask of thing registry
+	 */
+	protected $things;
+
+	public function register( $name )
+	{
+		$this->things = 0;
+
+		$this->things += S::$n->addThing('model.' . $name);
+
+		if ( !empty($this->dependencies) ) {
+			foreach ( $this->dependencies as $dependency ) {
+				S::$n->addModule($dependency);
+			}
+		}
+
+		foreach (
+			array(
+				'providers' => 'provider',
+				'contexts' => 'context',
+				'entities' => 'entity'
+				) as $p => $s
+		) {
+			if ( empty($this->$p) ) continue;
+
+			foreach ( $this->$p as $thing ) {
+				$this->things += S::$n->addThing(
+					$s . '.' . U::CamelTodashed($thing)
+				);
+			}
+		}
+	}
+
+	public function hasThing( $bit )
+	{
+		return $this->things & $bit;
+	}
 
 	/**
 	 * @param $type
@@ -54,16 +94,6 @@ class Module
 		}
 	}
 
-	public function dependencies() { return $this->dependencies; }
-
-	public function providers() { return $this->provideList('providers'); }
-
-	public function contexts() { return $this->provideList('contexts'); }
-
-	public function services() { return $this->provideList('services'); }
-
-	public function entities() { return $this->provideList('entities'); }
-
 	public function provideList( $type )
 	{
 		if ( empty($this->$type) ) return array();
@@ -73,9 +103,14 @@ class Module
 
 	public function masterContext()
 	{
-		$contexts = $this->contexts();
-
-		return array('root', U::CamelTodashed( array_shift($contexts) ) );
+		if ( empty($this->contexts) ) {
+			return 'root';
+		} else {
+			return array(
+				'root',
+				U::CamelTodashed( array_shift($this->contexts) )
+			);
+		}
 	}
 
 	/**
