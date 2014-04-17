@@ -116,6 +116,11 @@ class Navigator
 		}
 	}
 
+	public function getContexts()
+	{
+		return $this->contexts;
+	}
+
 	public function setRoot( $name )
 	{
 		$this->root = $name;

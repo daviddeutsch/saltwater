@@ -10,7 +10,15 @@ class Context extends Factory
 {
 	public static function get( $name, $context=null )
 	{
-		$module = S::$n->getModule(self::$module);
+		$module = self::$module;
+
+		foreach ( S::$n->getContexts() as $c => $m ) {
+			if ( $c == $name ) {
+				$module = $m;
+			}
+		}
+
+		$module = S::$n->getModule($module);
 
 		$class = $module->namespace
 			. '\Context\\'
