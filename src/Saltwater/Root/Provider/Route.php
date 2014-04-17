@@ -17,7 +17,8 @@ class Route extends AbstractRoute
 		$this->explode(
 			S::$n->masterContext(),
 			$this->http,
-			explode('/', $this->uri)
+			explode('/', $this->uri),
+			true
 		);
 	}
 
@@ -73,7 +74,7 @@ class Route extends AbstractRoute
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
-			$service = S::$n->service($call->service, $call->context);
+			$service = S::$n->service($call->class, $call->context);
 
 			// TODO: Middleware for individual Services
 
@@ -92,7 +93,7 @@ class Route extends AbstractRoute
 	 * @param string  $cmd
 	 * @param string  $path
 	 */
-	protected function explode( $context, $cmd, $path )
+	protected function explode( $context, $cmd, $path, $start=false )
 	{
 		$root = array_shift($path);
 
@@ -107,6 +108,15 @@ class Route extends AbstractRoute
 
 		if ( $c ) {
 			$context = $c;
+
+			// If we start right into a different context, switch master module
+			if ( $start ) {
+				foreach ( S::$n->getContexts() as $k => $module ) {
+					if ( $k == $root ) {
+						S::$n->setMaster($module);
+					}
+				}
+			}
 
 			$root = array_shift($path);
 		}
@@ -139,12 +149,18 @@ class Route extends AbstractRoute
 			$path = null;
 		}
 
+		// TODO: Setting a class here and reusing it later is mad uglies
 		$class = $context->namespace
 		. '\Service\\'
 		. U::dashedToCamelCase($service);
 
 		if ( !class_exists($class) ) {
-			$class = 'Saltwater\Root\Service\Rest';
+			$class = 'Saltwater\Root\Service\\'
+				. U::dashedToCamelCase($service);
+
+			if ( !class_exists($class) ) {
+				$class = 'Saltwater\Root\Service\Rest';
+			}
 		}
 
 		$method = $cmd . U::dashedToCamelCase($method);

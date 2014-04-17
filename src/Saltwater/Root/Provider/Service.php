@@ -16,15 +16,22 @@ class Service extends Factory
 	 */
 	public static function get( $name, $context=null )
 	{
-		$class = $context->namespace
-			. '\Service\\'
-			. U::dashedToCamelCase($name);
+		// TODO: This is still pretty dirty
+		if ( strpos($name, '\\') ) {
+			$class = $name;
+		} else {
+			$class = $context->namespace
+				. '\Service\\'
+				. U::dashedToCamelCase($name);
+		}
 
 		if ( class_exists($class) ) return new $class($context);
 
 		if ( in_array($name, $context->services) ) {
 			return S::$n->service('rest', $context);
 		} elseif ( !empty($context->parent) ) {
+			$name = U::namespacedClassToDashed($class);
+
 			return S::$n->service($name, $context->parent);
 		} else {
 			return '';

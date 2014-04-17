@@ -37,6 +37,11 @@ class Navigator
 	 */
 	private $master = '';
 
+	/**
+	 * @var array
+	 */
+	private $stack = array();
+
 	public function addModule( $class, $master=false )
 	{
 		if ( !class_exists($class) ) return false;
@@ -129,6 +134,19 @@ class Navigator
 	public function setMaster( $name )
 	{
 		$this->master = $name;
+
+		$this->pushStack($name);
+	}
+
+	private function pushStack( $name )
+	{
+		if ( empty($this->stack) ) {
+			$this->stack[] = $this->root;
+		}
+
+		if ( !in_array($name, $this->stack) ) {
+			$this->stack[] = $name;
+		}
 	}
 
 	/**
@@ -188,18 +206,18 @@ class Navigator
 			S::halt(500, 'Provider does not exist: ' . $name);
 		};
 
-		foreach ( self::providerPrecedence() as $key ) {
+		foreach ( $this->modulePrecedence() as $key ) {
 			if ( !in_array($key, $this->providers[$name]) ) continue;
 
 			$module = $this->getModule($key);
 
-			$return = $module->provide($this->master, $name, $args);
-
-			if ( $return !== false ) return $return;
-
 			$return = $module->provide($key, $name, $args);
 
-			if ( $return !== false ) return $return;
+			if ( $return !== false ) {
+				$this->setMaster($key);
+
+				return $return;
+			}
 		}
 
 		$key = array_shift( array_values($this->providers[$name]) );
@@ -207,13 +225,16 @@ class Navigator
 		return $this->modules[$key]->provide($key, $name, $args);
 	}
 
-	private function providerPrecedence()
+	private function modulePrecedence()
 	{
-		if ( $this->root == 'root' ) {
-			return array($this->master, 'root');
-		} else {
-			return array($this->master, $this->root, 'root');
+		$return = array();
+		foreach ( $this->stack as $module ) {
+			array_unshift($return, $module);
+
+			if ( $module == $this->master ) break;
 		}
+
+		return $return;
 	}
 
 	public function __get( $name )
