@@ -29,9 +29,9 @@ class Module
 
 	public function register( $name )
 	{
-		$this->things = 0;
+		$things = 0;
 
-		$this->things += S::$n->addThing('model.' . $name);
+		$things |= S::$n->addThing('model.' . $name);
 
 		if ( !empty($this->dependencies) ) {
 			foreach ( $this->dependencies as $dependency ) {
@@ -43,22 +43,25 @@ class Module
 			array(
 				'providers' => 'provider',
 				'contexts' => 'context',
+				'services' => 'service',
 				'entities' => 'entity'
-				) as $p => $s
+			) as $p => $s
 		) {
 			if ( empty($this->$p) ) continue;
 
 			foreach ( $this->$p as $thing ) {
-				$this->things += S::$n->addThing(
+				$things |= S::$n->addThing(
 					$s . '.' . U::CamelTodashed($thing)
 				);
 			}
 		}
+
+		$this->things = $things;
 	}
 
 	public function hasThing( $bit )
 	{
-		return $this->things & $bit;
+		return ($this->things & $bit) == $bit;
 	}
 
 	/**

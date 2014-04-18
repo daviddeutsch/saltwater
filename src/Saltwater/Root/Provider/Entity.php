@@ -32,7 +32,9 @@ class Entity extends Factory
 		} else {
 			$name = U::CamelTodashed($name);
 
-			if ( in_array($name, $module->entities()) ) {
+			$bit = S::$n->bitThing('entity.' . $name);
+
+			if ( $module->hasThing($bit) ) {
 				return '\Saltwater\Thing\Entity';
 			}
 		}

@@ -54,16 +54,27 @@ class Navigator
 		return array_search($name, $this->things) !== false;
 	}
 
+	public function bitThing( $name )
+	{
+		$id = array_search($name, $this->things);
+
+		if ( $id === false ) {
+			return false;
+		} else {
+			return pow(2, $id);
+		}
+	}
+
 	public function addThing( $name )
 	{
 		$id = array_search($name, $this->things);
 
 		if ( $id ) {
-			return ($id+1)^2;
+			return pow(2, $id);
 		} else {
 			$this->things[] = $name;
 
-			return count($this->things)^2;
+			return pow(2, count($this->things)-1);
 		}
 	}
 
@@ -95,9 +106,23 @@ class Navigator
 		}
 	}
 
-	public function getContexts()
+	public function getContextModule( $name )
 	{
-		return $this->contexts;
+		$name = 'context.' . $name;
+
+		foreach ( $this->things as $n => $thing ) {
+			if ( $thing != $name ) continue;
+
+			$bit = pow(2, $n);
+
+			foreach ( $this->modules as $module ) {
+				if ( !$module->hasThing($bit) ) continue;
+
+				return $module;
+			}
+		}
+
+		return null;
 	}
 
 	public function setRoot( $name )
@@ -172,27 +197,66 @@ class Navigator
 
 		$name = array_shift($args);
 
-		$thing = 'provider.'.$name;
+		$bit = $this->bitThing('provider.' . $name);
 
-		if ( !$this->isThing($thing) ) {
+		if ( $bit === false ) {
 			S::halt(500, 'Provider does not exist: ' . $name);
 		};
 
-		foreach ( $this->modulePrecedence() as $key ) {
-			if ( !$this->modules[$key]->hasThing($thing) ) continue;
+		$modules = $this->modulePrecedence();
 
-			$return = $this->modules[$key]->provide($key, $name, $args);
+		foreach ( $modules as $module ) {
+			if ( !$this->modules[$module]->hasThing($bit) ) continue;
+
+			$inject = $module;
+
+			if ( !empty($args[0]) && is_string($args[0]) ) {
+				$k = $name . '.' . $args[0];
+
+				$m = $this->modulesByThing($k);
+
+				if ( !empty($m) ) {
+					$inject = array_pop($m);
+				}
+			}
+
+			$return = $this->modules[$module]->provide($inject, $name, $args);
 
 			if ( $return !== false ) {
-				$this->setMaster($key);
+				//$this->setMaster($module);
 
 				return $return;
 			}
 		}
 
-		$key = array_shift( array_values($this->providers[$name]) );
+		$last = array_pop( array_values($this->stack) );
 
-		return $this->modules[$key]->provide($key, $name, $args);
+		if ( $last != $this->master ) {
+			$this->setMaster($last);
+
+			return call_user_func_array(
+				array(&$this, 'provider'),
+				array_merge( array($name), $args )
+			);
+		}
+
+		return false;
+	}
+
+	private function modulesByThing( $thing )
+	{
+		if ( !$this->isThing($thing) ) return false;
+
+		$b = $this->bitThing($thing);
+
+		$return = array();
+		foreach ( $this->modules as $k => $module ) {
+			if ( $module->hasThing($b) ) {
+				$return[] = $k;
+			}
+		}
+
+		return $return;
 	}
 
 	private function modulePrecedence()
