@@ -250,9 +250,9 @@ class Navigator
 		$b = $this->bitThing($thing);
 
 		$return = array();
-		foreach ( $this->modules as $k => $module ) {
-			if ( $module->hasThing($b) ) {
-				$return[] = $k;
+		foreach ( $this->modulePrecedence() as $module ) {
+			if ( $this->modules[$module]->hasThing($b) ) {
+				$return[] = $module;
 			}
 		}
 
