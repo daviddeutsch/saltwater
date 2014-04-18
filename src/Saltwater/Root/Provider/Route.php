@@ -109,15 +109,6 @@ class Route extends AbstractRoute
 		if ( $c ) {
 			$context = $c;
 
-			// If we start right into a different context, switch master module
-			/*if ( $start ) {
-				foreach ( S::$n->getContexts() as $k => $module ) {
-					if ( $k == $root ) {
-						S::$n->setMaster($module);
-					}
-				}
-			}*/
-
 			$root = array_shift($path);
 		}
 
