@@ -307,6 +307,8 @@ class Navigator
 			$bit = $this->bitThing($thing);
 		}
 
+		// Make it possible for providers to call "themselves"
+		// (actually: providers of the same name higher up the chain)
 		foreach ( array_reverse($this->modules) as $k => $module ) {
 			if ( $is_provider ) {
 				if ( $module->hasThing($bit) ) {
