@@ -13,7 +13,7 @@ class Navigator
 	private $modules = array();
 
 	/**
-	 * @var string[] array of things
+	 * @var string[] array of Saltwater\Thing(s)
 	 */
 	private $things = array();
 
@@ -28,10 +28,18 @@ class Navigator
 	private $master = '';
 
 	/**
-	 * @var array
+	 * @var string[] array of modules stacked in the order they were called in
 	 */
 	private $stack = array();
 
+	/**
+	 * Add module to Navigator and register its things
+	 *
+	 * @param string $class  Full Classname
+	 * @param bool   $master true if this is also the master module
+	 *
+	 * @return bool|null
+	 */
 	public function addModule( $class, $master=false )
 	{
 		if ( !class_exists($class) ) return false;
@@ -49,11 +57,25 @@ class Navigator
 		return true;
 	}
 
+	/**
+	 * Return true if the input is a registered thing
+	 *
+	 * @param string $name in the form "type.name"
+	 *
+	 * @return bool
+	 */
 	public function isThing( $name )
 	{
 		return array_search($name, $this->things) !== false;
 	}
 
+	/**
+	 * Return the bitmask integer a thing
+	 *
+	 * @param string $name in the form "type.name"
+	 *
+	 * @return bool|int
+	 */
 	public function bitThing( $name )
 	{
 		$id = array_search($name, $this->things);
@@ -65,9 +87,15 @@ class Navigator
 		}
 	}
 
+	/**
+	 * Register a thing and return its bitmask integer
+	 * @param $name
+	 *
+	 * @return number
+	 */
 	public function addThing( $name )
 	{
-		$id = array_search($name, $this->things);
+		$id = $this->bitThing($name);
 
 		if ( $id ) {
 			return pow(2, $id);
@@ -79,7 +107,9 @@ class Navigator
 	}
 
 	/**
-	 * @param $name
+	 * Return a module class by its name
+	 *
+	 * @param string $name
 	 *
 	 * @return Thing\Module
 	 */
@@ -88,11 +118,14 @@ class Navigator
 		return $this->modules[$name];
 	}
 
+	/**
+	 * Return the master context for the current master module
+	 *
+	 * @return null|Thing\Context
+	 */
 	public function masterContext()
 	{
-		$module = $this->modules[$this->master];
-
-		$context = $module->masterContext();
+		$context = $this->modules[$this->master]->masterContext();
 
 		if ( is_array($context) ) {
 			$parent = null;
@@ -106,6 +139,13 @@ class Navigator
 		}
 	}
 
+	/**
+	 * Get the Module that provides a context
+	 *
+	 * @param string $name plain name of the context
+	 *
+	 * @return null|Thing\Module
+	 */
 	public function getContextModule( $name )
 	{
 		$name = 'context.' . $name;
@@ -125,11 +165,21 @@ class Navigator
 		return null;
 	}
 
+	/**
+	 * Set the root module by name
+	 *
+	 * @param string $name
+	 */
 	public function setRoot( $name )
 	{
 		$this->root = $name;
 	}
 
+	/**
+	 * Set the master module by name
+	 *
+	 * @param string $name
+	 */
 	public function setMaster( $name )
 	{
 		$this->master = $name;
@@ -137,6 +187,11 @@ class Navigator
 		$this->pushStack($name);
 	}
 
+	/**
+	 * Push a module name onto the stack, establishing later hierarchy for calls
+	 *
+	 * @param string $name
+	 */
 	private function pushStack( $name )
 	{
 		if ( empty($this->stack) ) {
@@ -149,8 +204,10 @@ class Navigator
 	}
 
 	/**
-	 * @param      $name
-	 * @param null $parent
+	 * Provide a Thing\Context by name, possibly injecting a parent context
+	 *
+	 * @param string             $name
+	 * @param null|Thing\Context $parent
 	 *
 	 * @return Thing\Context
 	 */
@@ -160,8 +217,10 @@ class Navigator
 	}
 
 	/**
-	 * @param $name
-	 * @param $context
+	 * Provide a Thing\Service by name, specifying for which context
+	 *
+	 * @param string        $name
+	 * @param Thing\Context $context
 	 *
 	 * @return Thing\Service
 	 */
@@ -171,8 +230,10 @@ class Navigator
 	}
 
 	/**
-	 * @param      $name
-	 * @param null $input
+	 * Provide a Thing\Entity or Thing\Association by name
+	 *
+	 * @param string $name
+	 * @param null   $input
 	 *
 	 * @return Thing\Entity
 	 */
@@ -181,13 +242,22 @@ class Navigator
 		return $this->provide('entity', $name, $input);
 	}
 
+	/**
+	 * Generic call for a provider, specifying type and name, relaying arguments
+	 *
+	 * @param string     $type
+	 * @param string     $name
+	 * @param array|null $args
+	 *
+	 * @return Thing\*
+	 */
 	public function provide( $type, $name, $args=null )
 	{
 		return $this->provider($type, $name, $args);
 	}
 
 	/**
-	 * @param $name
+	 * Call upon a provider by type and name, relaying arguments
 	 *
 	 * @return Thing\Provider
 	 */
@@ -327,6 +397,14 @@ class Navigator
 		return null;
 	}
 
+	/**
+	 * Return top candidate Module for providing a Thing
+	 *
+	 * @param string $thing
+	 * @param bool   $precedence Use the current module precedence rules
+	 *
+	 * @return bool|mixed
+	 */
 	public function moduleByThing( $thing, $precedence=true )
 	{
 		$modules = $this->modulesByThing($thing, $precedence);
@@ -336,6 +414,13 @@ class Navigator
 		return array_shift($modules);
 	}
 
+	/**
+	 * Return a list of Modules providing a Thing
+	 * @param      $thing
+	 * @param bool $precedence
+	 *
+	 * @return array|bool
+	 */
 	public function modulesByThing( $thing, $precedence=true )
 	{
 		if ( !$this->isThing($thing) ) return false;
