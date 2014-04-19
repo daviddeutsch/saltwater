@@ -231,6 +231,7 @@ class Navigator
 			if ( $return !== false ) return $return;
 		}
 
+		// As a last resort, pop out of the master and try again
 		$last = array_pop( array_values($this->stack) );
 
 		if ( $last != $this->master ) {

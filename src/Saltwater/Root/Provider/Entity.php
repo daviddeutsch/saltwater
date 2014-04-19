@@ -12,9 +12,7 @@ class Entity extends Factory
 	{
 		$model = self::formatModel($name);
 
-		if ( !empty($model) ) {
-			return $model;
-		}
+		if ( !empty($model) ) return $model;
 
 		return $name;
 	}
@@ -27,16 +25,14 @@ class Entity extends Factory
 
 		$class = $module->namespace . '\Entity\\' . $name;
 
-		if ( class_exists($class) ) {
-			return $class;
-		} else {
-			$name = U::CamelTodashed($name);
+		if ( class_exists($class) ) return $class;
 
-			$bit = S::$n->bitThing('entity.' . $name);
+		$name = U::CamelTodashed($name);
 
-			if ( $module->hasThing($bit) ) {
-				return '\Saltwater\Thing\Entity';
-			}
+		$bit = S::$n->bitThing('entity.' . $name);
+
+		if ( $module->hasThing($bit) ) {
+			return '\Saltwater\Thing\Entity';
 		}
 
 		return null;

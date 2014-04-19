@@ -30,11 +30,12 @@ class Service extends Factory
 		if ( in_array($name, $context->services) ) {
 			return S::$n->service('rest', $context);
 		} elseif ( !empty($context->parent) ) {
-			$name = U::namespacedClassToDashed($class);
-
-			return S::$n->service($name, $context->parent);
-		} else {
-			return '';
+			return S::$n->service(
+				U::namespacedClassToDashed($class),
+				$context->parent
+			);
 		}
+
+		return null;
 	}
 }

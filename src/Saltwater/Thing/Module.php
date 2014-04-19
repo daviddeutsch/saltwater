@@ -73,15 +73,6 @@ class Module
 	 */
 	public function provide( $module, $name, $args=null )
 	{
-		// TODO: Figure out why this, why that.
-		if ( is_array($name) ) {
-			$copy = $name;
-
-			$name = array_shift($copy);
-
-			$args = $copy;
-		}
-
 		$class = $this->className('provider', $name);
 
 		if ( !class_exists($class) ) return false;

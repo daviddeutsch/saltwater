@@ -67,10 +67,9 @@ class Route extends AbstractRoute
 
 		if ( !$input ) $input = '';
 
-		$result = null;
-
 		$length = count($this->chain) - 1;
 
+		$result = null;
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
