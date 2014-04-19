@@ -150,7 +150,12 @@ class Route extends AbstractRoute
 				. U::dashedToCamelCase($service);
 
 			if ( !class_exists($class) ) {
-				$class = 'Saltwater\Root\Service\Rest';
+				$class = $context->namespace
+					. '\Service\Rest';
+
+				if ( !class_exists($class) ) {
+					$class = 'Saltwater\Root\Service\Rest';
+				}
 			}
 		}
 
