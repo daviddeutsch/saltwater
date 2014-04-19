@@ -280,7 +280,7 @@ class Navigator
 	private function findCallerModule( $provider )
 	{
 		// Let me tell you about my boat
-		$trace = debug_backtrace(false, 7);
+		$trace = debug_backtrace(2, 7);
 
 		$depth = count($trace);
 
@@ -296,7 +296,7 @@ class Navigator
 
 		$thing = array_pop($caller);
 
-		$thing = strtolower( $thing . '.' . array_pop($caller) );
+		$thing = strtolower( array_pop($caller) . '.' . $thing );
 
 		$namespace = implode('\\', $caller);
 
@@ -332,7 +332,7 @@ class Navigator
 
 		if ( empty($modules) ) return false;
 
-		return array_pop($modules);
+		return array_shift($modules);
 	}
 
 	public function modulesByThing( $thing, $precedence=true )
