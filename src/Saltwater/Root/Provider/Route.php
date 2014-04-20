@@ -92,7 +92,7 @@ class Route extends AbstractRoute
 	 * @param string  $cmd
 	 * @param string  $path
 	 */
-	protected function explode( $context, $cmd, $path, $start=false )
+	protected function explode( $context, $cmd, $path )
 	{
 		$root = array_shift($path);
 
@@ -124,10 +124,10 @@ class Route extends AbstractRoute
 	}
 
 	/**
-	 * @param Context $context
-	 * @param string  $cmd
-	 * @param string  $service
-	 * @param string  $path
+	 * @param \Saltwater\Thing\Context $context
+	 * @param string                   $cmd
+	 * @param string                   $service
+	 * @param string                   $path
 	 */
 	protected function push( $context, $cmd, $service, $path=null )
 	{
