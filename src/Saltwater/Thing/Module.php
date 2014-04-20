@@ -29,9 +29,7 @@ class Module
 
 	public function register( $name )
 	{
-		$things = 0;
-
-		$things |= S::$n->addThing('model.' . $name);
+		$this->things = 0;
 
 		if ( !empty($this->dependencies) ) {
 			foreach ( $this->dependencies as $dependency ) {
@@ -39,24 +37,17 @@ class Module
 			}
 		}
 
-		foreach (
-			array(
-				'providers' => 'provider',
-				'contexts' => 'context',
-				'services' => 'service',
-				'entities' => 'entity'
-			) as $p => $s
-		) {
+		$this->things |= S::$n->addThing('module.' . $name);
+
+		foreach ( $this->thingTypes() as $p => $s ) {
 			if ( empty($this->$p) ) continue;
 
 			foreach ( $this->$p as $thing ) {
-				$things |= S::$n->addThing(
+				$this->things |= S::$n->addThing(
 					$s . '.' . U::CamelTodashed($thing)
 				);
 			}
 		}
-
-		$this->things = $things;
 	}
 
 	public function hasThing( $bit )
@@ -97,14 +88,22 @@ class Module
 
 	public function masterContext()
 	{
-		if ( empty($this->contexts) ) {
-			return 'root';
-		} else {
-			return array(
-				'root',
-				U::CamelTodashed( array_shift($this->contexts) )
-			);
-		}
+		if ( empty($this->contexts) ) return 'root';
+
+		return array(
+			'root',
+			U::CamelTodashed( array_shift($this->contexts) )
+		);
+	}
+
+	public function thingTypes()
+	{
+		return array(
+			'providers' => 'provider',
+			'contexts' => 'context',
+			'services' => 'service',
+			'entities' => 'entity'
+		);
 	}
 
 	/**
