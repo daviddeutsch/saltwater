@@ -48,9 +48,11 @@ class Navigator
 
 		if ( isset($this->modules[$name]) ) return null;
 
-		$this->modules[$name] = new $class();
+		$module = new $class();
 
-		$this->modules[$name]->register($name);
+		$module->register($name);
+
+		$this->modules[$name] = $module;
 
 		if ( $master ) $this->setMaster($name);
 
@@ -70,7 +72,7 @@ class Navigator
 	}
 
 	/**
-	 * Return the bitmask integer a thing
+	 * Return the bitmask integer of a thing
 	 *
 	 * @param string $name in the form "type.name"
 	 *
@@ -95,15 +97,15 @@ class Navigator
 	 */
 	public function addThing( $name )
 	{
-		$id = $this->bitThing($name);
+		$id = array_search($name, $this->things);
 
-		if ( $id ) {
-			return pow(2, $id);
-		} else {
+		if ( !$id ) {
+			$id = count($this->things);
+
 			$this->things[] = $name;
-
-			return pow(2, count($this->things)-1);
 		}
+
+		return pow(2, $id);
 	}
 
 	/**
@@ -284,7 +286,10 @@ class Navigator
 		$modules = $this->modulePrecedence();
 
 		foreach ( $modules as $module ) {
-			if ( !$this->modules[$module]->hasThing($bit) ) continue;
+			if ( !$this->modules[$module]->hasThing($bit) ) {
+
+				continue;
+			}
 
 			$inject = $module;
 
@@ -301,11 +306,11 @@ class Navigator
 			if ( $return !== false ) return $return;
 		}
 
-		// As a last resort, pop out of the master and try again
-		$last = array_pop( array_values($this->stack) );
+		$master = array_search($this->master, $this->stack);
 
-		if ( $last != $this->master ) {
-			$this->setMaster($last);
+		// As a last resort, step one module out of the master and try again
+		if ( $master != count($this->stack)-1 ) {
+			$this->setMaster($this->stack[$master+1]);
 
 			return call_user_func_array(
 				array(&$this, 'provider'),
@@ -357,6 +362,7 @@ class Navigator
 
 		for ( $i=2; $i<$depth; ++$i ) {
 			if ( $trace[$i]['class'] == 'Saltwater\Navigator' ) continue;
+			if ( $trace[$i]['class'] == 'Saltwater\Server' ) continue;
 
 			$class = $trace[$i]['class']; break;
 		}
