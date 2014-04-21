@@ -7,6 +7,9 @@ namespace Saltwater\Thing;
  */
 class Service
 {
+	/**
+	 * @var Context
+	 */
 	protected $context;
 
 	public function __construct( $context )
