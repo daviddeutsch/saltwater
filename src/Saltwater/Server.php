@@ -10,6 +10,11 @@ class Server
 	public static $n;
 
 	/**
+	 * @var integer
+	 */
+	public static $start;
+
+	/**
 	 * Kick off the server with a set of modules.
 	 *
 	 * The first module is automatically the root module.
@@ -18,6 +23,8 @@ class Server
 	 */
 	public static function init( $modules=array() )
 	{
+		if ( empty(self::$start) ) self::$start = microtime(true);
+
 		if ( empty(self::$n) ) self::$n = new Navigator();
 
 		if ( !is_array($modules) ) $modules = array($modules);

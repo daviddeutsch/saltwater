@@ -356,13 +356,15 @@ class Navigator
 	private function findCallerModule( $provider )
 	{
 		// Let me tell you about my boat
-		$trace = debug_backtrace(2, 7);
+		$trace = debug_backtrace(2, 8);
 
 		$depth = count($trace);
 
 		for ( $i=2; $i<$depth; ++$i ) {
-			if ( $trace[$i]['class'] == 'Saltwater\Navigator' ) continue;
-			if ( $trace[$i]['class'] == 'Saltwater\Server' ) continue;
+			if (
+				( $trace[$i]['class'] == 'Saltwater\Navigator' )
+				|| ( $trace[$i]['class'] == 'Saltwater\Server' )
+			) continue;
 
 			$class = $trace[$i]['class']; break;
 		}
@@ -388,11 +390,9 @@ class Navigator
 		// (actually: providers of the same name higher up the chain)
 		foreach ( array_reverse($this->modules) as $k => $module ) {
 			if ( $is_provider ) {
-				if ( $module->hasThing($bit) ) {
-					if ( $module->namespace == $namespace ) continue;
-				} else {
-					continue;
-				}
+				if ( !$module->hasThing($bit) ) continue;
+
+				if ( $module->namespace == $namespace ) continue;
 			} elseif ( $module->namespace !== $namespace ) {
 				continue;
 			}

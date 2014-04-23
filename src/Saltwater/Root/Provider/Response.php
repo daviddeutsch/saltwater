@@ -2,6 +2,7 @@
 
 namespace Saltwater\Root\Provider;
 
+use Saltwater\Server as S;
 use Saltwater\Thing\Provider;
 
 class Response extends Provider
@@ -38,6 +39,8 @@ class Response extends Provider
 
 		header('Content-type: application/json');
 
+		header( 'X-Execution-Time: ' . (microtime(true) - S::$start) );
+
 		echo json_encode( self::prepareOutput($data) );
 
 		exit;
@@ -65,6 +68,8 @@ class Response extends Provider
 	public function plain( $data )
 	{
 		header('HTTP/1.0 200 OK');
+
+		header( 'X-Execution-Time: ' . (microtime(true) - S::$start) );
 
 		echo $data;
 
