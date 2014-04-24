@@ -63,6 +63,8 @@ class Utils
 	 */
 	public static function namespacedClassToDashed( $string )
 	{
-		return self::CamelTodashed( array_pop( explode('\\', $string) ) );
+		$array = explode('\\', $string);
+
+		return self::CamelTodashed( array_pop( $array ) );
 	}
 }
