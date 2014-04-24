@@ -72,7 +72,7 @@ class Module
 
 		if ( is_null($args) ) {
 			return $class::get();
-		} elseif ( is_array($args) ) {
+		} elseif ( is_array($args) && !empty($args) ) {
 			return $class::get($args[0], $args[1]);
 		} else {
 			return $class::get($args);
