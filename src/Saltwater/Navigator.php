@@ -361,6 +361,8 @@ class Navigator
 		$depth = count($trace);
 
 		for ( $i=2; $i<$depth; ++$i ) {
+			if ( !isset($trace[$i]['class']) ) continue;
+
 			if (
 				( $trace[$i]['class'] == 'Saltwater\Navigator' )
 				|| ( $trace[$i]['class'] == 'Saltwater\Server' )
