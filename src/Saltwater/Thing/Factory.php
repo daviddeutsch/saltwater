@@ -2,7 +2,9 @@
 
 namespace Saltwater\Thing;
 
-abstract class Factory
+use Saltwater\Interfaces\Factory as iFactory;
+
+abstract class Factory implements iFactory
 {
 	protected static $module;
 

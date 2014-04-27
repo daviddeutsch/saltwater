@@ -2,7 +2,9 @@
 
 namespace Saltwater\Thing;
 
-abstract class Provider
+use Saltwater\Interfaces\Provider as iProvider;
+
+abstract class Provider implements iProvider
 {
 	protected static $module;
 

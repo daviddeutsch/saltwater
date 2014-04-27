@@ -16,6 +16,8 @@ class Module
 
 	protected $providers = array();
 
+	protected $factories = array();
+
 	protected $contexts = array();
 
 	protected $services = array();
@@ -58,27 +60,39 @@ class Module
 	}
 
 	/**
+	 * @param $module
 	 * @param $type
-	 * @param $name
-	 * @param $args
 	 *
 	 * @return \Saltwater\Thing\Provider
 	 */
-	public function provide( $module, $name, $args=null )
+	public function provider( $module, $type )
 	{
-		$class = $this->className('provider', $name);
+		$class = $this->className('provider', $type);
 
 		if ( !class_exists($class) ) return false;
 
 		$class::setModule($module);
 
-		if ( is_null($args) ) {
-			return $class::get();
-		} elseif ( is_array($args) && !empty($args) ) {
-			return $class::get($args[0], $args[1]);
-		} else {
-			return $class::get($args);
-		}
+		return $class::get();
+	}
+
+	/**
+	 * @param $module
+	 * @param $type
+	 * @param $name
+	 * @param $args
+	 *
+	 * @return \Saltwater\Thing\Factory
+	 */
+	public function factory( $module, $type, $name, $args )
+	{
+		$class = $this->className('factory', $type);
+
+		if ( !class_exists($class) ) return false;
+
+		$class::setModule($module);
+
+		return $class::get($name, $args);
 	}
 
 	public function provideList( $type )
@@ -102,6 +116,7 @@ class Module
 	{
 		return array(
 			'providers' => 'provider',
+			'factories' => 'factory',
 			'contexts' => 'context',
 			'services' => 'service',
 			'entities' => 'entity'

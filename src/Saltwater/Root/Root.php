@@ -6,15 +6,15 @@ use Saltwater\Thing\Module;
 
 class Root extends Module
 {
-	protected $providers = array(
-		'db', 'entity', 'context', 'log', 'route', 'service', 'response'
-	);
+	public $namespace = 'Saltwater\Root';
+
+	protected $providers = array('db', 'log', 'route', 'response');
+
+	protected $factories = array('entity', 'context', 'service');
 
 	protected $contexts = array('root');
 
 	protected $services = array('rest', 'info');
 
 	protected $entities = array('log');
-
-	public $namespace = 'Saltwater\Root';
 }

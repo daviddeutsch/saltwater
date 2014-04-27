@@ -82,11 +82,9 @@ class Navigator
 	{
 		$id = array_search($name, $this->things);
 
-		if ( $id === false ) {
-			return false;
-		} else {
-			return pow(2, $id);
-		}
+		if ( $id === false ) return false;
+
+		return pow(2, $id);
 	}
 
 	/**
@@ -136,9 +134,9 @@ class Navigator
 			}
 
 			return $parent;
-		} else {
-			return $this->context($context);
 		}
+
+		return $this->context($context);
 	}
 
 	/**
@@ -174,6 +172,8 @@ class Navigator
 	 */
 	public function setRoot( $name )
 	{
+		if ( empty($name) || ($name == $this->root) ) return;
+
 		$this->root = $name;
 	}
 
@@ -184,6 +184,8 @@ class Navigator
 	 */
 	public function setMaster( $name )
 	{
+		if ( empty($name) || ($name == $this->master) ) return;
+
 		$this->master = $name;
 
 		$this->pushStack($name);
@@ -215,7 +217,7 @@ class Navigator
 	 */
 	public function context( $name, $parent=null )
 	{
-		return $this->provide('context', $name, $parent);
+		return $this->factory('context', $name, $parent);
 	}
 
 	/**
@@ -228,7 +230,7 @@ class Navigator
 	 */
 	public function service( $name, $context )
 	{
-		return $this->provide('service', $name, $context);
+		return $this->factory('service', $name, $context);
 	}
 
 	/**
@@ -241,11 +243,11 @@ class Navigator
 	 */
 	public function entity( $name, $input=null )
 	{
-		return $this->provide('entity', $name, $input);
+		return $this->factory('entity', $name, $input);
 	}
 
 	/**
-	 * Generic call for a provider, specifying type and name, relaying arguments
+	 * Generic call for a factory, specifying type and name, relaying arguments
 	 *
 	 * @param string     $type
 	 * @param string     $name
@@ -253,103 +255,84 @@ class Navigator
 	 *
 	 * @return Thing\*
 	 */
-	public function provide( $type, $name, $args=null )
+	public function factory( $type, $name, $args=array() )
 	{
-		return $this->provider($type, $name, $args);
+		return $this->get('factory', $type, $name, $args);
 	}
 
 	/**
-	 * Call upon a provider by type and name, relaying arguments
+	 * Generic call for a type of provider
+	 *
+	 * @param string $type
 	 *
 	 * @return Thing\Provider
 	 */
-	public function provider()
+	public function provider( $type )
 	{
-		$args = func_get_args();
+		return $this->get('provider', $type);
+	}
 
-		$name = array_shift($args);
+	/**
+	 * Call upon a provider or factory by type and name, relaying arguments
+	 *
+	 * @param string $base either 'factory' or 'provider'
+	 * @param string $type specifies what type of factory or provider
+	 * @param string $name Factories need a name
+	 * @param array  $args Factories can accept further arguments
+	 *
+	 * @return Thing\*
+	 */
+	protected function get( $base, $type, $name=null, $args=array() )
+	{
+		$what = $base . '.' . $type;
 
-		$provider = 'provider.' . $name;
-
-		$bit = $this->bitThing($provider);
+		$bit = $this->bitThing($what);
 
 		if ( $bit === false ) {
-			S::halt(500, 'Provider does not exist: ' . $name);
+			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
 		};
 
-		$caller = $this->findCallerModule($provider);
+		$this->setMaster( $this->findCallerModule($what) );
 
-		if ( $caller ) {
-			$this->setMaster($caller);
-		}
-
-		$modules = $this->modulePrecedence();
-
-		foreach ( $modules as $module ) {
-			if ( !$this->modules[$module]->hasThing($bit) ) {
-
-				continue;
-			}
+		foreach ( $this->modulePrecedence() as $module ) {
+			if ( !$this->modules[$module]->hasThing($bit) ) continue;
 
 			$inject = $module;
 
-			if ( !empty($args[0]) && is_string($args[0]) ) {
-				$k = $name . '.' . $args[0];
-
-				$m = $this->moduleByThing($k);
+			if ( $base == 'provider' ) {
+				$return = $this->modules[$module]->$base($inject, $type);
+			} else {
+				$m = $this->moduleByThing($type . '.' . $name);
 
 				if ( !empty($m) ) $inject = $m;
-			}
 
-			$return = $this->modules[$module]->provide($inject, $name, $args);
+				$return = $this->modules[$module]->$base($inject, $type, $args);
+			}
 
 			if ( $return !== false ) return $return;
 		}
 
 		$master = array_search($this->master, $this->stack);
 
-		// As a last resort, step one module out of the master and try again
-		if ( $master != count($this->stack)-1 ) {
-			$this->setMaster($this->stack[$master+1]);
+		// As a last resort, step one module out of the stack and try again
+		if ( $master == count($this->stack)-1 ) return false;
 
+		$this->setMaster($this->stack[$master+1]);
+
+		if ( $base == 'provider' ) {
+			return call_user_func( array(&$this, $base), $type );
+		} else {
 			return call_user_func_array(
-				array(&$this, 'provider'),
-				array_merge( array($name), $args )
+				array(&$this, 'factory'),
+				array($type, $name, $args)
 			);
 		}
-
-		return false;
 	}
 
 	/**
-	 * Since I understand this will raise heads, allow me to explain:
+	 * Use debug_backtrace() to find the caller module, for details, check:
 	 *
-	 * Doing the backtrace and getting the recent caller module takes between
-	 * 14 and 25 microseconds, with a median of 18 microseconds.
-	 *
-	 * The only other option to provide the same infrastructure would be to
-	 * introduce inheritance logic right into the calling object stack.
-	 * My feeling is that it's just not worth it - the inheritance logic would
-	 * probably add around the same overhead while recreating functionality
-	 * that PHP already provides with debug_backtrace().
-	 *
-	 * It would take 50+ calls to add even a millisecond delay to a request,
-	 * about twice the typical amount of calls in a saltwater query.
-	 *
-	 * One of the two should be used, though. Not only do we need to establish
-	 * a context, but that (plus either of those options) makes call caching
-	 * possible, again reducing the number of actual calls happening after the
-	 * check, which would be more expensive than the backtrace itself.
-	 *
-	 * All in all, I'd say it's a wash. However, in my opinion, solving
-	 * the problem with a couple dozen lines is preferable to setting up an
-	 * entire architecture which, again, only imitates existing functionality.
-	 *
-	 * "It does feel a little dirty, but as has been
-	 * well documented, opined, and beaten to death elsewhere,
-	 * PHP isn't a system designed for elegance."
-	 *
-	 *                                - http://stackoverflow.com/a/347014
+	 * https://github.com/daviddeutsch/saltwater/wiki/on-using-debug_backtrace
 	 *
 	 * @return string Class name
 	 */
@@ -463,9 +446,9 @@ class Navigator
 		return $return;
 	}
 
-	public function __get( $name )
+	public function __get( $type )
 	{
-		return $this->provider($name);
+		return $this->provider($type);
 	}
 
 	public function __call( $name, $args )
