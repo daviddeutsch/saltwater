@@ -29,6 +29,8 @@ class Module
 
 	public function register( $name )
 	{
+		if ( S::$n->isThing('module.' . $name) ) return null;
+
 		$this->things = 0;
 
 		if ( !empty($this->dependencies) ) {

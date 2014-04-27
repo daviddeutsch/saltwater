@@ -51,34 +51,6 @@ class Server
 	}
 
 	/**
-	 * Set the root module in Saltwater\Navigator
-	 *
-	 * Proxy for Saltwater\Navigator::setRoot()
-	 *
-	 * @param string $name
-	 */
-	public static function setRoot( $name )
-	{
-		if ( empty(self::$n) ) self::init();
-
-		self::$n->setRoot($name);
-	}
-
-	/**
-	 * Set the master module in Saltwater\Navigator
-	 *
-	 * Proxy for Saltwater\Navigator::setMaster()
-	 *
-	 * @param $name
-	 */
-	public static function setMaster( $name )
-	{
-		if ( empty(self::$n) ) self::init();
-
-		self::$n->setMaster($name);
-	}
-
-	/**
 	 * Return an Entity class name from the EntityProvider
 	 *
 	 * @param string $name

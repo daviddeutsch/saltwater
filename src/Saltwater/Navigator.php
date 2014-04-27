@@ -68,7 +68,7 @@ class Navigator
 	 */
 	public function isThing( $name )
 	{
-		return array_search($name, $this->things) !== false;
+		return in_array($name, $this->things) !== false;
 	}
 
 	/**
