@@ -87,18 +87,6 @@
          transform="scale(0.2) rotate(180) translate(6,0)" />
     </marker>
     <pattern
-       inkscape:stockid="Wavy white"
-       id="Wavywhite"
-       height="5.1805778"
-       width="30.066020"
-       patternUnits="userSpaceOnUse"
-       inkscape:collect="always">
-      <path
-         id="path5214"
-         d="M 7.597,0.061 C 5.079,-0.187 2.656,0.302 -0.01,1.788 L -0.01,3.061 C 2.773,1.431 5.173,1.052 7.472,1.280 C 9.770,1.508 11.969,2.361 14.253,3.218 C 18.820,4.931 23.804,6.676 30.066,3.061 L 30.062,1.788 C 23.622,5.497 19.246,3.770 14.691,2.061 C 12.413,1.207 10.115,0.311 7.597,0.061 z "
-         style="fill:white;stroke:none;" />
-    </pattern>
-    <pattern
        inkscape:stockid="Sand (bitmap)"
        id="sand_bitmap"
        height="256"
@@ -123,7 +111,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="427.06252"
+     inkscape:cx="707.06252"
      inkscape:cy="216.92882"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -132,7 +120,7 @@
      inkscape:window-width="1920"
      inkscape:window-height="1178"
      inkscape:window-x="0"
-     inkscape:window-y="22"
+     inkscape:window-y="-1"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -150,7 +138,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -434,66 +422,58 @@
            y="881.1972"
            style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold">service</tspan></text>
     </g>
-    <g
-       id="g5683"
-       transform="translate(-281.56835,64.999997)">
-      <rect
-         ry="10"
-         rx="10"
-         y="707.36218"
-         x="717"
-         height="69"
-         width="69"
-         id="rect3822"
-         style="fill:#ff7ee2;fill-opacity:1;fill-rule:nonzero;stroke:none" />
-      <text
-         xml:space="preserve"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
-         x="751.09363"
-         y="736.45416"
-         id="text3824"
-         sodipodi:linespacing="125%"><tspan
-           sodipodi:role="line"
-           id="tspan3826"
-           x="751.09363"
-           y="736.45416"
-           style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">service</tspan><tspan
-           id="tspan3831"
-           sodipodi:role="line"
-           x="751.09363"
-           y="756.45416"
-           style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">provider</tspan></text>
-    </g>
-    <g
-       id="g5689"
-       transform="translate(-270.56835,155)">
-      <rect
-         style="fill:#ff7ee2;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="rect3833"
-         width="69"
-         height="69"
-         x="796"
-         y="707.36218"
-         rx="10"
-         ry="10" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text3835"
-         y="736.45416"
-         x="830.09363"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
-         xml:space="preserve"><tspan
-           style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
-           y="736.45416"
-           x="830.09363"
-           id="tspan3837"
-           sodipodi:role="line">entity</tspan><tspan
-           style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
-           y="756.45416"
-           x="830.09363"
-           sodipodi:role="line"
-           id="tspan3839">provider</tspan></text>
-    </g>
+    <rect
+       style="fill:#00e7a6;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect3822"
+       width="69"
+       height="69"
+       x="435.43164"
+       y="772.36218"
+       rx="10"
+       ry="10" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3824"
+       y="801.45416"
+       x="469.52527"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
+       xml:space="preserve"><tspan
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
+         y="801.45416"
+         x="469.52527"
+         id="tspan3826"
+         sodipodi:role="line">service</tspan><tspan
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
+         y="821.45416"
+         x="469.52527"
+         sodipodi:role="line"
+         id="tspan3831">factory</tspan></text>
+    <rect
+       ry="10"
+       rx="10"
+       y="862.36218"
+       x="525.43164"
+       height="69"
+       width="69"
+       id="rect3833"
+       style="fill:#00e7a6;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
+       x="559.52527"
+       y="891.45416"
+       id="text3835"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3837"
+         x="559.52527"
+         y="891.45416"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">entity</tspan><tspan
+         id="tspan3839"
+         sodipodi:role="line"
+         x="559.52527"
+         y="911.45416"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">factory</tspan></text>
     <g
        id="g5663"
        transform="translate(132.43165,162.00001)">
@@ -524,36 +504,32 @@
            style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Lato;-inkscape-font-specification:Lato Bold"
            id="tspan5503">context</tspan></text>
     </g>
-    <g
-       id="g5677"
-       transform="translate(-308.56835,155)">
-      <rect
-         style="fill:#ff7ee2;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="rect5669"
-         width="69"
-         height="69"
-         x="624"
-         y="707.36218"
-         rx="10"
-         ry="10" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text5671"
-         y="736.45416"
-         x="658.09363"
-         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
-         xml:space="preserve"><tspan
-           style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
-           y="736.45416"
-           x="658.09363"
-           id="tspan5673"
-           sodipodi:role="line">context</tspan><tspan
-           style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
-           y="756.45416"
-           x="658.09363"
-           sodipodi:role="line"
-           id="tspan5675">provider</tspan></text>
-    </g>
+    <rect
+       ry="10"
+       rx="10"
+       y="862.36218"
+       x="315.43164"
+       height="69"
+       width="69"
+       id="rect5669"
+       style="fill:#00e7a6;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
+       x="349.52527"
+       y="891.45416"
+       id="text5671"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5673"
+         x="349.52527"
+         y="891.45416"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">context</tspan><tspan
+         id="tspan5675"
+         sodipodi:role="line"
+         x="349.52527"
+         y="911.45416"
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">factory</tspan></text>
     <g
        id="g5976"
        transform="translate(51.931647,10.000003)">
@@ -579,36 +555,32 @@
            y="982.60217"
            style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold">article</tspan></text>
     </g>
-    <g
-       id="g3805"
-       transform="translate(369.43165,22.999997)">
-      <rect
-         style="fill:#e79a00;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="rect3784"
-         width="69"
-         height="69"
-         x="66"
-         y="839.36218"
-         rx="10"
-         ry="10" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text2993"
-         y="868.71216"
-         x="100.08"
-         style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
-         xml:space="preserve"><tspan
-           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
-           y="868.71216"
-           x="100.08"
-           id="tspan2995"
-           sodipodi:role="line">article</tspan><tspan
-           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold"
-           y="893.71216"
-           x="100.08"
-           sodipodi:role="line"
-           id="tspan5974">service</tspan></text>
-    </g>
+    <rect
+       ry="10"
+       rx="10"
+       y="862.36218"
+       x="435.43164"
+       height="69"
+       width="69"
+       id="rect3784"
+       style="fill:#e79a00;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-size:18.00099945px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
+       x="469.4975"
+       y="892.22693"
+       id="text2993"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2995"
+         x="469.4975"
+         y="892.22693"
+         style="font-size:18.00099945px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">article</tspan><tspan
+         id="tspan5974"
+         sodipodi:role="line"
+         x="469.4975"
+         y="914.72815"
+         style="font-size:18.00099945px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;font-family:Lato;-inkscape-font-specification:Lato Bold">service</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:31.98402214px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
@@ -859,5 +831,26 @@
          style="opacity:0.425;fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow2Mstart);marker-end:none"
          sodipodi:nodetypes="cc" />
     </g>
+    <rect
+       style="fill:#00e7a6;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="rect5713-5"
+       width="69"
+       height="69"
+       x="778.5"
+       y="650.86218"
+       rx="10"
+       ry="10" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text5715-6"
+       y="691.11719"
+       x="786.98486"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
+       xml:space="preserve"><tspan
+         style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold"
+         y="691.11719"
+         x="786.98486"
+         id="tspan5717-1"
+         sodipodi:role="line">factory</tspan></text>
   </g>
 </svg>
