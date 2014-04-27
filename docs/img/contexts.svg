@@ -15,8 +15,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="provider_service_entity.svg"
-   inkscape:export-filename="/home/skore/workspace/saltwater/docs/img/provider_service_entity.png"
+   sodipodi:docname="contexts.svg"
+   inkscape:export-filename="/home/skore/workspace/saltwater/docs/img/contexts.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -1177,12 +1177,12 @@
        sodipodi:linespacing="125%"
        id="text8389"
        y="646.11633"
-       x="445.11826"
+       x="448.31982"
        style="font-size:31.98402214px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
        xml:space="preserve"><tspan
          style="font-size:31.98402214px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold"
          y="646.11633"
-         x="445.11826"
+         x="448.31982"
          id="tspan8391"
          sodipodi:role="line">app</tspan></text>
     <g
@@ -1443,13 +1443,13 @@
     <text
        xml:space="preserve"
        style="font-size:31.98402214px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
-       x="718.11829"
+       x="695.12842"
        y="646.11633"
        id="text8481"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan8483"
-         x="718.11829"
+         x="695.12842"
          y="646.11633"
          style="font-size:31.98402214px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold">archive</tspan></text>
     <g
@@ -1987,13 +1987,13 @@
        xml:space="preserve"
        style="font-size:31.98402214px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
        x="115.11826"
-       y="762.11633"
+       y="766.11633"
        id="text8970"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan8972"
          x="115.11826"
-         y="762.11633"
+         y="766.11633"
          style="font-size:31.98402214px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold">modules:</tspan></text>
   </g>
 </svg>
