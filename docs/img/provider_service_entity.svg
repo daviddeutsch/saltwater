@@ -138,7 +138,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -836,20 +836,20 @@
        id="rect5713-5"
        width="69"
        height="69"
-       x="778.5"
-       y="650.86218"
+       x="945.5"
+       y="624.86218"
        rx="10"
        ry="10" />
     <text
        sodipodi:linespacing="125%"
        id="text5715-6"
-       y="691.11719"
-       x="786.98486"
+       y="665.11719"
+       x="953.98486"
        style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Lato;-inkscape-font-specification:Lato Bold"
        xml:space="preserve"><tspan
          style="font-size:16px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Lato;-inkscape-font-specification:Lato Bold"
-         y="691.11719"
-         x="786.98486"
+         y="665.11719"
+         x="953.98486"
          id="tspan5717-1"
          sodipodi:role="line">factory</tspan></text>
   </g>
