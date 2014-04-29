@@ -32,6 +32,8 @@ class Navigator
 	 */
 	private $stack = array();
 
+	private $skip = array('Saltwater\Navigator','Saltwater\Server');
+
 	/**
 	 * Add module to Navigator and register its things
 	 *
@@ -52,6 +54,7 @@ class Navigator
 
 		$module->register($name);
 
+		// Push to ->modules late to preserve dependency order
 		$this->modules[$name] = $module;
 
 		if ( $master ) $this->setMaster($name);
@@ -91,9 +94,7 @@ class Navigator
 	 */
 	public function addThing( $name )
 	{
-		$id = $this->bitThing($name);
-
-		if ( $id ) return $id;
+		if ( $id = $this->bitThing($name) ) return $id;
 
 		$id = pow( 2, count($this->things) );
 
@@ -117,22 +118,21 @@ class Navigator
 	/**
 	 * Return the master context for the current master module
 	 *
+	 * @param Thing\Context $parent inject a parent context
+	 *
 	 * @return null|Thing\Context
 	 */
-	public function masterContext()
+	public function masterContext( $parent=null )
 	{
-		$context = $this->modules[$this->master]->masterContext();
+		$list = $this->modules[$this->master]->masterContext();
 
-		if ( is_array($context) ) {
-			$parent = null;
-			foreach ( $context as $c ) {
-				$parent = $this->context($c, $parent);
-			}
+		if ( !is_array($list) ) return $this->context($list, $parent);
 
-			return $parent;
+		foreach ( $list as $c ) {
+			$parent = $this->context($c, $parent);
 		}
 
-		return $this->context($context);
+		return $parent;
 	}
 
 	/**
@@ -278,15 +278,15 @@ class Navigator
 	 */
 	protected function get( $base, $type, $name=null, $args=array() )
 	{
-		$what = $base . '.' . $type;
+		$thing = $base . '.' . $type;
 
-		$bit = $this->bitThing($what);
+		$bit = $this->bitThing($thing);
 
-		if ( $bit === false ) {
+		if ( !$bit ) {
 			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
 		};
 
-		$this->setMaster( $this->findCallerModule($what) );
+		$this->setMaster( $this->findCallerModule($thing) );
 
 		foreach ( $this->modulePrecedence() as $k ) {
 			$module = $this->modules[$k];
@@ -339,27 +339,26 @@ class Navigator
 
 		$depth = count($trace);
 
+		// Iterate through backtrace, find the last caller class
 		for ( $i=2; $i<$depth; ++$i ) {
 			if ( !isset($trace[$i]['class']) ) continue;
 
-			if (
-				( $trace[$i]['class'] == 'Saltwater\Navigator' )
-				|| ( $trace[$i]['class'] == 'Saltwater\Server' )
-			) continue;
+			if ( in_array($trace[$i]['class'], $this->skip) ) continue;
 
-			$class = $trace[$i]['class']; break;
+			$caller = explode('\\', $trace[$i]['class']); break;
 		}
 
-		if ( empty($class) ) return false;
+		if ( empty($caller) ) return false;
 
-		$caller = explode('\\', $class);
-
+		// Extract the thing from the last two particles
 		$thing = array_pop($caller);
 
 		$thing = strtolower( array_pop($caller) . '.' . $thing );
 
+		// Everything else is Namespace
 		$namespace = implode('\\', $caller);
 
+		// Check whether this is a provider calling "itself"
 		$is_provider = $thing == $provider;
 
 		$bit = 0;
@@ -367,9 +366,9 @@ class Navigator
 			$bit = $this->bitThing($thing);
 		}
 
-		// Make it possible for providers to call "themselves"
-		// (actually: providers of the same name higher up the chain)
+
 		foreach ( array_reverse($this->modules) as $k => $module ) {
+			// A provider calling itself, always gets a higher instance
 			if ( $is_provider ) {
 				if ( !$module->hasThing($bit) ) continue;
 

@@ -37,7 +37,7 @@ class Utils
 	 */
 	public static function CamelCaseSpaced( $string )
 	{
-		return str_replace(' ', '', ucwords($string) );
+		return str_replace( ' ', '', ucwords($string) );
 	}
 
 	/**
@@ -65,6 +65,6 @@ class Utils
 	{
 		$array = explode('\\', $string);
 
-		return self::CamelTodashed( array_pop( $array ) );
+		return self::CamelTodashed( array_pop($array) );
 	}
 }
