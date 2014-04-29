@@ -294,19 +294,21 @@ class Navigator
 
 		$this->setMaster( $this->findCallerModule($what) );
 
-		foreach ( $this->modulePrecedence() as $module ) {
-			if ( !$this->modules[$module]->hasThing($bit) ) continue;
+		foreach ( $this->modulePrecedence() as $k ) {
+			$module = $this->modules[$k];
 
-			$inject = $module;
+			if ( !$module->hasThing($bit) ) continue;
+
+			$inject = $k;
 
 			if ( $base == 'provider' ) {
-				$return = $this->modules[$module]->$base($inject, $type);
+				$return = $module->$base($inject, $type);
 			} else {
 				$m = $this->moduleByThing($type . '.' . $name);
 
 				if ( !empty($m) ) $inject = $m;
 
-				$return = $this->modules[$module]->$base($inject, $type, $args);
+				$return = $module->$base($inject, $type, $name, $args);
 			}
 
 			if ( $return !== false ) return $return;
