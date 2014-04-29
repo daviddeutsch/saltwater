@@ -279,9 +279,7 @@ class Navigator
 	{
 		$thing = $base . '.' . $type;
 
-		$bit = $this->bitThing($thing);
-
-		if ( !$bit ) {
+		if ( !$bit = $this->bitThing($thing) ) {
 			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
 		};
 
@@ -310,19 +308,18 @@ class Navigator
 
 		$master = array_search($this->master, $this->stack);
 
-		// As a last resort, step one module out of the stack and try again
 		if ( $master == count($this->stack)-1 ) return false;
 
+		// As a last resort, step one module out of the stack and try again
 		$this->setMaster($this->stack[$master+1]);
 
 		if ( $base == 'provider' ) {
-			return call_user_func( array(&$this, $base), $type );
+			$args = array($type);
 		} else {
-			return call_user_func_array(
-				array(&$this, 'factory'),
-				array($type, $name, $args)
-			);
+			$args = array($type, $name, $args);
 		}
+
+		return call_user_func_array( array(&$this, $base), $args );
 	}
 
 	/**
@@ -334,7 +331,7 @@ class Navigator
 	{
 		if ( empty($caller) ) return null;
 
-		// Extract the thing from the last two particles
+		// Extract a thing from the last two particles
 		$thing = array_pop($caller);
 
 		$thing = strtolower( array_pop($caller) . '.' . $thing );
@@ -348,7 +345,7 @@ class Navigator
 		$bit = $is_provider ? $this->bitThing($thing) : 0;
 
 		foreach ( array_reverse($this->modules) as $k => $module ) {
-			// A provider calling itself, always gets a higher instance
+			// A provider calling itself always gets a lower level provider
 			if ( $is_provider ) {
 				if ( !$module->hasThing($bit) ) continue;
 
@@ -459,5 +456,4 @@ class Navigator
 
 		return $this->factory($type, $name, $args);
 	}
-
 }
