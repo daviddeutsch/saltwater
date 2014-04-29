@@ -80,11 +80,7 @@ class Navigator
 	 */
 	public function bitThing( $name )
 	{
-		$id = array_search($name, $this->things);
-
-		if ( $id === false ) return false;
-
-		return pow(2, $id);
+		return array_search($name, $this->things);
 	}
 
 	/**
@@ -95,15 +91,15 @@ class Navigator
 	 */
 	public function addThing( $name )
 	{
-		$id = array_search($name, $this->things);
+		$id = $this->bitThing($name);
 
-		if ( !$id ) {
-			$id = count($this->things);
+		if ( $id ) return $id;
 
-			$this->things[] = $name;
-		}
+		$id = pow( 2, count($this->things) );
 
-		return pow(2, $id);
+		$this->things[$id] = $name;
+
+		return $id;
 	}
 
 	/**
@@ -153,10 +149,8 @@ class Navigator
 		foreach ( $this->things as $n => $thing ) {
 			if ( $thing != $name ) continue;
 
-			$bit = pow(2, $n);
-
 			foreach ( $this->modules as $module ) {
-				if ( !$module->hasThing($bit) ) continue;
+				if ( !$module->hasThing($n) ) continue;
 
 				return $module;
 			}
