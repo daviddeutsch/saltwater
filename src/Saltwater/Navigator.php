@@ -327,16 +327,14 @@ class Navigator
 
 			if ( !$module->hasThing($bit) ) continue;
 
-			$inject = $k;
-
 			if ( $base == 'provider' ) {
-				$return = $module->$base($inject, $type);
+				$return = $module->provider($k, $type);
 			} else {
-				$m = $this->moduleByThing($type . '.' . $name);
+				$inject = $this->moduleByThing($type . '.' . $name);
 
-				if ( !empty($m) ) $inject = $m;
+				$inject = empty($inject) ? $k : $inject;
 
-				$return = $module->$base($inject, $type, $name, $args);
+				$return = $module->factory($inject, $type, $name, $args);
 			}
 
 			if ( $return !== false ) return $return;
@@ -346,7 +344,7 @@ class Navigator
 
 		if ( $master == count($this->stack)-1 ) return false;
 
-		// As a last resort, step one module out of the stack and try again
+		// As a last resort, step one module up within stack and try again
 		$this->setMaster($this->stack[$master+1]);
 
 		if ( $base == 'provider' ) {
