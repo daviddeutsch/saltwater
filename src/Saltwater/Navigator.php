@@ -453,9 +453,15 @@ class Navigator
 		return $this->provider($type);
 	}
 
-	public function __call( $name, $args )
+	public function __call( $type, $args )
 	{
-		return $this->provider($name, $args);
+		if ( !empty($args) ) {
+			$name = array_shift($args);
+		} else {
+			$name = null;
+		}
+
+		return $this->factory($type, $name, $args);
 	}
 
 }
