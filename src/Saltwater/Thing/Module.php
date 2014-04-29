@@ -27,13 +27,11 @@ class Module
 	/**
 	 * @var int bitmask of thing registry
 	 */
-	protected $things;
+	protected $things = 0;
 
 	public function register( $name )
 	{
-		if ( S::$n->isThing('module.' . $name) ) return null;
-
-		$this->things = 0;
+		if ( S::$n->isThing('module.' . $name) || $this->things ) return null;
 
 		if ( !empty($this->dependencies) ) {
 			foreach ( $this->dependencies as $dependency ) {
@@ -106,10 +104,7 @@ class Module
 	{
 		if ( empty($this->contexts) ) return 'root';
 
-		return array(
-			'root',
-			U::CamelTodashed( array_shift($this->contexts) )
-		);
+		return array( 'root', U::CamelTodashed( $this->contexts[0] ) );
 	}
 
 	public function thingTypes()
