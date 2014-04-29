@@ -32,6 +32,9 @@ class Navigator
 	 */
 	private $stack = array();
 
+	/**
+	 * @var array classes that can be skipped during search for caller module
+	 */
 	private $skip = array('Saltwater\Navigator','Saltwater\Server');
 
 	/**
@@ -150,9 +153,7 @@ class Navigator
 			if ( $thing != $name ) continue;
 
 			foreach ( $this->modules as $module ) {
-				if ( !$module->hasThing($n) ) continue;
-
-				return $module;
+				if ( $module->hasThing($n) ) return $module;
 			}
 		}
 
@@ -192,13 +193,11 @@ class Navigator
 	 */
 	private function pushStack( $name )
 	{
-		if ( empty($this->stack) ) {
-			$this->stack[] = $this->root;
-		}
+		if ( empty($this->stack) ) $this->stack[] = $this->root;
 
-		if ( !in_array($name, $this->stack) ) {
-			$this->stack[] = $name;
-		}
+		if ( in_array($name, $this->stack) ) return;
+
+		$this->stack[] = $name;
 	}
 
 	/**
@@ -286,7 +285,8 @@ class Navigator
 			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
 		};
 
-		$this->setMaster( $this->findCallerModule($thing) );
+		// Depending on the caller, reset the module stack
+		$this->setMaster( $this->findModule($this->lastCaller(), $thing) );
 
 		foreach ( $this->modulePrecedence() as $k ) {
 			$module = $this->modules[$k];
@@ -326,29 +326,13 @@ class Navigator
 	}
 
 	/**
-	 * Use debug_backtrace() to find the caller module, for details, check:
+	 * Find the module of a caller class
 	 *
-	 * https://github.com/daviddeutsch/saltwater/wiki/on-using-debug_backtrace
-	 *
-	 * @return string Class name
+	 * @return string module name
 	 */
-	private function findCallerModule( $provider )
+	private function findModule( $caller, $provider )
 	{
-		// Let me tell you about my boat
-		$trace = debug_backtrace(2, 8);
-
-		$depth = count($trace);
-
-		// Iterate through backtrace, find the last caller class
-		for ( $i=2; $i<$depth; ++$i ) {
-			if ( !isset($trace[$i]['class']) ) continue;
-
-			if ( in_array($trace[$i]['class'], $this->skip) ) continue;
-
-			$caller = explode('\\', $trace[$i]['class']); break;
-		}
-
-		if ( empty($caller) ) return false;
+		if ( empty($caller) ) return null;
 
 		// Extract the thing from the last two particles
 		$thing = array_pop($caller);
@@ -361,11 +345,7 @@ class Navigator
 		// Check whether this is a provider calling "itself"
 		$is_provider = $thing == $provider;
 
-		$bit = 0;
-		if ( $is_provider ) {
-			$bit = $this->bitThing($thing);
-		}
-
+		$bit = $is_provider ? $this->bitThing($thing) : 0;
 
 		foreach ( array_reverse($this->modules) as $k => $module ) {
 			// A provider calling itself, always gets a higher instance
@@ -382,6 +362,34 @@ class Navigator
 
 		return null;
 	}
+	/**
+	 * Extracts the last calling class from a debug_backtrace, skipping the
+	 * Navigator and Server, of course.
+	 *
+	 * And - Yup, debug_backtrace(). For details, check:
+	 *
+	 * https://github.com/daviddeutsch/saltwater/wiki/on-using-debug_backtrace
+	 *
+	 * @return string class name
+	 */
+	public function lastCaller()
+	{
+		// Let me tell you about my boat
+		$trace = debug_backtrace(2, 8);
+
+		$depth = count($trace);
+
+		// Iterate through backtrace, find the last caller class
+		for ( $i=2; $i<$depth; ++$i ) {
+			if ( !isset($trace[$i]['class']) ) continue;
+
+			if ( in_array($trace[$i]['class'], $this->skip) ) continue;
+
+			return explode('\\', $trace[$i]['class']);
+		}
+
+		return null;
+	}
 
 	/**
 	 * Return top candidate Module for providing a Thing
@@ -393,21 +401,18 @@ class Navigator
 	 */
 	public function moduleByThing( $thing, $precedence=true )
 	{
-		$modules = $this->modulesByThing($thing, $precedence);
-
-		if ( empty($modules) ) return false;
-
-		return array_shift($modules);
+		return $this->modulesByThing($thing, $precedence, true);
 	}
 
 	/**
 	 * Return a list of Modules providing a Thing
 	 * @param      $thing
 	 * @param bool $precedence
+	 * @param bool $first      only return the first item on the list
 	 *
 	 * @return array|bool
 	 */
-	public function modulesByThing( $thing, $precedence=true )
+	public function modulesByThing( $thing, $precedence=true, $first=false )
 	{
 		if ( !$this->isThing($thing) ) return false;
 
@@ -421,9 +426,11 @@ class Navigator
 
 		$return = array();
 		foreach ( $modules as $module ) {
-			if ( $this->modules[$module]->hasThing($b) ) {
-				$return[] = $module;
-			}
+			if ( !$this->modules[$module]->hasThing($b) ) continue;
+
+			if ( $first ) return $module;
+
+			$return[] = $module;
 		}
 
 		return $return;
@@ -448,11 +455,7 @@ class Navigator
 
 	public function __call( $type, $args )
 	{
-		if ( !empty($args) ) {
-			$name = array_shift($args);
-		} else {
-			$name = null;
-		}
+		$name = empty($args) ? null : array_shift($args);
 
 		return $this->factory($type, $name, $args);
 	}
