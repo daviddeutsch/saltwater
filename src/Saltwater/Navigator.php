@@ -65,6 +65,42 @@ class Navigator
 		return true;
 	}
 
+	public function cache( $path )
+	{
+		$cache = array();
+		foreach ( array('things', 'root', 'master', 'stack') as $k ) {
+			$cache[$k] = $this->$k;
+		}
+
+		$cache['modules'] = array();
+		foreach ( $this->modules as $name => $module ) {
+			$cache['modules'][$name] = get_class($module);
+
+			$cache['bits'][$name] = $module->things;
+		}
+
+		$info = pathinfo($path);
+
+		if ( !is_dir($info['dirname']) ) mkdir($info['dirname'], 0744, true);
+
+		file_put_contents( $path, serialize($cache)	);
+	}
+
+	public function loadCache( $path )
+	{
+		$cache = unserialize( file_get_contents($path) );
+
+		foreach ( $cache['modules'] as $name => $module ) {
+			$this->modules[$name] = new $module();
+
+			$this->modules[$name]->things = $cache['bits'][$name];
+		}
+
+		foreach ( array('things', 'root', 'master', 'stack') as $k ) {
+			$this->$k = $cache[$k];
+		}
+	}
+
 	/**
 	 * Return true if the input is a registered thing
 	 *

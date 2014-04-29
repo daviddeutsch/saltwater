@@ -27,7 +27,7 @@ class Module
 	/**
 	 * @var int bitmask of thing registry
 	 */
-	protected $things = 0;
+	public $things = 0;
 
 	public function register( $name )
 	{

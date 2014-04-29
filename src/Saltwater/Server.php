@@ -19,19 +19,30 @@ class Server
 	 *
 	 * The first module is automatically the root module.
 	 *
-	 * @param string[] $modules Array of class names of modules to include
+	 * @param string[] $modules array of class names of modules to include
+	 * @param string   $cache   filepath to a navigator cache file
 	 */
-	public static function init( $modules=array() )
+	public static function init( $modules=array(), $cache=null )
 	{
 		if ( empty(self::$start) ) self::$start = microtime(true);
 
 		if ( empty(self::$n) ) self::$n = new Navigator();
+
+		if ( $cache ) {
+			if ( file_exists($cache) ) {
+				self::$n->loadCache($cache);
+
+				return;
+			}
+		}
 
 		if ( !is_array($modules) ) $modules = array($modules);
 
 		foreach ( $modules as $i => $module ) {
 			self::$n->addModule($module, $i==0);
 		}
+
+		if ( $cache ) self::$n->cache($cache);
 	}
 
 	/**
