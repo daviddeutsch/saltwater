@@ -356,6 +356,70 @@ class Navigator
 		return call_user_func_array( array(&$this, $base), $args );
 	}
 
+	protected function get2( $base, $type, $name=null, $args=array() )
+	{
+		$thing = $base . '.' . $type;
+
+		if ( !$bit = $this->bitThing($thing) ) {
+			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
+		};
+
+		// Depending on the caller, reset the module stack
+		$this->setMaster( $this->findModule($this->lastCaller(), $thing) );
+
+		$stacklength = count($this->stack)-1;
+
+		$master = array_search($this->master, $this->stack);
+
+		$order = $this->modulePrecedence();
+
+		/**
+		 * Idea for hashing provider requests:
+		 *
+		 * $hash = sha( '[' . implode('.', $order) . ']:' . $master . '->' . $thing
+		 */
+
+		$a = array($type);
+		if ( $base == 'factory' ) {
+			$a = array_merge( $a, array($type, $name, $args) );
+		}
+
+		$return = false;
+		while ( ($return === false) && ($master <= $stacklength) ) {
+			$return = $this->seekInModules($order, $base, $bit, $a);
+
+			if ( $return === false ) $this->setMaster($this->stack[++$master]);
+		}
+
+		return $return;
+	}
+
+	protected function seekInModules( $modules, $base, $bit, $args )
+	{
+		$return = false;
+		foreach ( $modules as $k ) {
+			$module = $this->modules[$k];
+
+			if ( !$module->hasThing($bit) ) continue;
+
+			$a = $args;
+
+			if ( $base == 'factory' ) {
+				$inject = $this->moduleByThing($args[0] . '.' . $args[1]);
+
+				array_unshift($a, empty($inject) ? $k : $inject);
+			} else {
+				array_unshift($a, $k);
+			}
+
+			$return = call_user_func_array( array($module, $base), $a );
+
+			if ( $return !== false ) break;
+		}
+
+		return $return;
+	}
+
 	/**
 	 * Find the module of a caller class
 	 *
@@ -393,6 +457,7 @@ class Navigator
 
 		return null;
 	}
+
 	/**
 	 * Extracts the last calling class from a debug_backtrace, skipping the
 	 * Navigator and Server, of course.
