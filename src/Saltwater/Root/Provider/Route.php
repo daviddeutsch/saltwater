@@ -73,7 +73,13 @@ class Route extends AbstractRoute
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
-			$service = S::$n->service($call->class, $call->context);
+			if ( !empty($call->service) ) {
+				$service = S::$n->service($call->class, $call->context);
+			} elseif ( isset($service) ) {
+				$service->setContext($call->context);
+			} else {
+				S::halt(500, 'Service error');
+			};
 
 			// TODO: Middleware for individual Services
 
@@ -98,7 +104,7 @@ class Route extends AbstractRoute
 
 		// This is for simple commands upon an established service
 		if ( empty($path) ) {
-			$this->push($context, $cmd, $root);
+			$this->push($context, $cmd, '', $root);
 
 			return;
 		}
@@ -140,20 +146,23 @@ class Route extends AbstractRoute
 		}
 
 		// TODO: Setting a class here and reusing it later is mad uglies
-		$class = $context->namespace
-		. '\Service\\'
-		. U::dashedToCamelCase($service);
-
-		if ( !class_exists($class) ) {
-			$class = 'Saltwater\Root\Service\\'
-				. U::dashedToCamelCase($service);
+		$class = 'Saltwater\Thing\Service';
+		if ( !empty($service) ) {
+			$class = $context->namespace
+			. '\Service\\'
+			. U::dashedToCamelCase($service);
 
 			if ( !class_exists($class) ) {
-				$class = $context->namespace
-					. '\Service\Rest';
+				$class = 'Saltwater\Root\Service\\'
+					. U::dashedToCamelCase($service);
 
 				if ( !class_exists($class) ) {
-					$class = 'Saltwater\Root\Service\Rest';
+					$class = $context->namespace
+						. '\Service\Rest';
+
+					if ( !class_exists($class) ) {
+						$class = 'Saltwater\Root\Service\Rest';
+					}
 				}
 			}
 		}
