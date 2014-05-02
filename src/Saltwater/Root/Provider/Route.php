@@ -103,7 +103,7 @@ class Route extends AbstractRoute
 		$root = array_shift($path);
 
 		// This is for simple commands upon an established service
-		if ( empty($path) ) {
+		if ( empty($path) && !empty($this->chain) ) {
 			$this->push($context, $cmd, '', $root);
 
 			return;
