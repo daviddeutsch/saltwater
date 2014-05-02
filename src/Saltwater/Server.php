@@ -10,7 +10,7 @@ class Server
 	public static $n;
 
 	/**
-	 * @var integer
+	 * @var float
 	 */
 	public static $start;
 

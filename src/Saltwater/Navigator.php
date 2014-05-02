@@ -163,12 +163,12 @@ class Navigator
 	 */
 	public function masterContext( $parent=null )
 	{
-		$list = $this->modules[$this->master]->masterContext();
+		foreach ( $this->modules as $module ) {
+			$context = $module->masterContext();
 
-		if ( !is_array($list) ) return $this->context($list, $parent);
-
-		foreach ( $list as $c ) {
-			$parent = $this->context($c, $parent);
+			if ( !empty($context) ) {
+				$parent = $this->context($context, $parent);
+			}
 		}
 
 		return $parent;
@@ -356,6 +356,7 @@ class Navigator
 		return call_user_func_array( array(&$this, $base), $args );
 	}
 
+	// WIP - REWRITE OF get()
 	protected function get2( $base, $type, $name=null, $args=array() )
 	{
 		$thing = $base . '.' . $type;
@@ -376,7 +377,7 @@ class Navigator
 		/**
 		 * Idea for hashing provider requests:
 		 *
-		 * $hash = sha( '[' . implode('.', $order) . ']:' . $master . '->' . $thing
+		 * $hash = sha( '[' . implode('.', $order) . ']:' . $master . '->' . $thing );
 		 */
 
 		$a = array($type);
@@ -388,7 +389,11 @@ class Navigator
 		while ( ($return === false) && ($master <= $stacklength) ) {
 			$return = $this->seekInModules($order, $base, $bit, $a);
 
-			if ( $return === false ) $this->setMaster($this->stack[++$master]);
+			++$master;
+
+			if ( $return === false ) {
+				$this->setMaster($this->stack[$master]);
+			}
 		}
 
 		return $return;
@@ -419,6 +424,7 @@ class Navigator
 
 		return $return;
 	}
+	// END WIP
 
 	/**
 	 * Find the module of a caller class

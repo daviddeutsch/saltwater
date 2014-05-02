@@ -14,6 +14,11 @@ class Service
 
 	public function __construct( $context )
 	{
+		$this->setContext($context);
+	}
+
+	public function setContext( $context )
+	{
 		$this->context = $context;
 	}
 

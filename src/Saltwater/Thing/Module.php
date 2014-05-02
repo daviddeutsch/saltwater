@@ -102,9 +102,9 @@ class Module
 
 	public function masterContext()
 	{
-		if ( empty($this->contexts) ) return 'root';
+		if ( empty($this->contexts) ) return false;
 
-		return array( 'root', U::CamelTodashed( $this->contexts[0] ) );
+		return U::CamelTodashed( $this->contexts[0] );
 	}
 
 	public function thingTypes()
