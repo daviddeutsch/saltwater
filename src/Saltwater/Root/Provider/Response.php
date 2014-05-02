@@ -39,9 +39,7 @@ class Response extends Provider
 
 		header('Content-type: application/json');
 
-		header(
-			'X-Execution-Time: ' . ((microtime(true) - S::$start)*1000) . 'ms'
-		);
+		header( 'X-Execution-Time: ' . $this->executionTime() . 'ms' );
 
 		echo json_encode( self::prepareOutput($data) );
 
@@ -71,13 +69,16 @@ class Response extends Provider
 	{
 		header('HTTP/1.0 200 OK');
 
-		header(
-			'X-Execution-Time: ' . ((microtime(true) - S::$start)*1000) . 'ms'
-		);
+		header( 'X-Execution-Time: ' . $this->executionTime() . 'ms' );
 
 		echo $data;
 
 		exit;
+	}
+
+	private function executionTime()
+	{
+		return round((microtime(true) - S::$start)*1000, 2);
 	}
 
 	/**
