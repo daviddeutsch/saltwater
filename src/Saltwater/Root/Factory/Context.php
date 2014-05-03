@@ -8,7 +8,7 @@ use Saltwater\Thing\Factory;
 
 class Context extends Factory
 {
-	public static function get( $name, $context=null )
+	public static function getFactory( $name, $context=null )
 	{
 		$module = S::$n->getContextModule($name);
 

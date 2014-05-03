@@ -11,5 +11,5 @@ interface Provider
 {
 	public static function setModule( $module );
 
-	public static function get();
+	public static function getProvider();
 }

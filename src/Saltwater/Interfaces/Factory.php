@@ -11,5 +11,5 @@ interface Factory
 {
 	public static function setModule( $module );
 
-	public static function get( $name, $input=null );
+	public static function getFactory( $name, $input=null );
 }

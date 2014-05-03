@@ -14,7 +14,7 @@ class Service extends Factory
 	 *
 	 * @return \Saltwater\Thing\Provider|string
 	 */
-	public static function get( $name, $context=null )
+	public static function getFactory( $name, $context=null )
 	{
 		// TODO: This is still pretty dirty
 		if ( strpos($name, '\\') ) {

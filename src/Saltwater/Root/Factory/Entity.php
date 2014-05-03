@@ -8,7 +8,7 @@ use Saltwater\Thing\Factory;
 
 class Entity extends Factory
 {
-	public static function get( $name, $input=null )
+	public static function getFactory( $name, $input=null )
 	{
 		$model = self::formatModel($name);
 

@@ -2,9 +2,9 @@
 
 namespace Saltwater\Thing;
 
-use Saltwater\Interfaces\Factory as iFactory;
+use Saltwater\Interfaces\Factory as FactoryInterface;
 
-abstract class Factory implements iFactory
+abstract class Factory implements FactoryInterface
 {
 	protected static $module;
 
@@ -15,7 +15,7 @@ abstract class Factory implements iFactory
 		self::$module = $module;
 	}
 
-	public static function get( $name, $input=null )
+	public static function getFactory( $name, $input=null )
 	{
 		return new $name( $input );
 	}

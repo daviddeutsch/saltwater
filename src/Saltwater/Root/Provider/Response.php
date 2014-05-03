@@ -7,9 +7,7 @@ use Saltwater\Thing\Provider;
 
 class Response extends Provider
 {
-	protected function __construct() {}
-
-	public static function get()
+	public static function getProvider()
 	{
 		return new Response();
 	}

@@ -7,9 +7,7 @@ use Saltwater\Common\Log as AbstractLog;
 
 class Log extends AbstractLog
 {
-	protected function __construct() {}
-
-	public static function get()
+	public static function getProvider()
 	{
 		return new Log();
 	}

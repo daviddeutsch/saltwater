@@ -71,7 +71,7 @@ class Module
 
 		$class::setModule($module);
 
-		return $class::get();
+		return $class::getProvider();
 	}
 
 	/**
@@ -90,7 +90,7 @@ class Module
 
 		$class::setModule($module);
 
-		return $class::get($name, $args);
+		return $class::getFactory($name, $args);
 	}
 
 	public function provideList( $type )

@@ -22,7 +22,7 @@ class Route extends AbstractRoute
 		);
 	}
 
-	public static function get()
+	public static function getProvider()
 	{
 		$module = S::$n->getModule(self::$module);
 
