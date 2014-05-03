@@ -74,7 +74,7 @@ class Route extends AbstractRoute
 			$call->context->pushData($result);
 
 			if ( !empty($call->service) ) {
-				$service = S::$n->service($call->class, $call->context);
+				$service = S::$n->service($call->service, $call->context);
 			} elseif ( isset($service) ) {
 				$service->setContext($call->context);
 			} else {

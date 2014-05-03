@@ -35,7 +35,11 @@ class Navigator
 	/**
 	 * @var array classes that can be skipped during search for caller module
 	 */
-	private $skip = array('Saltwater\Navigator','Saltwater\Server');
+	private $skip = array(
+		'Saltwater\Navigator',
+		'Saltwater\Server',
+		'Saltwater\Root'
+	);
 
 	/**
 	 * Add module to Navigator and register its things
@@ -488,6 +492,8 @@ class Navigator
 			if ( !isset($trace[$i]['class']) ) continue;
 
 			if ( in_array($trace[$i]['class'], $this->skip) ) continue;
+
+			if ( strpos($trace[$i]['class'], 'Saltwater\Root') !== false ) continue;
 
 			return explode('\\', $trace[$i]['class']);
 		}
