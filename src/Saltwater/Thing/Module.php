@@ -122,7 +122,7 @@ class Module
 	 * @param $type
 	 * @param $name
 	 *
-	 * @return \Saltwater\Thing\Provider
+	 * @return \Saltwater\Thing\Provider|\Saltwater\Thing\Factory
 	 */
 	protected function className( $type, $name )
 	{

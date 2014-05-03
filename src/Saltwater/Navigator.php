@@ -163,12 +163,14 @@ class Navigator
 	 */
 	public function masterContext( $parent=null )
 	{
-		foreach ( $this->modules as $module ) {
+		foreach ( $this->modules as $name => $module ) {
 			$context = $module->masterContext();
 
 			if ( !empty($context) ) {
 				$parent = $this->context($context, $parent);
 			}
+
+			if ( $name == $this->master ) break;
 		}
 
 		return $parent;
