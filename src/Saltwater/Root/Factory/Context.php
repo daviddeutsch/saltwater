@@ -20,6 +20,6 @@ class Context extends Factory
 
 		if ( !class_exists($class) ) return false;
 
-		return new $class($context);
+		return new $class($context, $module);
 	}
 }

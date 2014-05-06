@@ -13,13 +13,17 @@ class Context
 
 	public $parent;
 
+	public $module;
+
 	public $data;
 
 	public $services = array();
 
-	public function __construct( $parent=null )
+	public function __construct( $parent=null, $module=null )
 	{
 		if ( !is_null($parent) ) $this->parent = $parent;
+
+		if ( !is_null($module) ) $this->module = $module;
 	}
 
 	public function pushData( $data )

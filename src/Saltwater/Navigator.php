@@ -250,9 +250,9 @@ class Navigator
 	 *
 	 * @return Thing\Context
 	 */
-	public function context( $name, $parent=null )
+	public function context( $name, $parent=null, $caller=null )
 	{
-		return $this->factory('context', $name, $parent);
+		return $this->factory('context', $name, $parent, $caller);
 	}
 
 	/**
@@ -263,9 +263,9 @@ class Navigator
 	 *
 	 * @return Thing\Service
 	 */
-	public function service( $name, $context )
+	public function service( $name, $context, $caller=null )
 	{
-		return $this->factory('service', $name, $context);
+		return $this->factory('service', $name, $context, $caller);
 	}
 
 	/**
@@ -276,9 +276,9 @@ class Navigator
 	 *
 	 * @return Thing\Entity
 	 */
-	public function entity( $name, $input=null )
+	public function entity( $name, $input=null, $caller=null )
 	{
-		return $this->factory('entity', $name, $input);
+		return $this->factory('entity', $name, $input, $caller);
 	}
 
 	/**
@@ -290,9 +290,9 @@ class Navigator
 	 *
 	 * @return Thing\*
 	 */
-	public function factory( $type, $name, $args=array() )
+	public function factory( $type, $name, $args=array(), $caller=null )
 	{
-		return $this->get('factory', $type, $name, $args);
+		return $this->get('factory', $type, $name, $args, $caller);
 	}
 
 	/**
@@ -302,9 +302,9 @@ class Navigator
 	 *
 	 * @return Thing\Provider
 	 */
-	public function provider( $type )
+	public function provider( $type, $caller=null )
 	{
-		return $this->get('provider', $type);
+		return $this->get('provider', $type, null, array(), $caller);
 	}
 
 	/**
@@ -317,7 +317,7 @@ class Navigator
 	 *
 	 * @return Thing\*
 	 */
-	protected function get( $base, $type, $name=null, $args=array() )
+	protected function get( $base, $type, $name=null, $args=array(), $caller=null )
 	{
 		$thing = $base . '.' . $type;
 
@@ -325,8 +325,12 @@ class Navigator
 			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
 		};
 
+		if ( empty($caller) ) {
+			$caller = $this->lastCaller();
+		}
+
 		// Depending on the caller, reset the module stack
-		$this->setMaster( $this->findModule($this->lastCaller(), $thing) );
+		$this->setMaster( $this->findModule($caller, $thing) );
 
 		foreach ( $this->modulePrecedence() as $k ) {
 			$module = $this->modules[$k];
@@ -474,9 +478,7 @@ class Navigator
 	 * Extracts the last calling class from a debug_backtrace, skipping the
 	 * Navigator and Server, of course.
 	 *
-	 * And - Yup, debug_backtrace(). For details, check:
-	 *
-	 * https://github.com/daviddeutsch/saltwater/wiki/on-using-debug_backtrace
+	 * And - Yup, debug_backtrace().
 	 *
 	 * @return string class name
 	 */

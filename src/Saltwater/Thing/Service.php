@@ -2,6 +2,8 @@
 
 namespace Saltwater\Thing;
 
+use Saltwater\Server as S;
+
 /**
  * Services provide data or functionality
  */
@@ -10,16 +12,25 @@ class Service
 	/**
 	 * @var Context
 	 */
-	protected $context;
+	protected $context = null;
 
-	public function __construct( $context )
+	protected $module = null;
+
+	public function __construct( $context=null, $module=null )
 	{
 		$this->setContext($context);
+
+		$this->setModule($module);
 	}
 
 	public function setContext( $context )
 	{
 		$this->context = $context;
+	}
+
+	public function setModule( $module )
+	{
+		$this->module = $module;
 	}
 
 	public function is_callable( $method )
@@ -29,16 +40,27 @@ class Service
 
 	public function call( $call, $data=null )
 	{
-		$func = array($this, $call->method);
+		$reflect = new \ReflectionMethod($this, $call->method);
 
-		if ( empty( $call->path ) && empty( $data ) ) {
-			return call_user_func($func);
+		$args = array();
+		if ( $reflect->getNumberOfParameters() ) {
+			foreach ( $reflect->getParameters() as $parameter ) {
+				$name = $parameter->getName();
+
+				switch ( $name ) {
+					case 'path':
+						$args[] = $call->path;
+						break;
+					case 'data':
+						$args[] = $data;
+						break;
+					default:
+						$args[] = S::$n->provider($name, $this->module);
+						break;
+				}
+			}
 		}
 
-		if ( empty( $call->path ) ) {
-			return call_user_func($func, $data);
-		} else {
-			return call_user_func($func, $call->path, $data);
-		}
+		return call_user_func_array(array($this, $call->method), $args);
 	}
 }
