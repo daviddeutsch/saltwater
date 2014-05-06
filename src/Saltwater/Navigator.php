@@ -37,8 +37,7 @@ class Navigator
 	 */
 	private $skip = array(
 		'Saltwater\Navigator',
-		'Saltwater\Server',
-		'Saltwater\Root'
+		'Saltwater\Server'
 	);
 
 	/**
@@ -247,6 +246,7 @@ class Navigator
 	 *
 	 * @param string             $name
 	 * @param null|Thing\Context $parent
+	 * @param string             $caller Caller module name
 	 *
 	 * @return Thing\Context
 	 */
@@ -260,6 +260,7 @@ class Navigator
 	 *
 	 * @param string        $name
 	 * @param Thing\Context $context
+	 * @param string        $caller Caller module name
 	 *
 	 * @return Thing\Service
 	 */
@@ -273,6 +274,7 @@ class Navigator
 	 *
 	 * @param string $name
 	 * @param null   $input
+	 * @param string $caller Caller module name
 	 *
 	 * @return Thing\Entity
 	 */
@@ -287,6 +289,7 @@ class Navigator
 	 * @param string     $type
 	 * @param string     $name
 	 * @param array|null $args
+	 * @param string     $caller Caller module name
 	 *
 	 * @return Thing\*
 	 */
@@ -299,6 +302,7 @@ class Navigator
 	 * Generic call for a type of provider
 	 *
 	 * @param string $type
+	 * @param string $caller Caller module name
 	 *
 	 * @return Thing\Provider
 	 */
@@ -314,10 +318,11 @@ class Navigator
 	 * @param string $type specifies what type of factory or provider
 	 * @param string $name Factories need a name
 	 * @param array  $args Factories can accept further arguments
+	 * @param string $c    Caller module name
 	 *
 	 * @return Thing\*
 	 */
-	protected function get( $base, $type, $name=null, $args=array(), $caller=null )
+	protected function get( $base, $type, $name=null, $args=array(), $c=null )
 	{
 		$thing = $base . '.' . $type;
 
@@ -325,12 +330,12 @@ class Navigator
 			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
 		};
 
-		if ( empty($caller) ) {
-			$caller = $this->lastCaller();
+		if ( empty($c) ) {
+			$c = $this->lastCaller();
 		}
 
 		// Depending on the caller, reset the module stack
-		$this->setMaster( $this->findModule($caller, $thing) );
+		$this->setMaster( $this->findModule($c, $thing) );
 
 		foreach ( $this->modulePrecedence() as $k ) {
 			$module = $this->modules[$k];

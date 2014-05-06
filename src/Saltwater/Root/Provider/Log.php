@@ -14,11 +14,13 @@ class Log extends AbstractLog
 
 	public function log( $level, $message, array $context=array() )
 	{
-		S::$n->db->_(
+		$db = S::$n->db;
+
+		$db->_(
 			'log',
 			array_merge(
 				array(
-					'created' => S::$n->db->isoDateTime(),
+					'created' => $db->isoDateTime(),
 					'level' => $level,
 					'message' => $message
 				),

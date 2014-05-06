@@ -14,6 +14,9 @@ class Service
 	 */
 	protected $context = null;
 
+	/**
+	 * @var string
+	 */
 	protected $module = null;
 
 	public function __construct( $context=null, $module=null )
@@ -42,25 +45,27 @@ class Service
 	{
 		$reflect = new \ReflectionMethod($this, $call->method);
 
-		$args = array();
-		if ( $reflect->getNumberOfParameters() ) {
-			foreach ( $reflect->getParameters() as $parameter ) {
-				$name = $parameter->getName();
+		if ( !$reflect->getNumberOfParameters() ) {
+			return call_user_func( array($this, $call->method) );
+		}
 
-				switch ( $name ) {
-					case 'path':
-						$args[] = $call->path;
-						break;
-					case 'data':
-						$args[] = $data;
-						break;
-					default:
-						$args[] = S::$n->provider($name, $this->module);
-						break;
-				}
+		$args = array();
+		foreach ( $reflect->getParameters() as $parameter ) {
+			$name = $parameter->getName();
+
+			switch ( $name ) {
+				case 'path':
+					$args[] = $call->path;
+					break;
+				case 'data':
+					$args[] = $data;
+					break;
+				default:
+					$args[] = S::$n->provider($name, $this->module);
+					break;
 			}
 		}
 
-		return call_user_func_array(array($this, $call->method), $args);
+		return call_user_func_array( array($this, $call->method), $args );
 	}
 }

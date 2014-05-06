@@ -7,6 +7,9 @@ use Saltwater\Thing\Provider;
 
 class Db extends Provider
 {
+	/**
+	 * @var \RedBean_Instance
+	 */
 	private static $r;
 
 	protected static function makeDB()
@@ -55,6 +58,9 @@ class Db extends Provider
 		self::$r->useWriterCache(true);
 	}
 
+	/**
+	 * @return \RedBean_Instance
+	 */
 	public static function getProvider()
 	{
 		if ( empty(self::$r) ) {
