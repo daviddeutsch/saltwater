@@ -1,23 +1,30 @@
 <?php
 
-namespace Saltwater\Root\Factory;
+namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
-use Saltwater\Thing\Factory;
+use Saltwater\Thing\Provider;
 
-class Entity extends Factory
+class Entity extends Provider
 {
-	public static function getFactory( $name, $input=null )
+	public static function getProvider() { return new Entity(); }
+
+	/**
+	 * @param string $name
+	 *
+	 * @return \Saltwater\Thing\Entity
+	 */
+	public function get( $name, $input=null )
 	{
-		$model = self::formatModel($name);
+		$model = $this->formatModel($name);
 
 		if ( !empty($model) ) return $model;
 
 		return $name;
 	}
 
-	private static function formatModel( $name )
+	private function formatModel( $name )
 	{
 		$module = S::$n->getModule(self::$module);
 

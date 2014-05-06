@@ -71,7 +71,7 @@ class Server
 	 */
 	public static function entity( $name, $input=null )
 	{
-		return self::$n->entity($name, $input);
+		return self::$n->entity->get($name, $input);
 	}
 
 	/**

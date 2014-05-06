@@ -170,7 +170,7 @@ class Navigator
 			$context = $module->masterContext();
 
 			if ( !empty($context) ) {
-				$parent = $this->context($context, $parent);
+				$parent = $this->context->get($context, $parent);
 			}
 
 			if ( $name == $this->master ) break;
@@ -242,63 +242,6 @@ class Navigator
 	}
 
 	/**
-	 * Provide a Thing\Context by name, possibly injecting a parent context
-	 *
-	 * @param string             $name
-	 * @param null|Thing\Context $parent
-	 * @param string             $caller Caller module name
-	 *
-	 * @return Thing\Context
-	 */
-	public function context( $name, $parent=null, $caller=null )
-	{
-		return $this->factory('context', $name, $parent, $caller);
-	}
-
-	/**
-	 * Provide a Thing\Service by name, specifying for which context
-	 *
-	 * @param string        $name
-	 * @param Thing\Context $context
-	 * @param string        $caller Caller module name
-	 *
-	 * @return Thing\Service
-	 */
-	public function service( $name, $context, $caller=null )
-	{
-		return $this->factory('service', $name, $context, $caller);
-	}
-
-	/**
-	 * Provide a Thing\Entity or Thing\Association by name
-	 *
-	 * @param string $name
-	 * @param null   $input
-	 * @param string $caller Caller module name
-	 *
-	 * @return Thing\Entity
-	 */
-	public function entity( $name, $input=null, $caller=null )
-	{
-		return $this->factory('entity', $name, $input, $caller);
-	}
-
-	/**
-	 * Generic call for a factory, specifying type and name, relaying arguments
-	 *
-	 * @param string     $type
-	 * @param string     $name
-	 * @param array|null $args
-	 * @param string     $caller Caller module name
-	 *
-	 * @return Thing\*
-	 */
-	public function factory( $type, $name, $args=array(), $caller=null )
-	{
-		return $this->get('factory', $type, $name, $args, $caller);
-	}
-
-	/**
 	 * Generic call for a type of provider
 	 *
 	 * @param string $type
@@ -308,49 +251,21 @@ class Navigator
 	 */
 	public function provider( $type, $caller=null )
 	{
-		return $this->get('provider', $type, null, array(), $caller);
-	}
-
-	/**
-	 * Call upon a provider or factory by type and name, relaying arguments
-	 *
-	 * @param string $base either 'factory' or 'provider'
-	 * @param string $type specifies what type of factory or provider
-	 * @param string $name Factories need a name
-	 * @param array  $args Factories can accept further arguments
-	 * @param string $c    Caller module name
-	 *
-	 * @return Thing\*
-	 */
-	protected function get( $base, $type, $name=null, $args=array(), $c=null )
-	{
-		$thing = $base . '.' . $type;
+		$thing = 'provider.' . $type;
 
 		if ( !$bit = $this->bitThing($thing) ) {
-			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
+			S::halt(500, 'provider does not exist: ' . $type);
 		};
 
-		if ( empty($c) ) {
-			$c = $this->lastCaller();
-		}
+		if ( empty($caller) ) $caller = $this->lastCaller();
 
 		// Depending on the caller, reset the module stack
-		$this->setMaster( $this->findModule($c, $thing) );
+		$this->setMaster( $this->findModule($caller, $thing) );
 
 		foreach ( $this->modulePrecedence() as $k ) {
-			$module = $this->modules[$k];
+			if ( !$this->modules[$k]->hasThing($bit) ) continue;
 
-			if ( !$module->hasThing($bit) ) continue;
-
-			if ( $base == 'provider' ) {
-				$return = $module->provider($k, $type);
-			} else {
-				$inject = $this->moduleByThing($type . '.' . $name);
-
-				$inject = empty($inject) ? $k : $inject;
-
-				$return = $module->factory($inject, $type, $name, $args);
-			}
+			$return = $this->modules[$k]->provider($k, $type);
 
 			if ( $return !== false ) return $return;
 		}
@@ -362,26 +277,22 @@ class Navigator
 		// As a last resort, step one module up within stack and try again
 		$this->setMaster($this->stack[$master+1]);
 
-		if ( $base == 'provider' ) {
-			$args = array($type);
-		} else {
-			$args = array($type, $name, $args);
-		}
-
-		return call_user_func_array( array(&$this, $base), $args );
+		return call_user_func( array(&$this, 'provider'), $type );
 	}
 
 	// WIP - REWRITE OF get()
-	protected function get2( $base, $type, $name=null, $args=array() )
+	protected function get2( $type, $caller=null )
 	{
-		$thing = $base . '.' . $type;
+		$thing = 'provider.' . $type;
 
 		if ( !$bit = $this->bitThing($thing) ) {
-			S::halt(500, ucfirst($base) . ' does not exist: ' . $type);
+			S::halt(500, 'provider does not exist: ' . $type);
 		};
 
+		if ( empty($caller) ) $caller = $this->lastCaller();
+
 		// Depending on the caller, reset the module stack
-		$this->setMaster( $this->findModule($this->lastCaller(), $thing) );
+		$this->setMaster( $this->findModule($caller, $thing) );
 
 		$stacklength = count($this->stack)-1;
 
@@ -395,14 +306,9 @@ class Navigator
 		 * $hash = sha( '[' . implode('.', $order) . ']:' . $master . '->' . $thing );
 		 */
 
-		$a = array($type);
-		if ( $base == 'factory' ) {
-			$a = array_merge( $a, array($type, $name, $args) );
-		}
-
 		$return = false;
 		while ( ($return === false) && ($master <= $stacklength) ) {
-			$return = $this->seekInModules($order, $base, $bit, $a);
+			$return = $this->seekInModules($order, $type, $bit);
 
 			++$master;
 
@@ -414,25 +320,13 @@ class Navigator
 		return $return;
 	}
 
-	protected function seekInModules( $modules, $base, $bit, $args )
+	protected function seekInModules( $modules, $type, $bit )
 	{
 		$return = false;
 		foreach ( $modules as $k ) {
-			$module = $this->modules[$k];
+			if ( !$this->modules[$k]->hasThing($bit) ) continue;
 
-			if ( !$module->hasThing($bit) ) continue;
-
-			$a = $args;
-
-			if ( $base == 'factory' ) {
-				$inject = $this->moduleByThing($args[0] . '.' . $args[1]);
-
-				array_unshift($a, empty($inject) ? $k : $inject);
-			} else {
-				array_unshift($a, $k);
-			}
-
-			$return = call_user_func_array( array($module, $base), $a );
+			$return = $this->modules[$k]->provider($k, $type);
 
 			if ( $return !== false ) break;
 		}
@@ -572,8 +466,8 @@ class Navigator
 
 	public function __call( $type, $args )
 	{
-		$name = empty($args) ? null : array_shift($args);
+		$caller = empty($args) ? null : array_shift($args);
 
-		return $this->factory($type, $name, $args);
+		return $this->provider($type, $caller);
 	}
 }

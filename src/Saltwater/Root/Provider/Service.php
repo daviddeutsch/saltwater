@@ -1,20 +1,22 @@
 <?php
 
-namespace Saltwater\Root\Factory;
+namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
-use Saltwater\Thing\Factory;
 use Saltwater\Utils as U;
+use Saltwater\Thing\Provider;
 
-class Service extends Factory
+class Service extends Provider
 {
+	public static function getProvider() { return new Service(); }
+
 	/**
 	 * @param string                   $name
 	 * @param \Saltwater\Thing\Context $context
 	 *
-	 * @return \Saltwater\Thing\Provider|string
+	 * @return \Saltwater\Thing\Service
 	 */
-	public static function getFactory( $name, $context=null )
+	public function get( $name, $context=null )
 	{
 		// TODO: This is still pretty dirty
 		if ( strpos($name, '\\') ) {
@@ -28,9 +30,9 @@ class Service extends Factory
 		if ( class_exists($class) ) return new $class($context);
 
 		if ( in_array($name, $context->services) ) {
-			return S::$n->service('rest', $context);
+			return S::$n->service->get('rest', $context);
 		} elseif ( !empty($context->parent) ) {
-			return S::$n->service(
+			return S::$n->service->get(
 				U::namespacedClassToDashed($class),
 				$context->parent
 			);
