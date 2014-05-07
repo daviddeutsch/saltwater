@@ -61,13 +61,14 @@ class Module
 	 *
 	 * @return \Saltwater\Thing\Provider
 	 */
-	public function provider( $module, $type )
+	public function provider( $module, $caller, $type )
 	{
 		$class = $this->className('provider', $type);
 
 		if ( !class_exists($class) ) return false;
 
 		$class::setModule($module);
+		$class::setCaller($caller);
 
 		return $class::getProvider();
 	}

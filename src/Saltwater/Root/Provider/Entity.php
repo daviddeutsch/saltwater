@@ -26,7 +26,13 @@ class Entity extends Provider
 
 	private function formatModel( $name )
 	{
-		$module = S::$n->getModule(self::$module);
+		$module = S::$n->getModule(self::$caller);
+
+		$bit = S::$n->bitThing('entity.' . $name);
+
+		if ( !$module->hasThing($bit) ) {
+			$module = S::$n->getModule(self::$module);
+		}
 
 		$name = U::snakeToCamelCase($name);
 

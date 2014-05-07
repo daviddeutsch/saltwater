@@ -259,13 +259,15 @@ class Navigator
 
 		if ( empty($caller) ) $caller = $this->lastCaller();
 
+		$caller = $this->findModule($caller, $thing);
+
 		// Depending on the caller, reset the module stack
-		$this->setMaster( $this->findModule($caller, $thing) );
+		$this->setMaster($caller);
 
 		foreach ( $this->modulePrecedence() as $k ) {
 			if ( !$this->modules[$k]->hasThing($bit) ) continue;
 
-			$return = $this->modules[$k]->provider($k, $type);
+			$return = $this->modules[$k]->provider($k, $caller, $type);
 
 			if ( $return !== false ) return $return;
 		}
@@ -281,7 +283,7 @@ class Navigator
 	}
 
 	// WIP - REWRITE OF get()
-	protected function get2( $type, $caller=null )
+	public function get2( $type, $caller=null )
 	{
 		$thing = 'provider.' . $type;
 
@@ -308,7 +310,7 @@ class Navigator
 
 		$return = false;
 		while ( ($return === false) && ($master <= $stacklength) ) {
-			$return = $this->seekInModules($order, $type, $bit);
+			$return = $this->seekInModules($order, $caller, $type, $bit);
 
 			++$master;
 
@@ -320,13 +322,13 @@ class Navigator
 		return $return;
 	}
 
-	protected function seekInModules( $modules, $type, $bit )
+	protected function seekInModules( $modules, $caller, $type, $bit )
 	{
 		$return = false;
 		foreach ( $modules as $k ) {
 			if ( !$this->modules[$k]->hasThing($bit) ) continue;
 
-			$return = $this->modules[$k]->provider($k, $type);
+			$return = $this->modules[$k]->provider($k, $caller, $type);
 
 			if ( $return !== false ) break;
 		}
