@@ -257,9 +257,9 @@ class Navigator
 			S::halt(500, 'provider does not exist: ' . $type);
 		};
 
-		if ( empty($caller) ) $caller = $this->lastCaller();
-
-		$caller = $this->findModule($caller, $thing);
+		if ( empty($caller) ) {
+			$caller = $this->findModule($this->lastCaller(), $thing);
+		}
 
 		// Depending on the caller, reset the module stack
 		$this->setMaster($caller);
