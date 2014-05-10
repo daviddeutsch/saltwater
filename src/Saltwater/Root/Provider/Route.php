@@ -3,7 +3,6 @@
 namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
-use Saltwater\Utils as U;
 use Saltwater\Common\Route as AbstractRoute;
 
 class Route extends AbstractRoute

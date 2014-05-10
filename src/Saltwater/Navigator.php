@@ -188,6 +188,22 @@ class Navigator
 	 *
 	 * @param string $name
 	 *
+	 * @return Thing\Module[]
+	 */
+	public function getModules( $reverse=false )
+	{
+		if ( $reverse ) {
+			return array_reverse($this->modules);
+		} else {
+			return $this->modules;
+		}
+	}
+
+	/**
+	 * Return a module class by its name
+	 *
+	 * @param string $name
+	 *
 	 * @return Thing\Module
 	 */
 	public function getModule( $name )
@@ -222,7 +238,7 @@ class Navigator
 	 *
 	 * @param string $name plain name of the context
 	 *
-	 * @return Thing\Module
+	 * @return Thing\Module|null
 	 */
 	public function getContextModule( $name )
 	{
@@ -299,6 +315,11 @@ class Navigator
 			$caller = $this->findModule($this->lastCaller(), $thing);
 		}
 
+		return $this->providerFromModule($bit, $caller, $type);
+	}
+
+	private function providerFromModule( $bit, $caller, $type)
+	{
 		// Depending on the caller, reset the module stack
 		$this->setMaster($caller);
 
@@ -315,9 +336,9 @@ class Navigator
 		if ( $master == count($this->stack)-1 ) return false;
 
 		// As a last resort, step one module up within stack and try again
-		$this->setMaster($this->stack[$master+1]);
+		$caller = $this->stack[$master+1];
 
-		return call_user_func( array(&$this, 'provider'), $type );
+		return $this->providerFromModule($bit, $caller, $type);
 	}
 
 	/**
@@ -330,26 +351,17 @@ class Navigator
 	{
 		if ( empty($caller) ) return null;
 
-		// Extract a thing from the last two particles
-		$thing = array_pop($caller);
+		$c = $this->explodeCaller($caller, $provider);
 
-		$thing = strtolower( array_pop($caller) . '.' . $thing );
+		$bit = $c->provider ? $this->bitThing($c->thing) : 0;
 
-		// Everything else is Namespace
-		$namespace = implode('\\', $caller);
-
-		// Check whether this is a provider calling "itself"
-		$is_provider = $thing == $provider;
-
-		$bit = $is_provider ? $this->bitThing($thing) : 0;
-
-		foreach ( array_reverse($this->modules) as $k => $module ) {
-			// A provider calling itself always gets a lower level provider
-			if ( $is_provider ) {
+		foreach ( $this->getModules(true) as $k => $module ) {
+			if ( $c->self ) {
+				// A provider calling itself always gets a lower level provider
 				if ( !$module->hasThing($bit) ) continue;
 
-				if ( $module->namespace == $namespace ) continue;
-			} elseif ( $module->namespace !== $namespace ) {
+				if ( $module->namespace == $c->namespace ) continue;
+			} elseif ( $module->namespace !== $c->namespace ) {
 				continue;
 			}
 
@@ -357,6 +369,21 @@ class Navigator
 		}
 
 		return null;
+	}
+
+	private function explodeCaller( $caller, $provider )
+	{
+		// Extract a thing from the last two particles
+		$thing = array_pop($caller);
+
+		$thing = strtolower( array_pop($caller) . '.' . $thing );
+
+		// The rest is the namespace
+		return (object) array(
+			'thing'     => $thing,
+			'namespace' => implode('\\', $caller),
+			'self'      => $thing == $provider
+		);
 	}
 
 	/**
@@ -378,9 +405,10 @@ class Navigator
 		for ( $i=2; $i<$depth; ++$i ) {
 			if ( !isset($trace[$i]['class']) ) continue;
 
-			if ( in_array($trace[$i]['class'], $this->skip) ) continue;
-
-			if ( strpos($trace[$i]['class'], 'Saltwater\Root') !== false ) continue;
+			if (
+				in_array($trace[$i]['class'], $this->skip)
+				|| (strpos($trace[$i]['class'], 'Saltwater\Root') !== false)
+			) continue;
 
 			return explode('\\', $trace[$i]['class']);
 		}

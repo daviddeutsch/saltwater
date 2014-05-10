@@ -37,20 +37,44 @@ class Service
 		$this->module = $module;
 	}
 
+	/**
+	 * Check whether a method is callable in this service
+	 *
+	 * @param string $method
+	 *
+	 * @return bool
+	 */
 	public function is_callable( $method )
 	{
 		return method_exists($this, $method);
 	}
 
+	/**
+	 * Attempt to execute a call on this service
+	 *
+	 * @param            $call
+	 * @param mixed|null $data
+	 *
+	 * @return mixed|null
+	 */
 	public function call( $call, $data=null )
 	{
 		$method = $call->http . U::dashedToCamelCase($call->method);
 
 		if ( !$this->is_callable($method) ) return null;
 
-		$this->executeCall($call, $method, $data);
+		return $this->executeCall($call, $method, $data);
 	}
 
+	/**
+	 * Execute a call
+	 *
+	 * @param object     $call
+	 * @param string     $method
+	 * @param mixed|null $data
+	 *
+	 * @return mixed
+	 */
 	protected function executeCall( $call, $method, $data )
 	{
 		$reflect = new \ReflectionMethod($this, $method);
