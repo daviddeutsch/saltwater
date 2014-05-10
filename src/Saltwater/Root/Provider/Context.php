@@ -32,9 +32,9 @@ class Context extends Provider
 	}
 
 	/**
-	 * @param string                   $name
-	 * @param \Saltwater\Thing\Context $context
-	 * @param \Saltwater\Thing\Module  $module
+	 * @param string                        $class
+	 * @param \Saltwater\Thing\Context|null $context
+	 * @param \Saltwater\Thing\Module       $module
 	 *
 	 * @return \Saltwater\Thing\Context
 	 */

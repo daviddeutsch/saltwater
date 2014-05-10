@@ -185,7 +185,7 @@ class Navigator
 	/**
 	 * Return the master context for the current master module
 	 *
-	 * @param \Saltwater\Thing\Context $parent inject a parent context
+	 * @param \Saltwater\Thing\Context|null $parent inject a parent context
 	 *
 	 * @return \Saltwater\Thing\Context
 	 */

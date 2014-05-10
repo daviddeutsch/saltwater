@@ -14,8 +14,12 @@ class Route extends AbstractRoute
 
 		$this->http = $this->getHTTP();
 
+		$context = S::$n->masterContext();
+
+		if ( empty($context) ) return;
+
 		$this->explode(
-			S::$n->masterContext(),
+			$context,
 			$this->http,
 			explode('/', $this->uri)
 		);
