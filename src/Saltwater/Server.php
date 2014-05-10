@@ -65,7 +65,6 @@ class Server
 	 * Return an Entity class name from the EntityProvider
 	 *
 	 * @param string $name
-	 * @param null   $input
 	 *
 	 * @return string
 	 */
