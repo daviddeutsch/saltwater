@@ -4,6 +4,7 @@ namespace Saltwater\Common;
 
 use Saltwater\Thing\Provider;
 
-abstract class Config extends Provider {
-
+abstract class Config extends Provider
+{
+	public $database;
 }

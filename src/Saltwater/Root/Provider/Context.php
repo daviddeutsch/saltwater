@@ -28,6 +28,18 @@ class Context extends Provider
 
 		if ( !class_exists($class) ) return null;
 
+		return $this->newContext($class, $context, $module);
+	}
+
+	/**
+	 * @param string                   $name
+	 * @param \Saltwater\Thing\Context $context
+	 * @param \Saltwater\Thing\Module  $module
+	 *
+	 * @return \Saltwater\Thing\Context
+	 */
+	private function newContext( $class, $context, $module )
+	{
 		return new $class($context, $module);
 	}
 }
