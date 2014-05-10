@@ -307,61 +307,6 @@ class Navigator
 		return call_user_func( array(&$this, 'provider'), $type );
 	}
 
-	// WIP - REWRITE OF get()
-	public function get2( $type, $caller=null )
-	{
-		$thing = 'provider.' . $type;
-
-		if ( !$bit = $this->bitThing($thing) ) {
-			S::halt(500, 'provider does not exist: ' . $type);
-		};
-
-		if ( empty($caller) ) $caller = $this->lastCaller();
-
-		// Depending on the caller, reset the module stack
-		$this->setMaster( $this->findModule($caller, $thing) );
-
-		$stacklength = count($this->stack)-1;
-
-		$master = array_search($this->master, $this->stack);
-
-		$order = $this->modulePrecedence();
-
-		/**
-		 * Idea for hashing provider requests:
-		 *
-		 * $hash = sha( '[' . implode('.', $order) . ']:' . $master . '->' . $thing );
-		 */
-
-		$return = false;
-		while ( ($return === false) && ($master <= $stacklength) ) {
-			$return = $this->seekInModules($order, $caller, $type, $bit);
-
-			++$master;
-
-			if ( $return === false ) {
-				$this->setMaster($this->stack[$master]);
-			}
-		}
-
-		return $return;
-	}
-
-	protected function seekInModules( $modules, $caller, $type, $bit )
-	{
-		$return = false;
-		foreach ( $modules as $k ) {
-			if ( !$this->modules[$k]->hasThing($bit) ) continue;
-
-			$return = $this->modules[$k]->provider($k, $caller, $type);
-
-			if ( $return !== false ) break;
-		}
-
-		return $return;
-	}
-	// END WIP
-
 	/**
 	 * Find the module of a caller class
 	 *
