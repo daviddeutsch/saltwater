@@ -3,6 +3,7 @@
 namespace Saltwater\Thing;
 
 use Saltwater\Server as S;
+use Saltwater\Utils as U;
 
 /**
  * Services provide data or functionality
@@ -43,10 +44,22 @@ class Service
 
 	public function call( $call, $data=null )
 	{
-		$reflect = new \ReflectionMethod($this, $call->method);
+		$method = $call->http . U::dashedToCamelCase($call->method);
+
+		if ( !$this->is_callable($this, $method) ) return null;
+
+		return call_user_func_array(
+			array($this, $call->method),
+			$this->getMethodArgs($method, $call->path, $data)
+		);
+	}
+
+	private function getMethodArgs( $method, $path, $data )
+	{
+		$reflect = new \ReflectionMethod($this, $method);
 
 		if ( !$reflect->getNumberOfParameters() ) {
-			return call_user_func( array($this, $call->method) );
+			return call_user_func( array($this, $method) );
 		}
 
 		$args = array();
@@ -55,7 +68,7 @@ class Service
 
 			switch ( $name ) {
 				case 'path':
-					$args[] = $call->path;
+					$args[] = $path;
 					break;
 				case 'data':
 					$args[] = $data;
@@ -66,6 +79,6 @@ class Service
 			}
 		}
 
-		return call_user_func_array( array($this, $call->method), $args );
+		return $args;
 	}
 }

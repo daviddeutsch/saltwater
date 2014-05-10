@@ -18,7 +18,7 @@ class Service extends Provider
 	 */
 	public function get( $name, $context=null )
 	{
-		$class = $this->ClassFromName( $context, $name );
+		$class = $this->getServiceClass( $context, $name );
 
 		if ( class_exists($class) ) return new $class($context);
 
@@ -34,11 +34,27 @@ class Service extends Provider
 		return null;
 	}
 
-	private function ClassFromName( $context, $name )
+	/**
+	 * @param \Saltwater\Thing\Context $context
+	 * @param string $service
+	 */
+	private function getServiceClass( $context, $service )
 	{
-		// TODO: This is still pretty dirty
-		if ( strpos($name, '\\') ) return $name;
+		$class = $context->namespace
+			. '\Service\\'
+			. U::dashedToCamelCase($service);
 
-		return $context->namespace . '\Service\\' . U::dashedToCamelCase($name);
+		if ( class_exists($class) ) return $class;
+
+		$class = 'Saltwater\Root\Service\\'
+			. U::dashedToCamelCase($service);
+
+		if ( class_exists($class) ) return $class;
+
+		$class = $context->namespace . '\Service\Rest';
+
+		if ( class_exists($class) ) return $class;
+
+		return 'Saltwater\Root\Service\Rest';
 	}
 }

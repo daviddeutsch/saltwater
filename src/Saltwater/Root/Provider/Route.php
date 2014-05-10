@@ -109,6 +109,8 @@ class Route extends AbstractRoute
 			}
 
 			$result = $service->call($call, $data);
+
+			if ( is_null($result) ) S::halt(400, 'Bad Request');
 		}
 
 		return $result;
@@ -166,54 +168,13 @@ class Route extends AbstractRoute
 			$path = null;
 		}
 
-		// TODO: Figure out more elegant way to compute ->plain
-		$class = $this->ServiceClassFromContext( $service, $context );
-
-		$method = $cmd . U::dashedToCamelCase($method);
-
-		if ( !method_exists($class, $method) ) {
-			$plain = true;
-		} else {
-			$plain = $method == $service;
-		}
-
 		$this->chain[] = (object) array(
 			'context' => $context,
 			'http' => $cmd,
 			'service' => $service,
-			'class' => $class,
 			'method' => $method,
-			'plain' => $plain,
 			'path' => $path
 		);
 	}
 
-	/**
-	 * @param string $service
-	 * @param \Saltwater\Thing\Context $context
-	 */
-	private function ServiceClassFromContext( $service, $context )
-	{
-		$class = 'Saltwater\Thing\Service';
-
-		if ( empty($service) ) return $class;
-
-		$class = $context->namespace
-			. '\Service\\'
-			. U::dashedToCamelCase($service);
-
-		if ( class_exists($class) ) return $class;
-
-		$class = 'Saltwater\Root\Service\\'
-			. U::dashedToCamelCase($service);
-
-		if ( class_exists($class) ) return $class;
-
-		$class = $context->namespace
-			. '\Service\Rest';
-
-		if ( class_exists($class) ) return $class;
-
-		return 'Saltwater\Root\Service\Rest';
-	}
 }
