@@ -11,8 +11,8 @@ class Context extends Provider
 	public static function getProvider() { return new Context(); }
 
 	/**
-	 * @param string                   $name
-	 * @param \Saltwater\Thing\Context $context Parent Context
+	 * @param string                        $name
+	 * @param \Saltwater\Thing\Context|null $context Parent Context
 	 *
 	 * @return \Saltwater\Thing\Context
 	 */

@@ -5,6 +5,7 @@ namespace Saltwater\Root\Provider;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 use Saltwater\Common\Route as AbstractRoute;
+use Saltwater\Thing\Service;
 
 class Route extends AbstractRoute
 {
@@ -17,8 +18,7 @@ class Route extends AbstractRoute
 		$this->explode(
 			S::$n->masterContext(),
 			$this->http,
-			explode('/', $this->uri),
-			true
+			explode('/', $this->uri)
 		);
 	}
 
@@ -31,6 +31,11 @@ class Route extends AbstractRoute
 		return new $class();
 	}
 
+	/**
+	 * Get the URI from $_SERVER
+	 *
+	 * @return string
+	 */
 	protected function getURI()
 	{
 		$path = $_SERVER['SCRIPT_NAME'];
@@ -70,6 +75,8 @@ class Route extends AbstractRoute
 		$length = count($this->chain) - 1;
 
 		$result = null;
+
+		$service = new Service();
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
@@ -96,7 +103,7 @@ class Route extends AbstractRoute
 	/**
 	 * @param Context $context
 	 * @param string  $cmd
-	 * @param string  $path
+	 * @param array   $path
 	 */
 	protected function explode( $context, $cmd, $path )
 	{

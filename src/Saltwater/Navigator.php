@@ -12,11 +12,12 @@ use Saltwater\Utils as U;
  *
  * List of known providers:
  *
- * @property \Saltwater\Thing\Context $context
- * @property \Saltwater\Thing\Entity  $entity
- * @property \Saltwater\Thing\Service $service
+ * @property \Saltwater\Root\Provider\Context $context
+ * @property \Saltwater\Root\Provider\Entity  $entity
+ * @property \Saltwater\Root\Provider\Service $service
  *
- * @property \Saltwater\Root\Provider\Db       $db
+ * @property \RedBean_Instance $db
+ *
  * @property \Saltwater\Root\Provider\Log      $log
  * @property \Saltwater\Root\Provider\Response $response
  * @property \Saltwater\Root\Provider\Route    $route

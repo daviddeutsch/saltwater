@@ -15,7 +15,7 @@ class Entity extends Provider
 	 *
 	 * @return string
 	 */
-	public function get( $name, $input=null )
+	public function get( $name )
 	{
 		$model = $this->formatModel($name);
 
