@@ -110,7 +110,7 @@ class Navigator
 	{
 		$cache = unserialize( file_get_contents($path) );
 
-		$this->copyCache( $this, $cache );
+		$this->copyCache( $cache, $this );
 	}
 
 	/**
