@@ -67,4 +67,36 @@ class Utils
 
 		return self::CamelTodashed( array_pop($array) );
 	}
+
+	/**
+	 * Read a JSON file and return its content
+	 *
+	 * @param      $path
+	 * @param bool $associative
+	 *
+	 * @return mixed
+	 */
+	public static function getJSON( $path, $associative=false )
+	{
+		return json_decode( file_get_contents($path), $associative );
+	}
+
+	/**
+	 * Store any data as JSON to a file
+	 *
+	 * @param $path
+	 * @param $content
+	 *
+	 * @return int
+	 */
+	public static function storeJSON( $path, $content )
+	{
+		return file_put_contents(
+			$path,
+			json_encode(
+				$content,
+				JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+			)
+		);
+	}
 }
