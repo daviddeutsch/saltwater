@@ -5,6 +5,22 @@ namespace Saltwater;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 
+/**
+ * Class Navigator
+ *
+ * @package Saltwater
+ *
+ * List of known providers:
+ *
+ * @property \Saltwater\Root\Provider\Context  $context
+ * @property \Saltwater\Root\Provider\Db       $db
+ * @property \Saltwater\Root\Provider\Entity   $entity
+ * @property \Saltwater\Root\Provider\Log      $log
+ * @property \Saltwater\Root\Provider\Response $response
+ * @property \Saltwater\Root\Provider\Route    $route
+ * @property \Saltwater\Root\Provider\Service  $service
+ * @property \Saltwater\Common\Config          $config
+ */
 class Navigator
 {
 	/**
