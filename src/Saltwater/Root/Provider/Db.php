@@ -16,34 +16,13 @@ class Db extends Provider
 	{
 		$cfg = S::$n->config->database;
 
-		if ( empty(self::$r) ) {
-			self::$r = new \RedBean_Instance();
-		}
+		if ( !isset($cfg->type) ) $cfg->type = 'mysql';
 
-		if ( isset($cfg->type) ) {
-			$type = $cfg->type;
-		} else {
-			$type = 'mysql';
-		}
+		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
 
-		if ( empty(self::$r->toolboxes) ) {
-			self::$r->setup(
-				$type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
-				$cfg->user,
-				$cfg->password
-			);
+		self::setupDB($cfg);
 
-			self::$r->setupPipeline();
-		}
-
-		if ( !isset(self::$r->toolboxes[$cfg->name]) ) {
-			self::$r->addDatabase(
-				$cfg->name,
-				$type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
-				$cfg->user,
-				$cfg->password
-			);
-		}
+		self::addDB($cfg);
 
 		self::$r->selectDatabase($cfg->name);
 
@@ -57,6 +36,32 @@ class Db extends Provider
 
 		self::$r->useWriterCache(true);
 	}
+
+	private static function setupDB( $cfg )
+	{
+		if ( !empty(self::$r->toolboxes) ) return;
+
+		self::$r->setup(
+			$cfg->type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
+			$cfg->user,
+			$cfg->password
+		);
+
+		self::$r->setupPipeline();
+	}
+
+	private static function addDB( $cfg )
+	{
+		if ( isset(self::$r->toolboxes[$cfg->name]) ) return;
+
+		self::$r->addDatabase(
+			$cfg->name,
+			$cfg->type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
+			$cfg->user,
+			$cfg->password
+		);
+	}
+
 
 	/**
 	 * @return \RedBean_Instance

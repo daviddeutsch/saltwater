@@ -105,17 +105,21 @@ class Navigator
 
 	/**
 	 * @param string $path
+	 *
+	 * @return bool
 	 */
 	public function loadCache( $path )
 	{
 		$cache = unserialize( file_get_contents($path) );
 
-		$this->copyCache( $cache, $this );
+		return $this->copyCache( $cache, $this );
 	}
 
 	/**
 	 * @param Navigator|object $from
 	 * @param Navigator|object $to
+	 *
+	 * @return bool
 	 */
 	private function copyCache( &$from, &$to )
 	{
@@ -134,6 +138,8 @@ class Navigator
 
 			$to->bits[$name] = $from->things;
 		}
+
+		return true;
 	}
 
 	/**

@@ -24,16 +24,10 @@ class Server
 	 */
 	public static function init( $modules=array(), $cache=null )
 	{
-		if ( empty(self::$start) ) self::$start = microtime(true);
-
-		if ( empty(self::$n) ) self::$n = new Navigator();
+		if ( empty(self::$start) ) self::start();
 
 		if ( $cache ) {
-			if ( file_exists($cache) ) {
-				self::$n->loadCache($cache);
-
-				return;
-			}
+			if ( self::loadCache($cache) ) return;
 		}
 
 		if ( !is_array($modules) ) $modules = array($modules);
@@ -43,6 +37,25 @@ class Server
 		}
 
 		if ( $cache ) self::$n->cache($cache);
+	}
+
+	private static function start()
+	{
+		self::$start = microtime(true);
+
+		self::$n = new Navigator();
+	}
+
+	/**
+	 * @param $cache
+	 *
+	 * @return bool
+	 */
+	private static function loadCache( $cache )
+	{
+		if ( !file_exists($cache) ) return false;
+
+		return self::$n->loadCache($cache);
 	}
 
 	/**

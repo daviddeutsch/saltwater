@@ -18,14 +18,7 @@ class Service extends Provider
 	 */
 	public function get( $name, $context=null )
 	{
-		// TODO: This is still pretty dirty
-		if ( strpos($name, '\\') ) {
-			$class = $name;
-		} else {
-			$class = $context->namespace
-				. '\Service\\'
-				. U::dashedToCamelCase($name);
-		}
+		$class = $this->ClassFromName( $context, $name );
 
 		if ( class_exists($class) ) return new $class($context);
 
@@ -39,5 +32,13 @@ class Service extends Provider
 		}
 
 		return null;
+	}
+
+	private function ClassFromName( $context, $name )
+	{
+		// TODO: This is still pretty dirty
+		if ( strpos($name, '\\') ) return $name;
+
+		return $context->namespace . '\Service\\' . U::dashedToCamelCase($name);
 	}
 }

@@ -88,13 +88,15 @@ class Route extends AbstractRoute
 
 		$result = null;
 
+		$data = null;
+
 		$service = new \Saltwater\Thing\Service();
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
 			if ( !empty($call->service) ) {
 				$service = S::$n->service->get($call->class, $call->context);
-			} elseif ( isset($service) ) {
+			} elseif ( !($service instanceof \Saltwater\Thing\Service) ) {
 				$service->setContext($call->context);
 			} else {
 				S::halt(500, 'Service error');
@@ -103,10 +105,10 @@ class Route extends AbstractRoute
 			// TODO: Middleware for individual Services
 
 			if ( ($i == $length) && !empty($input) ) {
-				$result = $service->call($call, json_decode($input));
-			} else {
-				$result = $service->call($call);
+				$data = json_decode($input);
 			}
+
+			$result = $service->call($call, $data);
 		}
 
 		return $result;
