@@ -186,6 +186,10 @@ class Route extends AbstractRoute
 		);
 	}
 
+	/**
+	 * @param string $service
+	 * @param \Saltwater\Thing\Context $context
+	 */
 	private function ServiceClassFromContext( $service, $context )
 	{
 		$class = 'Saltwater\Thing\Service';
