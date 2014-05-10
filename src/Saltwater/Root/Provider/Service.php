@@ -34,6 +34,12 @@ class Service extends Provider
 		return null;
 	}
 
+	/**
+	 * @param \Saltwater\Thing\Context|null $context
+	 * @param string $name
+	 *
+	 * @return string
+	 */
 	private function ClassFromName( $context, $name )
 	{
 		// TODO: This is still pretty dirty
