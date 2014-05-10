@@ -48,13 +48,10 @@ class Service
 
 		if ( !$this->is_callable($this, $method) ) return null;
 
-		return call_user_func_array(
-			array($this, $call->method),
-			$this->getMethodArgs($method, $call->path, $data)
-		);
+		$this->executeCall($call, $method, $data);
 	}
 
-	private function getMethodArgs( $method, $path, $data )
+	protected function executeCall( $call, $method, $data )
 	{
 		$reflect = new \ReflectionMethod($this, $method);
 
@@ -62,21 +59,30 @@ class Service
 			return call_user_func( array($this, $method) );
 		}
 
+		return call_user_func_array(
+			array($this, $method),
+			$this->getMethodArgs($reflect, $call->path, $data)
+		);
+	}
+
+	/**
+	 * @param \ReflectionMethod $reflect
+	 * @param $path
+	 * @param $data
+	 *
+	 * @return array
+	 */
+	private function getMethodArgs( $reflect, $path, $data )
+	{
 		$args = array();
 		foreach ( $reflect->getParameters() as $parameter ) {
 			$name = $parameter->getName();
 
-			switch ( $name ) {
-				case 'path':
-					$args[] = $path;
-					break;
-				case 'data':
-					$args[] = $data;
-					break;
-				default:
-					$args[] = S::$n->provider($name, $this->module);
-					break;
-			}
+			if ( $name == 'path' ) { $args[] = $path; continue; }
+
+			if ( $name == 'data' ) { $args[] = $data; continue; }
+
+			$args[] = S::$n->provider($name, $this->module);
 		}
 
 		return $args;
