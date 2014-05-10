@@ -187,7 +187,7 @@ class Navigator
 	 *
 	 * @param Thing\Context $parent inject a parent context
 	 *
-	 * @return null|Thing\Context
+	 * @return Thing\Context
 	 */
 	public function masterContext( $parent=null )
 	{

@@ -67,7 +67,7 @@ class Server
 	 * @param string $name
 	 * @param null   $input
 	 *
-	 * @return Thing\Entity
+	 * @return string
 	 */
 	public static function entity( $name )
 	{
