@@ -92,17 +92,9 @@ class Navigator
 	 */
 	public function cache( $path )
 	{
-		$cache = array();
-		foreach ( array('things', 'root', 'master', 'stack') as $k ) {
-			$cache[$k] = $this->$k;
-		}
+		$cache = new \stdClass();
 
-		$cache['modules'] = array();
-		foreach ( $this->modules as $name => $module ) {
-			$cache['modules'][$name] = get_class($module);
-
-			$cache['bits'][$name] = $module->things;
-		}
+		$this->copyCache( $this, $cache );
 
 		$info = pathinfo($path);
 
@@ -116,16 +108,25 @@ class Navigator
 	 */
 	public function loadCache( $path )
 	{
-		$cache = unserialize( file_get_contents($path) );
+		$this->copyCache( $this, unserialize( file_get_contents($path) ) );
+	}
 
-		foreach ( $cache['modules'] as $name => $module ) {
-			$this->modules[$name] = new $module();
-
-			$this->modules[$name]->things = $cache['bits'][$name];
+	private function copyCache( &$from, &$to )
+	{
+		foreach ( array('things', 'root', 'master', 'stack') as $k ) {
+			$to->$k = $from->$k;
 		}
 
-		foreach ( array('things', 'root', 'master', 'stack') as $k ) {
-			$this->$k = $cache[$k];
+		if ( !isset($to->modules) ) $to->modules = array();
+
+		foreach ( $from->modules as $name => $module ) {
+			if ( is_object($module) ) {
+				$to->modules[$name] = get_class($module);
+			} else {
+				$to->modules[$name] = new $module();
+			}
+
+			$to->bits[$name] = $from->things;
 		}
 	}
 
