@@ -209,7 +209,7 @@ class Navigator
 	 *
 	 * @param string $name plain name of the context
 	 *
-	 * @return string
+	 * @return Thing\Module
 	 */
 	public function getContextModule( $name )
 	{
