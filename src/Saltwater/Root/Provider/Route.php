@@ -5,7 +5,6 @@ namespace Saltwater\Root\Provider;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 use Saltwater\Common\Route as AbstractRoute;
-use Saltwater\Thing\Service as Service;
 
 class Route extends AbstractRoute
 {
@@ -76,7 +75,7 @@ class Route extends AbstractRoute
 
 		$result = null;
 
-		$service = new Service();
+		$service = new \Saltwater\Thing\Service();
 		foreach ( $this->chain as $i => $call ) {
 			$call->context->pushData($result);
 
