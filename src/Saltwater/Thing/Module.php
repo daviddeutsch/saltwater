@@ -98,10 +98,10 @@ class Module
 	}
 
 	/**
-	 * @param $type
+	 * @param string $type
 	 * @param $name
 	 *
-	 * @return \Saltwater\Thing\Provider
+	 * @return string
 	 */
 	protected function className( $type, $name )
 	{
