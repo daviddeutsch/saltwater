@@ -69,9 +69,9 @@ class Server
 	 *
 	 * @return Thing\Entity
 	 */
-	public static function entity( $name, $input=null )
+	public static function entity( $name )
 	{
-		return self::$n->entity->get($name, $input);
+		return self::$n->entity->get($name);
 	}
 
 	/**
