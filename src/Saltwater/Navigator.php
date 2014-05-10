@@ -108,9 +108,15 @@ class Navigator
 	 */
 	public function loadCache( $path )
 	{
-		$this->copyCache( $this, unserialize( file_get_contents($path) ) );
+		$cache = unserialize( file_get_contents($path) );
+
+		$this->copyCache( $this, $cache );
 	}
 
+	/**
+	 * @param Navigator|object $from
+	 * @param Navigator|object $to
+	 */
 	private function copyCache( &$from, &$to )
 	{
 		foreach ( array('things', 'root', 'master', 'stack') as $k ) {
