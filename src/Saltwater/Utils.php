@@ -9,7 +9,7 @@ class Utils
 	 *
 	 * @param string $string
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public static function snakeToCamelCase( $string )
 	{
@@ -21,7 +21,7 @@ class Utils
 	 *
 	 * @param string $string
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public static function dashedToCamelCase( $string )
 	{
@@ -33,7 +33,7 @@ class Utils
 	 *
 	 * @param string $string
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public static function CamelCaseSpaced( $string )
 	{

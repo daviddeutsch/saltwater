@@ -27,6 +27,9 @@ class Rest extends Service
 		return $this->callPath($call->http, $path, $data);
 	}
 
+	/**
+	 * @param string $path
+	 */
 	protected function callPath( $http, $path, $data=null )
 	{
 		$rest = $this->restHandler();

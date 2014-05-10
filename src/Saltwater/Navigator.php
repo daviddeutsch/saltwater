@@ -68,6 +68,9 @@ class Navigator
 		return true;
 	}
 
+	/**
+	 * @param string $path
+	 */
 	public function cache( $path )
 	{
 		$cache = array();
@@ -89,6 +92,9 @@ class Navigator
 		file_put_contents( $path, serialize($cache)	);
 	}
 
+	/**
+	 * @param string $path
+	 */
 	public function loadCache( $path )
 	{
 		$cache = unserialize( file_get_contents($path) );
@@ -184,7 +190,7 @@ class Navigator
 	 *
 	 * @param string $name plain name of the context
 	 *
-	 * @return null|Thing\Module
+	 * @return string
 	 */
 	public function getContextModule( $name )
 	{
@@ -340,6 +346,7 @@ class Navigator
 	/**
 	 * Find the module of a caller class
 	 *
+	 * @param string $provider
 	 * @return string module name
 	 */
 	private function findModule( $caller, $provider )
@@ -419,7 +426,7 @@ class Navigator
 
 	/**
 	 * Return a list of Modules providing a Thing
-	 * @param      $thing
+	 * @param      string $thing
 	 * @param bool $precedence
 	 * @param bool $first      only return the first item on the list
 	 *

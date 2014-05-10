@@ -13,7 +13,7 @@ class Entity extends Provider
 	/**
 	 * @param string $name
 	 *
-	 * @return \Saltwater\Thing\Entity
+	 * @return string
 	 */
 	public function get( $name, $input=null )
 	{
@@ -24,6 +24,9 @@ class Entity extends Provider
 		return $name;
 	}
 
+	/**
+	 * @param string $name
+	 */
 	private function formatModel( $name )
 	{
 		$module = S::$n->getModule(self::$caller);

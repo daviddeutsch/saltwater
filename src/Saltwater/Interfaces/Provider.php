@@ -9,6 +9,9 @@ namespace Saltwater\Interfaces;
  */
 interface Provider
 {
+	/**
+	 * @return void
+	 */
 	public static function setModule( $module );
 
 	public static function getProvider();
