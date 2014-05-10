@@ -16,7 +16,7 @@ class Service extends Provider
 	 *
 	 * @return \Saltwater\Thing\Service
 	 */
-	public function get( $name, $context=null )
+	public function get( $name, $context )
 	{
 		$class = $this->getServiceClass( $context, $name );
 

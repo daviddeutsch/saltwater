@@ -46,7 +46,7 @@ class Service
 	{
 		$method = $call->http . U::dashedToCamelCase($call->method);
 
-		if ( !$this->is_callable($this, $method) ) return null;
+		if ( !$this->is_callable($method) ) return null;
 
 		$this->executeCall($call, $method, $data);
 	}
