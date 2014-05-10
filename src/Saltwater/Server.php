@@ -47,7 +47,7 @@ class Server
 	}
 
 	/**
-	 * @param $cache
+	 * @param string $cache
 	 *
 	 * @return bool
 	 */
