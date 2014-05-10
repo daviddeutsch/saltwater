@@ -41,10 +41,14 @@ class Route extends AbstractRoute
 	 */
 	protected function getURI()
 	{
-		$path = $_SERVER['SCRIPT_NAME'];
+		return $this->filterURI(
+			$_SERVER['REQUEST_URI'],
+			$_SERVER['SCRIPT_NAME']
+		);
+	}
 
-		$uri = $_SERVER['REQUEST_URI'];
-
+	private function filterURI( $uri, $path )
+	{
 		if ( strpos($uri, $path) === false ) {
 			$path = str_replace( '\\', '', dirname($path) );
 		}
@@ -75,6 +79,11 @@ class Route extends AbstractRoute
 
 		if ( !$input ) $input = '';
 
+		S::$n->response->response( $this->resolveChain($input) );
+	}
+
+	private function resolveChain( $input )
+	{
 		$length = count($this->chain) - 1;
 
 		$result = null;
@@ -100,7 +109,7 @@ class Route extends AbstractRoute
 			}
 		}
 
-		S::$n->response->response($result);
+		return $result;
 	}
 
 	/**
@@ -155,27 +164,8 @@ class Route extends AbstractRoute
 			$path = null;
 		}
 
-		// TODO: Setting a class here and reusing it later is mad uglies
-		$class = 'Saltwater\Thing\Service';
-		if ( !empty($service) ) {
-			$class = $context->namespace
-			. '\Service\\'
-			. U::dashedToCamelCase($service);
-
-			if ( !class_exists($class) ) {
-				$class = 'Saltwater\Root\Service\\'
-					. U::dashedToCamelCase($service);
-
-				if ( !class_exists($class) ) {
-					$class = $context->namespace
-						. '\Service\Rest';
-
-					if ( !class_exists($class) ) {
-						$class = 'Saltwater\Root\Service\Rest';
-					}
-				}
-			}
-		}
+		// TODO: Figure out more elegant way to compute ->plain
+		$class = $this->ServiceClassFromContext( $service, $context );
 
 		$method = $cmd . U::dashedToCamelCase($method);
 
@@ -194,5 +184,30 @@ class Route extends AbstractRoute
 			'plain' => $plain,
 			'path' => $path
 		);
+	}
+
+	private function ServiceClassFromContext( $service, $context )
+	{
+		$class = 'Saltwater\Thing\Service';
+
+		if ( empty($service) ) return $class;
+
+		$class = $context->namespace
+			. '\Service\\'
+			. U::dashedToCamelCase($service);
+
+		if ( class_exists($class) ) return $class;
+
+		$class = 'Saltwater\Root\Service\\'
+			. U::dashedToCamelCase($service);
+
+		if ( class_exists($class) ) return $class;
+
+		$class = $context->namespace
+			. '\Service\Rest';
+
+		if ( class_exists($class) ) return $class;
+
+		return 'Saltwater\Root\Service\Rest';
 	}
 }

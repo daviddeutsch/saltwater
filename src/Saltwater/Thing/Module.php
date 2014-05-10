@@ -31,14 +31,24 @@ class Module
 	{
 		if ( S::$n->isThing('module.' . $name) || $this->things ) return null;
 
-		if ( !empty($this->dependencies) ) {
-			foreach ( $this->dependencies as $dependency ) {
-				S::$n->addModule($dependency);
-			}
-		}
+		$this->registerDependencies();
 
 		$this->things |= S::$n->addThing('module.' . $name);
 
+		$this->registerThings();
+	}
+
+	private function registerDependencies()
+	{
+		if ( empty($this->dependencies) ) return;
+
+		foreach ( $this->dependencies as $dependency ) {
+			S::$n->addModule($dependency);
+		}
+	}
+
+	private function registerThings()
+	{
 		foreach ( $this->thingTypes() as $p => $s ) {
 			if ( empty($this->$p) ) continue;
 
