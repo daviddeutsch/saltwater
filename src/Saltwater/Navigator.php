@@ -365,7 +365,7 @@ class Navigator
 		$bit = $this->bitThing($caller->thing);
 
 		foreach ( $this->getModules(true) as $k => $module ) {
-			if ( !$this->bitInModule($caller, $module, $bit) ) continue;
+			if ( !$this->bitInModule($module, $caller, $bit) ) continue;
 
 			return $k;
 		}
@@ -374,24 +374,22 @@ class Navigator
 	}
 
 	/**
-	 * @param object       $caller
 	 * @param Thing\Module $module
+	 * @param object       $c
 	 * @param string       $bit
 	 *
 	 * @return bool
 	 */
-	private function bitInModule( $caller, $module, $bit )
+	private function bitInModule( $module, $c, $bit )
 	{
-		if ( $caller->is_provider ) {
-			// A provider calling itself always gets a lower level provider
-			if ( $module->namespace == $caller->namespace ) return false;
-
-			if ( !$module->hasThing($bit) ) return false;
-		} else {
-			if ( $module->namespace !== $caller->namespace ) return false;
-
-			if ( !$module->hasThing($bit) ) return false;
+		// A provider calling itself always gets a lower level provider
+		if ( $c->is_provider && ($module->namespace == $c->namespace) ) {
+			return false;
+		} elseif ( $module->namespace !== $c->namespace ) {
+			return false;
 		}
+
+		if ( !$module->hasThing($bit) ) return false;
 
 		return true;
 	}
