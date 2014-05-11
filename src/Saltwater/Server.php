@@ -62,7 +62,7 @@ class Server
 	 *
 	 * Proxy for Saltwater\Navigator::addModule()
 	 *
-	 * @param array|string $class
+	 * @param string[] $class
 	 *
 	 * @return bool|null
 	 */
