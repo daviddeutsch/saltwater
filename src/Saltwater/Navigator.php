@@ -362,12 +362,12 @@ class Navigator
 
 		$caller = $this->explodeCaller($caller, $provider);
 
-		$bit = $caller->provider ? $this->bitThing($caller->thing) : 0;
+		$bit = $this->bitThing($caller->thing);
 
 		foreach ( $this->getModules(true) as $k => $module ) {
-			if ( $this->compareCallerModule( $caller, $module, $bit ) ) {
-				return $k;
-			}
+			if ( !$this->bitInModule($caller, $module, $bit) ) continue;
+
+			return $k;
 		}
 
 		return null;
@@ -380,18 +380,18 @@ class Navigator
 	 *
 	 * @return bool
 	 */
-	private function compareCallerModule( $caller, $module, $bit )
+	private function bitInModule( $caller, $module, $bit )
 	{
-		if ( $caller->provider ) {
-			if ( !$module->hasThing($bit) ) return false;
-
+		if ( $caller->is_provider ) {
 			// A provider calling itself always gets a lower level provider
 			if ( $module->namespace == $caller->namespace ) return false;
+
+			if ( !$module->hasThing($bit) ) return false;
+		} else {
+			if ( $module->namespace !== $caller->namespace ) return false;
+
+			if ( !$module->hasThing($bit) ) return false;
 		}
-
-		if ( $module->namespace !== $caller->namespace ) return false;
-
-		if ( !$module->hasThing($bit) ) return false;
 
 		return true;
 	}
@@ -411,9 +411,9 @@ class Navigator
 
 		// The rest is the namespace
 		return (object) array(
-			'thing'     => $thing,
-			'namespace' => implode('\\', $caller),
-			'provider'  => $thing == $provider
+			'thing'        => $thing,
+			'namespace'    => implode('\\', $caller),
+			'is_provider'  => $thing == $provider
 		);
 	}
 
