@@ -82,32 +82,25 @@ class Route extends AbstractRoute
 		S::$n->response->response( $this->resolveChain($input) );
 	}
 
-	private function resolveChain( $input )
+	private function resolveChain( $input, $result=null )
 	{
-		$result = null;
+		$input = empty($input) ? null : json_decode($input);
 
 		$length = count($this->chain) - 1;
 
-		$input = empty($input) ? null : json_decode($input);
-
 		$service = new \Saltwater\Thing\Service();
 		for ( $i=0; $i<$length; ++$i ) {
-			$call =& $this->chain[$i];
+			$c =& $this->chain[$i];
 
-			$call->context->pushData($result);
+			$c->context->pushData($result);
 
-			$service->setContext($call->context);
+			$service->setContext($c->context);
 
-			if ( $service->prepareCall($call) ) {
-				$result = $service->call(
-					$call,
-					($i == $length) ? $input : null
-				);
-			} else {
-				$service = S::$n->service->get($call->service, $call->context);
-
-				--$i;
+			if ( !$service->prepareCall($c) ) {
+				$service = S::$n->service->get($c->service, $c->context);
 			}
+
+			$result = $service->call( $c, ($i == $length) ? $input : null );
 		}
 
 		return $result;
