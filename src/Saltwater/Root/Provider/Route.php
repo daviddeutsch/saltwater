@@ -3,6 +3,7 @@
 namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
+use Saltwater\Utils as U;
 use Saltwater\Common\Route as AbstractRoute;
 
 class Route extends AbstractRoute
@@ -83,33 +84,30 @@ class Route extends AbstractRoute
 
 	private function resolveChain( $input )
 	{
-		$length = count($this->chain) - 1;
-
 		$result = null;
 
-		$data = null;
+		$length = count($this->chain) - 1;
+
+		$input = empty($input) ? null : json_decode($input);
 
 		$service = new \Saltwater\Thing\Service();
-		foreach ( $this->chain as $i => $call ) {
+		for ( $i=0; $i<$length; ++$i ) {
+			$call =& $this->chain[$i];
+
 			$call->context->pushData($result);
 
-			if ( !empty($call->service) ) {
-				$service = S::$n->service->get($call->service, $call->context);
-			} elseif ( !($service instanceof \Saltwater\Thing\Service) ) {
-				$service->setContext($call->context);
+			$service->setContext($call->context);
+
+			if ( $service->prepareCall($call) ) {
+				$result = $service->call(
+					$call,
+					($i == $length) ? $input : null
+				);
 			} else {
-				S::halt(500, 'Service error');
-			};
+				$service = S::$n->service->get($call->service, $call->context);
 
-			// TODO: Middleware for individual Services
-
-			if ( ($i == $length) && !empty($input) ) {
-				$data = json_decode($input);
+				--$i;
 			}
-
-			$result = $service->call($call, $data);
-
-			// TODO: Exception handling for Service error?
 		}
 
 		return $result;
@@ -126,7 +124,7 @@ class Route extends AbstractRoute
 
 		// This is for simple commands upon an established service
 		if ( empty($path) && !empty($this->chain) ) {
-			$this->push($context, $cmd, '', $root);
+			$this->push($context, $cmd, $root);
 
 			return;
 		}
@@ -168,11 +166,12 @@ class Route extends AbstractRoute
 		}
 
 		$this->chain[] = (object) array(
-			'context' => $context,
-			'http' => $cmd,
-			'service' => $service,
-			'method' => $method,
-			'path' => $path
+			'context'  => $context,
+			'http'     => $cmd,
+			'service'  => $service,
+			'method'   => $method,
+			'function' => $cmd . U::dashedToCamelCase($method),
+			'path'     => $path
 		);
 	}
 

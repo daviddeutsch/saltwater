@@ -49,6 +49,11 @@ class Service
 		return method_exists($this, $method);
 	}
 
+	public function prepareCall( $call )
+	{
+		return $this->is_callable($call->function);
+	}
+
 	/**
 	 * Attempt to execute a call on this service
 	 *
@@ -59,11 +64,9 @@ class Service
 	 */
 	public function call( $call, $data=null )
 	{
-		$method = $call->http . U::dashedToCamelCase($call->method);
+		if ( !$this->$this->is_callable($call->function) ) return null;
 
-		if ( !$this->is_callable($method) ) return null;
-
-		return $this->executeCall($call, $method, $data);
+		return $this->executeCall($call, $call->function, $data);
 	}
 
 	/**

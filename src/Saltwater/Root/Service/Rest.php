@@ -7,9 +7,17 @@ use Saltwater\Thing\Service;
 
 class Rest extends Service
 {
+	public function is_callable( $method )
+	{
+		return strpos(
+			$method,
+			array_pop( explode('\\', get_class($this) ) )
+		) !== false;
+	}
+
 	public function call( $call, $data=null )
 	{
-		if ( $this->is_callable($call->method) ) {
+		if ( parent::is_callable($call->function) ) {
 			return parent::call($call, $data);
 		}
 
@@ -18,7 +26,7 @@ class Rest extends Service
 
 	protected function restCall( $call, $data=null )
 	{
-		$path = strtolower( str_replace($call->http, '', $call->method) );
+		$path = $call->method;
 
 		if ( is_numeric($call->path) ) {
 			$path .= '/' . $call->path;
