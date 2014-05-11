@@ -344,45 +344,64 @@ class Navigator
 	/**
 	 * Find the module of a caller class
 	 *
+	 * @param string $caller
 	 * @param string $provider
+	 *
 	 * @return string module name
 	 */
 	private function findModule( $caller, $provider )
 	{
 		if ( empty($caller) ) return null;
 
-		$c = $this->explodeCaller($caller, $provider);
+		$caller = $this->explodeCaller($caller, $provider);
 
-		$bit = $c->provider ? $this->bitThing($c->thing) : 0;
+		$bit = $caller->provider ? $this->bitThing($caller->thing) : 0;
 
 		foreach ( $this->getModules(true) as $k => $module ) {
-			if ( $c->self ) {
-				// A provider calling itself always gets a lower level provider
-				if ( !$module->hasThing($bit) ) continue;
 
-				if ( $module->namespace == $c->namespace ) continue;
-			} elseif ( $module->namespace !== $c->namespace ) {
-				continue;
+			if ( $this->compareCallerModule( $caller, $module, $bit ) ) {
+				return $k;
 			}
-
-			return $k;
 		}
 
 		return null;
 	}
 
+	/**
+	 * @param object       $caller
+	 * @param Thing\Module $module
+	 * @param string       $bit
+	 *
+	 * @return bool
+	 */
+	private function compareCallerModule( $caller, $module, $bit )
+	{
+		if ( $caller->provider ) {
+			if ( !$module->hasThing($bit) ) return false;
+
+			// A provider calling itself always gets a lower level provider
+			if ( $module->namespace == $caller->namespace ) return false;
+		}
+
+		if ( $module->namespace !== $caller->namespace ) return false;
+
+		if ( !$module->hasThing($bit) ) return false;
+
+		return true;
+	}
+
 	private function explodeCaller( $caller, $provider )
 	{
 		// Extract a thing from the last two particles
-		$thing = array_pop($caller);
+		$class = array_pop($caller);
 
-		$thing = strtolower( array_pop($caller) . '.' . $thing );
+		$thing = strtolower( array_pop($caller) . '.' . $class );
 
 		// The rest is the namespace
 		return (object) array(
 			'thing'     => $thing,
 			'namespace' => implode('\\', $caller),
-			'self'      => $thing == $provider
+			'provider'  => $thing == $provider
 		);
 	}
 
@@ -446,7 +465,7 @@ class Navigator
 		if ( $precedence ) {
 			$modules = $this->modulePrecedence();
 		} else {
-			$modules = array_reverse( array_keys($this->modules) );
+			$modules = array_keys( $this->getModules(true) );
 		}
 
 		$return = array();
