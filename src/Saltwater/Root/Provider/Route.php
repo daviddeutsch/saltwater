@@ -94,7 +94,7 @@ class Route extends AbstractRoute
 			$call->context->pushData($result);
 
 			if ( !empty($call->service) ) {
-				$service = S::$n->service->get($call->class, $call->context);
+				$service = S::$n->service->get($call->service, $call->context);
 			} elseif ( !($service instanceof \Saltwater\Thing\Service) ) {
 				$service->setContext($call->context);
 			} else {
