@@ -428,7 +428,7 @@ class Navigator
 	public function lastCaller()
 	{
 		// Let me tell you about my boat
-		$trace = debug_backtrace(2, 8);
+		$trace = debug_backtrace(2, 22);
 
 		$depth = count($trace);
 
@@ -439,6 +439,7 @@ class Navigator
 			if (
 				in_array($trace[$i]['class'], $this->skip)
 				|| (strpos($trace[$i]['class'], 'Saltwater\Root') !== false)
+				|| (strpos($trace[$i]['class'], '\\') === false)
 			) continue;
 
 			return explode('\\', $trace[$i]['class']);
