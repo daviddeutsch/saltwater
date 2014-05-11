@@ -186,7 +186,7 @@ class Navigator
 	/**
 	 * Return a module class by its name
 	 *
-	 * @param string $name
+	 * @param bool $reverse
 	 *
 	 * @return Thing\Module[]
 	 */
@@ -318,6 +318,13 @@ class Navigator
 		return $this->providerFromModule($bit, $caller, $type);
 	}
 
+	/**
+	 * @param int    $bit
+	 * @param string $caller
+	 * @param string $type
+	 *
+	 * @return bool|Thing\Provider
+	 */
 	private function providerFromModule( $bit, $caller, $type)
 	{
 		// Depending on the caller, reset the module stack
@@ -344,7 +351,7 @@ class Navigator
 	/**
 	 * Find the module of a caller class
 	 *
-	 * @param string $caller
+	 * @param array  $caller
 	 * @param string $provider
 	 *
 	 * @return string module name
@@ -390,6 +397,12 @@ class Navigator
 		return true;
 	}
 
+	/**
+	 * @param array  $caller
+	 * @param string $provider
+	 *
+	 * @return object
+	 */
 	private function explodeCaller( $caller, $provider )
 	{
 		// Extract a thing from the last two particles
@@ -411,7 +424,7 @@ class Navigator
 	 *
 	 * And - Yup, debug_backtrace().
 	 *
-	 * @return string class name
+	 * @return array|null
 	 */
 	public function lastCaller()
 	{
