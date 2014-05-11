@@ -30,15 +30,14 @@ class Server
 			if ( self::loadCache($cache) ) return;
 		}
 
-		if ( !is_array($modules) ) $modules = array($modules);
-
-		foreach ( $modules as $i => $module ) {
-			self::$n->addModule($module, $i==0);
-		}
+		self::addModules($modules);
 
 		if ( $cache ) self::$n->cache($cache);
 	}
 
+	/**
+	 * Set timestamp and Navigator instance
+	 */
 	private static function start()
 	{
 		self::$start = microtime(true);
@@ -59,6 +58,28 @@ class Server
 	}
 
 	/**
+	 * Add one or more modules to the Saltwater\Navigator module stack
+	 *
+	 * Proxy for Saltwater\Navigator::addModule()
+	 *
+	 * @param array|string $class
+	 *
+	 * @return bool|null
+	 */
+	public static function addModules( $array )
+	{
+		if ( empty(self::$start) ) self::init();
+
+		if ( is_array($array) ) {
+			foreach ( $array as $i => $module ) {
+				self::$n->addModule($module, $i==0);
+			}
+		} else {
+			self::$n->addModule($array);
+		}
+	}
+
+	/**
 	 * Add a module to the Saltwater\Navigator module stack
 	 *
 	 * Proxy for Saltwater\Navigator::addModule()
@@ -69,8 +90,6 @@ class Server
 	 */
 	public static function addModule( $class )
 	{
-		if ( empty(self::$n) ) self::init();
-
 		return self::$n->addModule($class);
 	}
 
