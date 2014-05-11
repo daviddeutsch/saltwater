@@ -9,10 +9,9 @@ class Rest extends Service
 {
 	public function is_callable( $method )
 	{
-		return strpos(
-			$method,
-			array_pop( explode('\\', get_class($this) ) )
-		) !== false;
+		$class = explode('\\', get_class($this) );
+
+		return strpos( $method, array_pop($class) ) !== false;
 	}
 
 	public function call( $call, $data=null )
