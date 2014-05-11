@@ -3,7 +3,6 @@
 namespace Saltwater\Thing;
 
 use Saltwater\Server as S;
-use Saltwater\Utils as U;
 
 /**
  * Services provide data or functionality
