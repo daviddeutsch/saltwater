@@ -121,20 +121,18 @@ class Navigator
 	 *
 	 * @return bool
 	 */
-	private function copyCache( &$from, &$to )
+	private function copyCache( $from, &$to )
 	{
 		foreach ( array('things', 'root', 'master', 'stack') as $k ) {
 			$to->$k = $from->$k;
 		}
 
-		if ( !isset($to->modules) ) $to->modules = array();
+		$nav = $to instanceof Navigator;
+
+		if ( !$nav ) $to->modules = array();
 
 		foreach ( $from->modules as $name => $module ) {
-			if ( is_object($module) ) {
-				$to->modules[$name] = get_class($module);
-			} else {
-				$to->modules[$name] = new $module();
-			}
+			$to->modules[$name] = $nav ? new $module() : get_class($module);
 
 			$to->bits[$name] = $from->things;
 		}
@@ -242,14 +240,10 @@ class Navigator
 	 */
 	public function getContextModule( $name )
 	{
-		$name = 'context.' . $name;
+		$bit = $this->bitThing('context.' . $name);
 
-		foreach ( $this->things as $n => $thing ) {
-			if ( $thing != $name ) continue;
-
-			foreach ( $this->modules as $module ) {
-				if ( $module->hasThing($n) ) return $module;
-			}
+		foreach ( $this->modules as $module ) {
+			if ( $module->hasThing($bit) ) return $module;
 		}
 
 		return null;
@@ -365,7 +359,6 @@ class Navigator
 		$bit = $caller->provider ? $this->bitThing($caller->thing) : 0;
 
 		foreach ( $this->getModules(true) as $k => $module ) {
-
 			if ( $this->compareCallerModule( $caller, $module, $bit ) ) {
 				return $k;
 			}

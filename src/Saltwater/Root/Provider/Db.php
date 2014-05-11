@@ -24,17 +24,7 @@ class Db extends Provider
 
 		self::addDB($cfg);
 
-		self::$r->selectDatabase($cfg->name);
-
-		if ( !empty($cfg->prefix) ) {
-			self::$r->prefix($cfg->prefix);
-		}
-
-		self::$r->redbean->beanhelper->setModelFormatter(
-			'Saltwater\Server::entity'
-		);
-
-		self::$r->useWriterCache(true);
+		self::configureDB($cfg);
 	}
 
 	private static function setupDB( $cfg )
@@ -62,6 +52,20 @@ class Db extends Provider
 		);
 	}
 
+	private static function configureDB( $cfg )
+	{
+		self::$r->selectDatabase($cfg->name);
+
+		if ( !empty($cfg->prefix) ) {
+			self::$r->prefix($cfg->prefix);
+		}
+
+		self::$r->redbean->beanhelper->setModelFormatter(
+			'Saltwater\Server::entity'
+		);
+
+		self::$r->useWriterCache(true);
+	}
 
 	/**
 	 * @return \RedBean_Instance
