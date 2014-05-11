@@ -351,8 +351,8 @@ class Navigator
 	/**
 	 * Find the module of a caller class
 	 *
-	 * @param array  $caller
-	 * @param string $provider
+	 * @param array|null $caller
+	 * @param string     $provider
 	 *
 	 * @return string module name
 	 */
