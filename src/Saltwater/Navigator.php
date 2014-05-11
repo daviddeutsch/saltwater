@@ -132,9 +132,15 @@ class Navigator
 		if ( !$nav ) $to->modules = array();
 
 		foreach ( $from->modules as $name => $module ) {
-			$to->modules[$name] = $nav ? new $module() : get_class($module);
+			if ( $nav ) {
+				$to->modules[$name] = new $module();
 
-			$to->bits[$name] = $from->things;
+				$to->modules[$name]->things = $from->bits[$name];
+			} else {
+				$to->modules[$name] = get_class($module);
+
+				$to->bits[$name] = $module->things;
+			}
 		}
 
 		return true;
