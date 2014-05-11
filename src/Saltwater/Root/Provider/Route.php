@@ -109,7 +109,7 @@ class Route extends AbstractRoute
 
 			$result = $service->call($call, $data);
 
-			if ( is_null($result) ) S::halt(400, 'Bad Request');
+			// TODO: Exception handling for Service error?
 		}
 
 		return $result;
