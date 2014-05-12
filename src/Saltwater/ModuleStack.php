@@ -109,8 +109,6 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function masterContext( $parent=null )
 	{
-		$this->rewind();
-
 		foreach ( $this as $name => $module ) {
 			$context = $module->masterContext();
 
@@ -134,8 +132,6 @@ class ModuleStack extends \ArrayObject
 	public function getContextModule( $name )
 	{
 		$bit = S::$n->bitThing('context.' . $name);
-
-		$this->rewind();
 
 		foreach ( $this as $module ) {
 			if ( $module->hasThing($bit) ) return $module;
@@ -194,8 +190,6 @@ class ModuleStack extends \ArrayObject
 		$caller = $this->explodeCaller($caller, $provider);
 
 		$bit = S::$n->bitThing($caller->thing);
-
-		$this->rewind();
 
 		foreach ( array_reverse($this) as $k => $module ) {
 			if ( !$this->bitInModule($module, $caller, $bit) ) continue;
@@ -274,8 +268,6 @@ class ModuleStack extends \ArrayObject
 		if ( $precedence ) {
 			$modules = $this->modulePrecedence();
 		} else {
-			$this->rewind();
-
 			$modules = array_keys( array_reverse($this) );
 		}
 
@@ -312,8 +304,6 @@ class ModuleStack extends \ArrayObject
 
 	public function __sleep()
 	{
-		$this->rewind();
-
 		foreach ( $this as $k => $v ) {
 			$this[$k] = array(
 				'class' => get_class($v),
