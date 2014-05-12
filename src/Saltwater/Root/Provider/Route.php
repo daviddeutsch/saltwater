@@ -86,7 +86,7 @@ class Route extends AbstractRoute
 	{
 		$input = empty($input) ? null : json_decode($input);
 
-		$length = count($this->chain) - 1;
+		$length = count($this->chain);
 
 		$service = new \Saltwater\Thing\Service();
 		for ( $i=0; $i<$length; ++$i ) {
@@ -95,7 +95,6 @@ class Route extends AbstractRoute
 			$c->context->pushData($result);
 
 			$service->setContext($c->context);
-
 			if ( !$service->prepareCall($c) ) {
 				$service = S::$n->service->get($c->service, $c->context);
 			}

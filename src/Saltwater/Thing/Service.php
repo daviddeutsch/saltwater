@@ -63,7 +63,7 @@ class Service
 	 */
 	public function call( $call, $data=null )
 	{
-		if ( !$this->$this->is_callable($call->function) ) return null;
+		if ( !$this->is_callable($call->function) ) return null;
 
 		return $this->executeCall($call, $call->function, $data);
 	}
