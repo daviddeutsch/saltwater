@@ -86,12 +86,22 @@ class Response extends Provider
 	private function prepareOutput( $input )
 	{
 		if ( is_array($input) ) {
-			$return = array();
-			foreach ( $input as $k => $v ) {
-				$return[$k] = self::convertNumeric($v);
-			}
+			return $this->outputArray($input);
 		} else {
-			$return = self::convertNumeric($input);
+			return $this->output($input);
+		}
+	}
+
+	private function output( $input )
+	{
+		return $this->convertNumeric($input);
+	}
+
+	private function outputArray( $input )
+	{
+		$return = array();
+		foreach ( $input as $k => $v ) {
+			$return[$k] = $this->output($v);
 		}
 
 		return $return;
@@ -113,13 +123,18 @@ class Response extends Provider
 		foreach ( get_object_vars($object) as $k => $v ) {
 			if ( !is_numeric($v) ) continue;
 
-			if ( strpos($v, '.') !== false ) {
-				$object->$k = (float) $v;
-			} else {
-				$object->$k = (int) $v;
-			}
+			$object->$k = $this->stringToNum($v);
 		}
 
 		return $object;
+	}
+
+	private function stringToNum( $value )
+	{
+		if ( strpos($value, '.') !== false ) {
+			return (float) $value;
+		} else {
+			return (int) $value;
+		}
 	}
 }

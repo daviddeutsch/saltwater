@@ -24,7 +24,7 @@ class Server
 	 */
 	public static function init( $modules=array(), $cache=null )
 	{
-		if ( empty(self::$start) ) self::start();
+		self::start();
 
 		if ( $cache ) {
 			if ( self::loadCache($cache) ) return;
@@ -40,6 +40,8 @@ class Server
 	 */
 	private static function start()
 	{
+		if ( !empty(self::$start) ) return;
+
 		self::$start = microtime(true);
 
 		self::$n = new Navigator();
