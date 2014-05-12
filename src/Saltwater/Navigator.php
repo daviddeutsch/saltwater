@@ -385,7 +385,7 @@ class Navigator
 		// A provider calling itself always gets a lower level provider
 		if ( $c->is_provider && ($module->namespace == $c->namespace) ) {
 			return false;
-		} elseif ( $module->namespace !== $c->namespace ) {
+		} elseif ( !$c->is_provider && ($module->namespace != $c->namespace) ) {
 			return false;
 		}
 
