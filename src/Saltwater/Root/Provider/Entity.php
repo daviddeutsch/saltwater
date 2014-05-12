@@ -26,31 +26,56 @@ class Entity extends Provider
 
 	/**
 	 * @param string $name
+	 *
+	 * @return string|null
 	 */
 	private function formatModel( $name )
 	{
-		$module = S::$n->getModule(self::$caller);
+		$module = $this->getCallerModule();
 
 		$bit = S::$n->bitThing('entity.' . $name);
 
 		if ( !$module->hasThing($bit) ) {
-			$module = S::$n->getModule(self::$module);
+			$module = $this->getOwnModule();
 		}
 
-		$name = U::snakeToCamelCase($name);
-
-		$class = $module->namespace . '\Entity\\' . $name;
+		$class = $this->fromModule($name, $module);
 
 		if ( class_exists($class) ) return $class;
-
-		$name = U::CamelTodashed($name);
-
-		$bit = S::$n->bitThing('entity.' . $name);
 
 		if ( $module->hasThing($bit) ) {
 			return '\Saltwater\Thing\Entity';
 		}
 
 		return null;
+	}
+
+	/**
+	 * @return \Saltwater\Thing\Module
+	 */
+	private function getCallerModule()
+	{
+		return S::$n->getModule(self::$caller);
+	}
+
+	/**
+	 * @return \Saltwater\Thing\Module
+	 */
+	private function getOwnModule()
+	{
+		return S::$n->getModule(self::$module);
+	}
+
+	/**
+	 * @param string                  $name
+	 * @param \Saltwater\Thing\Module $module
+	 *
+	 * @return mixed
+	 */
+	private function fromModule( $name, $module )
+	{
+		$name = U::snakeToCamelCase($name);
+
+		return $module->namespace . '\Entity\\' . U::snakeToCamelCase($name);
 	}
 }
