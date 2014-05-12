@@ -109,7 +109,7 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function masterContext( $parent=null )
 	{
-		foreach ( $this as $name => $module ) {
+		foreach ( (array) $this as $name => $module ) {
 			$context = $module->masterContext();
 
 			if ( !empty($context) ) {
@@ -133,7 +133,7 @@ class ModuleStack extends \ArrayObject
 	{
 		$bit = S::$n->bitThing('context.' . $name);
 
-		foreach ( $this as $module ) {
+		foreach ( (array) $this as $module ) {
 			if ( $module->hasThing($bit) ) return $module;
 		}
 
@@ -191,7 +191,7 @@ class ModuleStack extends \ArrayObject
 
 		$bit = S::$n->bitThing($caller->thing);
 
-		foreach ( array_reverse($this) as $k => $module ) {
+		foreach ( array_reverse((array) $this) as $k => $module ) {
 			if ( !$this->bitInModule($module, $caller, $bit) ) continue;
 
 			return $k;
@@ -210,9 +210,8 @@ class ModuleStack extends \ArrayObject
 	private function bitInModule( $module, $c, $bit )
 	{
 		// A provider calling itself always gets a lower level provider
-		if ( $c->is_provider && ($module->namespace == $c->namespace) ) {
-			return false;
-		} elseif ( !$c->is_provider && ($module->namespace != $c->namespace) ) {
+		// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
+		if ( $c->is_provider === ($module->namespace == $c->namespace) ) {
 			return false;
 		}
 
@@ -268,7 +267,7 @@ class ModuleStack extends \ArrayObject
 		if ( $precedence ) {
 			$modules = $this->modulePrecedence();
 		} else {
-			$modules = array_keys( array_reverse($this) );
+			$modules = array_keys( array_reverse((array) $this) );
 		}
 
 		$bit = S::$n->bitThing($thing);
@@ -304,7 +303,7 @@ class ModuleStack extends \ArrayObject
 
 	public function __sleep()
 	{
-		foreach ( $this as $k => $v ) {
+		foreach ( (array) $this as $k => $v ) {
 			$this[$k] = array(
 				'class' => get_class($v),
 				'things' => $v->things
@@ -314,7 +313,7 @@ class ModuleStack extends \ArrayObject
 
 	public function __wakeup()
 	{
-		foreach ( $this as $k => $v ) {
+		foreach ( (array) $this as $k => $v ) {
 			$class = $v['class'];
 
 			$this[$k] = new $class();

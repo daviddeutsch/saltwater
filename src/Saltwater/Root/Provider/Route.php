@@ -89,12 +89,14 @@ class Route extends AbstractRoute
 		$length = count($this->chain);
 
 		$service = new \Saltwater\Thing\Service();
+
 		for ( $i=0; $i<$length; ++$i ) {
 			$c =& $this->chain[$i];
 
 			$c->context->pushData($result);
 
 			$service->setContext($c->context);
+
 			if ( !$service->prepareCall($c) ) {
 				$service = S::$n->service->get($c->service, $c->context);
 			}
