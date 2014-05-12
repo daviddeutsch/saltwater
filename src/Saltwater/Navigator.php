@@ -60,7 +60,7 @@ class Navigator
 	/**
 	 * @param string $path
 	 */
-	public function cache( $path )
+	public function storeCache( $path )
 	{
 		$info = pathinfo($path);
 

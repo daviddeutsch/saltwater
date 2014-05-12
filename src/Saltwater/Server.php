@@ -32,7 +32,7 @@ class Server
 
 		self::addModules($modules);
 
-		if ( $cache ) self::$n->cache($cache);
+		if ( $cache ) self::$n->storeCache($cache);
 	}
 
 	/**

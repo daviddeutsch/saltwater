@@ -5,7 +5,7 @@ namespace Saltwater;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 
-class ModuleStack extends \ArrayIterator
+class ModuleStack extends \ArrayObject
 {
 	/**
 	 * @var string
@@ -21,14 +21,6 @@ class ModuleStack extends \ArrayIterator
 	 * @var string[] array of modules stacked in the order they were called in
 	 */
 	private $stack = array();
-
-	/**
-	 * @return \Saltwater\Thing\Module
-	 */
-	public function current()
-	{
-		return parent::current();
-	}
 
 	/**
 	 * Set the root module by name
