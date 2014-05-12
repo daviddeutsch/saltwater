@@ -338,9 +338,14 @@ class Navigator
 			if ( $return !== false ) return $return;
 		}
 
+		return $this->tryModuleFallback($bit, $type);
+	}
+
+	private function tryModuleFallback( $bit, $type )
+	{
 		$master = array_search($this->master, $this->stack);
 
-		if ( $master == count($this->stack)-1 ) return false;
+		if ( $master == (count($this->stack) - 1) ) return false;
 
 		// As a last resort, step one module up within stack and try again
 		$caller = $this->stack[$master+1];
@@ -389,9 +394,7 @@ class Navigator
 			return false;
 		}
 
-		if ( !$module->hasThing($bit) ) return false;
-
-		return true;
+		return $module->hasThing($bit);
 	}
 
 	/**
@@ -434,16 +437,19 @@ class Navigator
 		for ( $i=2; $i<$depth; ++$i ) {
 			if ( !isset($trace[$i]['class']) ) continue;
 
-			if (
-				in_array($trace[$i]['class'], $this->skip)
-				|| (strpos($trace[$i]['class'], 'Saltwater\Root') !== false)
-				|| (strpos($trace[$i]['class'], '\\') === false)
-			) continue;
+			if ( $this->skipCaller($trace[$i]['class']) ) continue;
 
 			return explode('\\', $trace[$i]['class']);
 		}
 
 		return null;
+	}
+
+	private function skipCaller( $class )
+	{
+		return (strpos($class, 'Saltwater\Root') !== false)
+			|| (strpos($class, '\\') === false)
+			|| in_array($class, $this->skip);
 	}
 
 	/**
@@ -471,17 +477,22 @@ class Navigator
 	{
 		if ( !$this->isThing($thing) ) return false;
 
-		$b = $this->bitThing($thing);
-
 		if ( $precedence ) {
 			$modules = $this->modulePrecedence();
 		} else {
 			$modules = array_keys( $this->getModules(true) );
 		}
 
+		$bit = $this->bitThing($thing);
+
+		return $this->thingInStack($modules, $bit, $first);
+	}
+
+	private function thingInStack( $modules, $bit, $first )
+	{
 		$return = array();
 		foreach ( $modules as $module ) {
-			if ( !$this->modules[$module]->hasThing($b) ) continue;
+			if ( !$this->modules[$module]->hasThing($bit) ) continue;
 
 			if ( $first ) return $module;
 
