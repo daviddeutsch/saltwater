@@ -82,7 +82,7 @@ class ModuleStack extends \ArrayObject
 
 		$module->register($name);
 
-		// Push to ->modules late to preserve dependency order
+		// Push late to preserve dependency order
 		$this[$name] = $module;
 
 		if ( $master ) $this->setMaster($name);
@@ -147,20 +147,40 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return bool|Thing\Provider
 	 */
-	public function providerFromModule( $bit, $caller, $type)
+	public function provider( $bit, $caller, $type)
 	{
 		// Depending on the caller, reset the module stack
 		$this->setMaster($caller);
 
-		foreach ( $this->modulePrecedence() as $k ) {
-			if ( !$this[$k]->hasThing($bit) ) continue;
+		foreach ( $this->modulePrecedence() as $name ) {
+			$return = $this->providerFromModule(
+				$this[$name],
+				$name,
+				$bit,
+				$caller,
+				$type
+			);
 
-			$return = $this[$k]->provider($k, $caller, $type);
-
-			if ( $return !== false ) return $return;
+			if ( $return ) return $return;
 		}
 
 		return $this->tryModuleFallback($bit, $type);
+	}
+
+	/**
+	 * @param \Saltwater\Thing\Module $module
+	 * @param string                  $name
+	 * @param int                     $bit
+	 * @param string                  $caller
+	 * @param string                  $type
+	 *
+	 * @return bool
+	 */
+	private function providerFromModule( $module, $name, $bit, $caller, $type )
+	{
+		if ( !$module->hasThing($bit) ) return false;
+
+		return $module->provider($name, $caller, $type);
 	}
 
 	private function tryModuleFallback( $bit, $type )
@@ -172,7 +192,7 @@ class ModuleStack extends \ArrayObject
 		// As a last resort, step one module up within stack and try again
 		$caller = $this->stack[$master+1];
 
-		return $this->providerFromModule($bit, $caller, $type);
+		return $this->provider($bit, $caller, $type);
 	}
 
 	/**

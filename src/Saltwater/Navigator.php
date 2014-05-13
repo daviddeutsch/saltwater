@@ -174,7 +174,7 @@ class Navigator
 			$caller = $this->modules->findModule($this->lastCaller(), $thing);
 		}
 
-		return $this->modules->providerFromModule($bit, $caller, $type);
+		return $this->modules->provider($bit, $caller, $type);
 	}
 
 	/**
