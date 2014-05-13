@@ -148,6 +148,10 @@ class Route extends AbstractRoute
 		$this->explodePush($path, $context, $cmd, $root);
 	}
 
+	/**
+	 * @param \Saltwater\Thing\Context $context
+	 * @param string $cmd
+	 */
 	private function explodePush( $path, $context, $cmd, $root )
 	{
 		$next = array_shift($path);

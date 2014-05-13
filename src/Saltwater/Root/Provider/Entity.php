@@ -70,7 +70,7 @@ class Entity extends Provider
 	 * @param string                  $name
 	 * @param \Saltwater\Thing\Module $module
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	private function fromModule( $name, $module )
 	{

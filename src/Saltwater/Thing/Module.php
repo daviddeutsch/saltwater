@@ -27,6 +27,9 @@ class Module
 	 */
 	public $things = 0;
 
+	/**
+	 * @param string $name
+	 */
 	public function register( $name )
 	{
 		if ( S::$n->isThing('module.' . $name) || $this->things ) return null;
@@ -66,8 +69,9 @@ class Module
 	}
 
 	/**
-	 * @param $module
-	 * @param $type
+	 * @param string $module
+	 * @param string $type
+	 * @param string $caller
 	 *
 	 * @return \Saltwater\Thing\Provider
 	 */

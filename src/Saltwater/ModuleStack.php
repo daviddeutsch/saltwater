@@ -91,7 +91,7 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * @param $class
+	 * @param string $class
 	 *
 	 * @return \Saltwater\Thing\Module
 	 */
@@ -183,6 +183,10 @@ class ModuleStack extends \ArrayObject
 		return $module->provider($name, $caller, $type);
 	}
 
+	/**
+	 * @param integer $bit
+	 * @param string $type
+	 */
 	private function tryModuleFallback( $bit, $type )
 	{
 		$master = array_search($this->master, $this->stack);
@@ -295,6 +299,9 @@ class ModuleStack extends \ArrayObject
 		return $this->thingInStack($modules, $bit, $first);
 	}
 
+	/**
+	 * @param boolean $first
+	 */
 	private function thingInStack( $modules, $bit, $first )
 	{
 		$return = array();

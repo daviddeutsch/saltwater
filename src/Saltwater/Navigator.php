@@ -3,7 +3,6 @@
 namespace Saltwater;
 
 use Saltwater\Server as S;
-use Saltwater\Utils as U;
 
 /**
  * Class Navigator
@@ -148,6 +147,7 @@ class Navigator
 
 	/**
 	 * @see ModuleStack::getContextModule()
+	 * @param string $name
 	 */
 	public function getContextModule( $name )
 	{
