@@ -77,34 +77,50 @@ class Route extends AbstractRoute
 	{
 		$input = @file_get_contents('php://input');
 
-		if ( !$input ) $input = '';
+		$input = empty($input) ? null : json_decode($input);
 
 		S::$n->response->response( $this->resolveChain($input) );
 	}
 
 	private function resolveChain( $input, $result=null )
 	{
-		$input = empty($input) ? null : json_decode($input);
-
 		$length = count($this->chain);
 
 		$service = new \Saltwater\Thing\Service();
 
 		for ( $i=0; $i<$length; ++$i ) {
-			$c =& $this->chain[$i];
-
-			$c->context->pushData($result);
-
-			$service->setContext($c->context);
-
-			if ( !$service->prepareCall($c) ) {
-				$service = S::$n->service->get($c->service, $c->context);
-			}
-
-			$result = $service->call( $c, ($i == $length) ? $input : null );
+			$result = $this->chain(
+				$service,
+				$this->chain[$i],
+				$input,
+				$result,
+				($i == $length)
+			);
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @param \Saltwater\Thing\Service $service
+	 * @param object                   $item
+	 * @param mixed                    $input
+	 * @param mixed                    $result
+	 * @param bool                     $last
+	 *
+	 * @return mixed|null
+	 */
+	private function chain( &$service, &$item, $input, $result, $last )
+	{
+		$item->context->pushData($result);
+
+		$service->setContext($item->context);
+
+		if ( !$service->prepareCall($item) ) {
+			$service = S::$n->service->get($item->service, $item->context);
+		}
+
+		return $service->call( $item, $last ? $input : null );
 	}
 
 	/**
@@ -123,14 +139,17 @@ class Route extends AbstractRoute
 			return;
 		}
 
-		$c = S::$n->context->get($root, $context);
-
-		if ( $c ) {
+		if ( $c = S::$n->context->get($root, $context) ) {
 			$context = $c;
 
 			$root = array_shift($path);
 		}
 
+		$this->explodePush($path, $context, $cmd, $root);
+	}
+
+	private function explodePush( $path, $context, $cmd, $root )
+	{
 		$next = array_shift($path);
 
 		// Either push a call on the last service or a new one into the chain
@@ -139,6 +158,7 @@ class Route extends AbstractRoute
 		} else {
 			$this->push($context, 'get', $root, $next);
 
+			// We have leftovers!
 			$this->explode($context, $cmd, $path);
 		}
 	}
