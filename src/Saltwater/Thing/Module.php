@@ -111,7 +111,7 @@ class Module
 
 	public function masterContext()
 	{
-		if ( $this->noContext() ) return false;
+		if ( $this->noContext() ) return null;
 
 		return U::CamelTodashed( $this->provide['context'][0] );
 	}

@@ -15,6 +15,11 @@ class TempStack extends \ArrayObject
 	private $master = '';
 
 	/**
+	 * @var string[]
+	 */
+	private $storage;
+
+	/**
 	 * Set the root module by name
 	 *
 	 * @param string $name
@@ -57,7 +62,7 @@ class TempStack extends \ArrayObject
 	 */
 	private function pushStack( $name )
 	{
-		if ( !$this->count ) $this[] = $this->root;
+		if ( !$this->count() ) $this[] = $this->root;
 
 		if ( in_array($name, $this->storage) ) return;
 
@@ -80,7 +85,7 @@ class TempStack extends \ArrayObject
 	{
 		$master = array_search($this->master, $this->storage);
 
-		if ( $master == ($this->count - 1) ) return false;
+		if ( $master == ($this->count() - 1) ) return false;
 
 		return $this[$master+1];
 	}
