@@ -139,12 +139,17 @@ class Navigator
 	}
 
 	/**
-	 * @see ModuleStack::getContextModule()
-	 * @param string $name
+	 * Get the Module that provides a context
+	 *
+	 * @param string $name plain name of the context
+	 *
+	 * @return Thing\Module|null
 	 */
 	public function getContextModule( $name )
 	{
-		return $this->modules->getContextModule($name);
+		$bit = S::$n->bitThing('context.' . $name);
+
+		return $this->modules->getModuleByThing($bit);
 	}
 
 	/**

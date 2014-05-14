@@ -102,24 +102,6 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * Get the Module that provides a context
-	 *
-	 * @param string $name plain name of the context
-	 *
-	 * @return Thing\Module|null
-	 */
-	public function getContextModule( $name )
-	{
-		$bit = S::$n->bitThing('context.' . $name);
-
-		foreach ( (array) $this as $module ) {
-			if ( $module->hasThing($bit) ) return $module;
-		}
-
-		return null;
-	}
-
-	/**
 	 * @param int    $bit
 	 * @param string $caller
 	 * @param string $type
@@ -182,7 +164,7 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function findModule( $caller, $provider )
 	{
-		if ( empty($caller) ) return null;
+		if ( empty($caller) ) return false;
 
 		$caller = $this->explodeCaller($caller, $provider);
 
@@ -244,7 +226,7 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function moduleByThing( $thing, $precedence=true )
 	{
-		return $this->modulesByThing( $thing, $precedence, true );
+		return $this->modulesByThing($thing, $precedence, true);
 	}
 
 	/**
@@ -260,7 +242,7 @@ class ModuleStack extends \ArrayObject
 	{
 		if ( !S::$n->isThing($thing) ) return false;
 
-		$call = $first ? 'selectModuleByThing' : 'selectModulesByThing';
+		$call = $first ? 'getThingModule' : 'getThingModules';
 
 		return $this->$call(
 			$this->getPrecedence($precedence),
@@ -268,8 +250,10 @@ class ModuleStack extends \ArrayObject
 		);
 	}
 
-	private function selectModulesByThing( $modules, $bit )
+	public function getThingModules( $bit, $modules=null )
 	{
+		$modules = is_null($modules) ? (array) $this : $modules;
+
 		$return = array();
 		foreach ( $modules as $module ) {
 			if ( !$this[$module]->hasThing($bit) ) continue;
@@ -280,8 +264,10 @@ class ModuleStack extends \ArrayObject
 		return $return;
 	}
 
-	private function selectModuleByThing( $modules, $bit )
+	public function getThingModule( $bit, $modules=null )
 	{
+		$modules = is_null($modules) ? (array) $this : $modules;
+
 		foreach ( $modules as $module ) {
 			if ( $this[$module]->hasThing($bit) ) return $module;
 		}
