@@ -184,9 +184,7 @@ class ModuleStack extends \ArrayObject
 		$bit = S::$n->bitThing($caller->thing);
 
 		foreach ( array_reverse((array) $this) as $k => $module ) {
-			if ( !$this->bitInModule($module, $caller, $bit) ) continue;
-
-			return $k;
+			if ( $this->bitInModule($module, $caller, $bit) ) return $k;
 		}
 
 		return null;
@@ -239,49 +237,63 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return bool|mixed
 	 */
-	public function moduleByThing( $thing, $precedence=true )
+	public function moduleByThing( $thing, $stack_precedence=true )
 	{
-		return $this->modulesByThing($thing, $precedence, true);
+		if ( !S::$n->isThing($thing) ) return false;
+
+		return $this->selectModuleByThing(
+			$this->getPrecedence($stack_precedence),
+			S::$n->bitThing($thing)
+		);
 	}
 
 	/**
 	 * Return a list of Modules providing a Thing
-	 * @param      string $thing
-	 * @param bool $precedence
-	 * @param bool $first      only return the first item on the list
+	 *
+	 * @param string $thing
+	 * @param bool   $precedence
+	 * @param bool   $first      only return the first item on the list
 	 *
 	 * @return array|bool
 	 */
-	public function modulesByThing( $thing, $precedence=true, $first=false )
+	public function modulesByThing( $thing, $stack_precedence=true )
 	{
 		if ( !S::$n->isThing($thing) ) return false;
 
-		if ( $precedence ) {
-			$modules = $this->stack->modulePrecedence();
-		} else {
-			$modules = array_keys( array_reverse((array) $this) );
-		}
-
-		$bit = S::$n->bitThing($thing);
-
-		return $this->thingInList($modules, $bit, $first);
+		return $this->selectModulesByThing(
+			$this->getPrecedence($stack_precedence),
+			S::$n->bitThing($thing)
+		);
 	}
 
-	/**
-	 * @param boolean $first
-	 */
-	private function thingInList( $modules, $bit, $first=false )
+	private function getPrecedence( $stack_precedence )
+	{
+		if ( $stack_precedence ) {
+			return $this->stack->modulePrecedence();
+		} else {
+			return array_keys( array_reverse((array) $this) );
+		}
+	}
+
+	private function selectModulesByThing( $modules, $bit )
 	{
 		$return = array();
 		foreach ( $modules as $module ) {
 			if ( !$this[$module]->hasThing($bit) ) continue;
 
-			if ( $first ) return $module;
-
 			$return[] = $module;
 		}
 
 		return $return;
+	}
+
+	private function selectModuleByThing( $modules, $bit )
+	{
+		foreach ( $modules as $module ) {
+			if ( $this[$module]->hasThing($bit) ) return $module;
+		}
+
+		return false;
 	}
 
 	public function __sleep()
