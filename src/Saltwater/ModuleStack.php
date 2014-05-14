@@ -168,6 +168,11 @@ class ModuleStack extends \ArrayObject
 
 		$c = $this->explodeCaller($caller, $provider);
 
+		return $this->findModuleWithCaller($c);
+	}
+
+	private function findModuleWithCaller( $c )
+	{
 		$bit = S::$n->bitThing($c->thing);
 
 		foreach ( array_reverse((array) $this) as $k => $module ) {
