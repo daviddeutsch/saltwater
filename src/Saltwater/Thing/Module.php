@@ -98,7 +98,7 @@ class Module
 	 */
 	private function makeProvider( $type )
 	{
-		$class = $this->className('provider', $type);
+		$class = U::className($this->namespace, 'provider', $type);
 
 		return class_exists($class) ? $class : false;
 	}
@@ -108,18 +108,5 @@ class Module
 		if ( empty($this->provide['context']) ) return false;
 
 		return U::CamelTodashed( $this->provide['context'][0] );
-	}
-
-	/**
-	 * @param string $type
-	 * @param $name
-	 *
-	 * @return string
-	 */
-	protected function className( $type, $name )
-	{
-		return $this->namespace
-			. '\\' . ucfirst($type)
-			. '\\' . U::dashedToCamelCase($name);
 	}
 }

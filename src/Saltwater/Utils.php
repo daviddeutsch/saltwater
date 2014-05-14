@@ -69,6 +69,18 @@ class Utils
 	}
 
 	/**
+	 * @return string
+	 */
+	public static function className()
+	{
+		$args = func_get_args();
+
+		array_walk( $args, array('U::dashedToCamelCase') );
+
+		return implode( '\\', $args );
+	}
+
+	/**
 	 * Read a JSON file and return its content
 	 *
 	 * @param      $path
