@@ -18,11 +18,7 @@ class Route extends AbstractRoute
 
 		if ( empty($context) ) return;
 
-		$this->explode(
-			$context,
-			$this->http,
-			explode('/', $this->uri)
-		);
+		$this->explode( $context, $this->http, explode('/', $this->uri) );
 	}
 
 	public static function getProvider()
@@ -90,11 +86,7 @@ class Route extends AbstractRoute
 
 		for ( $i=0; $i<$length; ++$i ) {
 			$result = $this->chain(
-				$service,
-				$this->chain[$i],
-				$input,
-				$result,
-				($i == $length)
+				$service, $this->chain[$i], $input, $result, ($i == $length)
 			);
 		}
 
