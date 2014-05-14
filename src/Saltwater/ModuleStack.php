@@ -8,59 +8,9 @@ use Saltwater\Utils as U;
 class ModuleStack extends \ArrayObject
 {
 	/**
-	 * @var string
+	 * @var TempStack
 	 */
-	private $root = 'root';
-
-	/**
-	 * @var string
-	 */
-	private $master = '';
-
-	/**
-	 * @var string[] array of modules stacked in the order they were called in
-	 */
-	private $stack = array();
-
-	/**
-	 * Set the root module by name
-	 *
-	 * @param string $name
-	 */
-	public function setRoot( $name )
-	{
-		if ( empty($name) || ($name == $this->root) ) return;
-
-		$this->root = $name;
-	}
-
-	/**
-	 * Set the master module by name
-	 *
-	 * @param string $name
-	 */
-	public function setMaster( $name )
-	{
-		if ( empty($name) || ($name == $this->master) ) return;
-
-		$this->master = $name;
-
-		$this->pushStack($name);
-	}
-
-	/**
-	 * Push a module name onto the stack, establishing later hierarchy for calls
-	 *
-	 * @param string $name
-	 */
-	private function pushStack( $name )
-	{
-		if ( empty($this->stack) ) $this->stack[] = $this->root;
-
-		if ( in_array($name, $this->stack) ) return;
-
-		$this->stack[] = $name;
-	}
+	private $stack;
 
 	/**
 	 * Add module to stack and register its things
@@ -85,7 +35,7 @@ class ModuleStack extends \ArrayObject
 		// Push late to preserve dependency order
 		$this[$name] = $module;
 
-		if ( $master ) $this->setMaster($name);
+		if ( $master ) $this->stack->setMaster($name);
 
 		return true;
 	}
@@ -160,9 +110,9 @@ class ModuleStack extends \ArrayObject
 	public function provider( $bit, $caller, $type)
 	{
 		// Depending on the caller, reset the module stack
-		$this->setMaster($caller);
+		$this->stack->setMaster($caller);
 
-		foreach ( $this->modulePrecedence() as $name ) {
+		foreach ( $this->stack->modulePrecedence() as $name ) {
 			$return = $this->providerFromModule(
 				$this[$name],
 				$name,
@@ -199,14 +149,12 @@ class ModuleStack extends \ArrayObject
 	 */
 	private function tryModuleFallback( $bit, $type )
 	{
-		$master = array_search($this->master, $this->stack);
-
-		if ( $master == (count($this->stack) - 1) ) return false;
-
 		// As a last resort, step one module up within stack and try again
-		$caller = $this->stack[$master+1];
-
-		return $this->provider($bit, $caller, $type);
+		if ( $caller = $this->stack->advanceMaster() ) {
+			return $this->provider($bit, $caller, $type);
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -299,20 +247,20 @@ class ModuleStack extends \ArrayObject
 		if ( !S::$n->isThing($thing) ) return false;
 
 		if ( $precedence ) {
-			$modules = $this->modulePrecedence();
+			$modules = $this->stack->modulePrecedence();
 		} else {
 			$modules = array_keys( array_reverse((array) $this) );
 		}
 
 		$bit = S::$n->bitThing($thing);
 
-		return $this->thingInStack($modules, $bit, $first);
+		return $this->thingInList($modules, $bit, $first);
 	}
 
 	/**
 	 * @param boolean $first
 	 */
-	private function thingInStack( $modules, $bit, $first )
+	private function thingInList( $modules, $bit, $first )
 	{
 		$return = array();
 		foreach ( $modules as $module ) {
@@ -321,18 +269,6 @@ class ModuleStack extends \ArrayObject
 			if ( $first ) return $module;
 
 			$return[] = $module;
-		}
-
-		return $return;
-	}
-
-	private function modulePrecedence()
-	{
-		$return = array();
-		foreach ( $this->stack as $module ) {
-			array_unshift($return, $module);
-
-			if ( $module == $this->master ) break;
 		}
 
 		return $return;
