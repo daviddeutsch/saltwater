@@ -57,9 +57,9 @@ class TempStack extends \ArrayObject
 	 */
 	private function pushStack( $name )
 	{
-		if ( empty($this) ) $this[] = $this->root;
+		if ( !$this->count ) $this[] = $this->root;
 
-		if ( in_array($name, (array) $this) ) return;
+		if ( in_array($name, $this->storage) ) return;
 
 		$this[] = $name;
 	}
@@ -67,7 +67,7 @@ class TempStack extends \ArrayObject
 	public function modulePrecedence()
 	{
 		$return = array();
-		foreach ( (array) $this as $module ) {
+		foreach ( $this->storage as $module ) {
 			array_unshift($return, $module);
 
 			if ( $module == $this->master ) break;
@@ -78,9 +78,9 @@ class TempStack extends \ArrayObject
 
 	public function advanceMaster()
 	{
-		$master = array_search($this->master, (array) $this);
+		$master = array_search($this->master, $this->storage);
 
-		if ( $master == (count((array) $this) - 1) ) return false;
+		if ( $master == ($this->count - 1) ) return false;
 
 		return $this[$master+1];
 	}
