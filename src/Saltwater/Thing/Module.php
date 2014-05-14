@@ -57,11 +57,16 @@ class Module
 
 		foreach ( $this->provide as $type => $content ) {
 			foreach ( $content as $thing ) {
-				$this->registry |= S::$n->addThing(
-					$type . '.' . U::CamelTodashed($thing)
-				);
+				$this->registerThing($type, $thing);
 			}
 		}
+	}
+
+	private function registerThing( $type, $thing )
+	{
+		$this->registry |= S::$n->addThing(
+			$type . '.' . U::CamelTodashed($thing)
+		);
 	}
 
 	public function hasThing( $bit )
@@ -78,9 +83,7 @@ class Module
 	 */
 	public function provider( $module, $caller, $type )
 	{
-		$class = $this->className('provider', $type);
-
-		if ( !class_exists($class) ) return false;
+		if ( !($class = $this->makeProvider($type)) ) return false;
 
 		$class::setModule($module);
 		$class::setCaller($caller);
@@ -88,11 +91,23 @@ class Module
 		return $class::getProvider();
 	}
 
+	/**
+	 * @param $type
+	 *
+	 * @return bool|\Saltwater\Thing\Provider
+	 */
+	private function makeProvider( $type )
+	{
+		$class = $this->className('provider', $type);
+
+		return class_exists($class) ? $class : false;
+	}
+
 	public function masterContext()
 	{
-		if ( empty($this->contexts) ) return false;
+		if ( empty($this->provide['context']) ) return false;
 
-		return U::CamelTodashed( $this->contexts[0] );
+		return U::CamelTodashed( $this->provide['context'][0] );
 	}
 
 	/**
