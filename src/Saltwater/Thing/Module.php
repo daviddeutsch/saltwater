@@ -92,9 +92,9 @@ class Module
 	}
 
 	/**
-	 * @param $type
+	 * @param string $type
 	 *
-	 * @return bool|\Saltwater\Thing\Provider
+	 * @return false|\Saltwater\Thing\Provider
 	 */
 	private function makeProvider( $type )
 	{

@@ -31,9 +31,9 @@ class Navigator
 	private $modules = array();
 
 	/**
-	 * @var string[] array of Saltwater\Thing(s)
+	 * @var Registry
 	 */
-	private $things = array();
+	private $registry = array();
 
 	/**
 	 * @var array classes that can be skipped during search for caller module
@@ -46,14 +46,20 @@ class Navigator
 	public function __construct()
 	{
 		$this->modules = new ModuleStack();
+
+		$this->registry = new Registry();
 	}
 
-	/**
-	 * @see ModuleStack::appendModule()
-	 */
-	public function addModule( $class, $master=false )
+	public function __get( $type )
 	{
-		return $this->modules->appendModule($class, $master);
+		return $this->provider($type);
+	}
+
+	public function __call( $type, $args )
+	{
+		$caller = empty($args) ? null : array_shift($args);
+
+		return $this->provider($type, $caller);
 	}
 
 	/**
@@ -85,56 +91,43 @@ class Navigator
 	}
 
 	/**
-	 * Return true if the input is a registered thing
-	 *
-	 * @param string $name in the form "type.name"
-	 *
-	 * @return bool
+	 * @see Registry::bitThing()
 	 */
 	public function isThing( $name )
 	{
-		return in_array($name, $this->things) !== false;
+		return $this->registry->isThing($name);
 	}
 
 	/**
-	 * Return the bitmask integer of a thing
-	 *
-	 * @param string $name in the form "type.name"
-	 *
-	 * @return bool|int
+	 * @see Registry::bitThing()
 	 */
 	public function bitThing( $name )
 	{
-		return array_search($name, $this->things);
+		return $this->registry->bitThing($name);
 	}
 
 	/**
-	 * Register a thing and return its bitmask integer
-	 * @param $name
-	 *
-	 * @return number
+	 * @see Registry::addThing()
 	 */
 	public function addThing( $name )
 	{
-		if ( $id = $this->bitThing($name) ) return $id;
-
-		$id = pow( 2, count($this->things) );
-
-		$this->things[$id] = $name;
-
-		return $id;
+		return $this->registry->addThing($name);
 	}
 
 	/**
-	 * Return a module class by its name
-	 *
-	 * @param string $name
-	 *
-	 * @return Thing\Module
+	 * @see ModuleStack::appendModule()
+	 */
+	public function addModule( $class, $master=false )
+	{
+		return $this->modules->appendModule($class, $master);
+	}
+
+	/**
+	 * @see ModuleStack::getModule()
 	 */
 	public function getModule( $name )
 	{
-		return $this->modules[$name];
+		return $this->modules->getModule($name);
 	}
 
 	/**
@@ -185,7 +178,7 @@ class Navigator
 	 *
 	 * @return array|null
 	 */
-	public function lastCaller()
+	private function lastCaller()
 	{
 		// Let me tell you about my boat
 		$trace = debug_backtrace(2, 22);
@@ -209,17 +202,5 @@ class Navigator
 		return (strpos($class, 'Saltwater\Root') !== false)
 			|| (strpos($class, '\\') === false)
 			|| in_array($class, $this->skip);
-	}
-
-	public function __get( $type )
-	{
-		return $this->provider($type);
-	}
-
-	public function __call( $type, $args )
-	{
-		$caller = empty($args) ? null : array_shift($args);
-
-		return $this->provider($type, $caller);
 	}
 }

@@ -91,6 +91,18 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
+	 * Return a module class by its name
+	 *
+	 * @param string $name
+	 *
+	 * @return Thing\Module
+	 */
+	public function getModule( $name )
+	{
+		return $this[$name];
+	}
+
+	/**
 	 * @param string $class
 	 *
 	 * @return \Saltwater\Thing\Module
