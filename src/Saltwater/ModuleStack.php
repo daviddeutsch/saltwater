@@ -237,14 +237,9 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return bool|mixed
 	 */
-	public function moduleByThing( $thing, $stack_precedence=true )
+	public function moduleByThing( $thing, $precedence=true )
 	{
-		if ( !S::$n->isThing($thing) ) return false;
-
-		return $this->selectModuleByThing(
-			$this->getPrecedence($stack_precedence),
-			S::$n->bitThing($thing)
-		);
+		return $this->modulesByThing( $thing, $precedence, true );
 	}
 
 	/**
@@ -256,23 +251,16 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return array|bool
 	 */
-	public function modulesByThing( $thing, $stack_precedence=true )
+	public function modulesByThing( $thing, $precedence=true, $first=false )
 	{
 		if ( !S::$n->isThing($thing) ) return false;
 
-		return $this->selectModulesByThing(
-			$this->getPrecedence($stack_precedence),
+		$call = $first ? 'selectModuleByThing' : 'selectModulesByThing';
+
+		return $this->$call(
+			$this->getPrecedence($precedence),
 			S::$n->bitThing($thing)
 		);
-	}
-
-	private function getPrecedence( $stack_precedence )
-	{
-		if ( $stack_precedence ) {
-			return $this->stack->modulePrecedence();
-		} else {
-			return array_keys( array_reverse((array) $this) );
-		}
 	}
 
 	private function selectModulesByThing( $modules, $bit )
@@ -294,6 +282,15 @@ class ModuleStack extends \ArrayObject
 		}
 
 		return false;
+	}
+
+	private function getPrecedence( $stack_precedence )
+	{
+		if ( $stack_precedence ) {
+			return $this->stack->modulePrecedence();
+		} else {
+			return array_keys( array_reverse((array) $this) );
+		}
 	}
 
 	public function __sleep()
