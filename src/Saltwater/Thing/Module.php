@@ -12,52 +12,53 @@ class Module
 {
 	public $namespace;
 
-	protected $dependencies = array();
+	/**
+	 * @var array Associative Array of requirements that need to be in place
+	 *            for this module
+	 */
+	protected $require = array();
 
-	protected $providers = array();
-
-	protected $contexts = array();
-
-	protected $services = array();
-
-	protected $entities = array();
+	/**
+	 * @var array Associative Array of things that this module provides
+	 */
+	protected $provide = array();
 
 	/**
 	 * @var int bitmask of thing registry
 	 */
-	public $things = 0;
+	public $registry = 0;
 
 	/**
 	 * @param string $name
 	 */
 	public function register( $name )
 	{
-		if ( S::$n->isThing('module.' . $name) || $this->things ) return null;
+		if ( S::$n->isThing('module.' . $name) || $this->registry ) return null;
 
-		$this->registerDependencies();
+		$this->ensureRequires();
 
-		$this->things |= S::$n->addThing('module.' . $name);
+		$this->registry |= S::$n->addThing('module.' . $name);
 
 		$this->registerThings();
 	}
 
-	private function registerDependencies()
+	private function ensureRequires()
 	{
-		if ( empty($this->dependencies) ) return;
+		if ( empty($this->require['module']) ) return;
 
-		foreach ( $this->dependencies as $dependency ) {
-			S::$n->addModule($dependency);
+		foreach ( $this->require['module'] as $module ) {
+			S::$n->addModule($module);
 		}
 	}
 
 	private function registerThings()
 	{
-		foreach ( $this->thingTypes() as $p => $s ) {
-			if ( empty($this->$p) ) continue;
+		if ( empty($this->provide) ) return;
 
-			foreach ( $this->$p as $thing ) {
-				$this->things |= S::$n->addThing(
-					$s . '.' . U::CamelTodashed($thing)
+		foreach ( $this->provide as $type => $content ) {
+			foreach ( $content as $thing ) {
+				$this->registry |= S::$n->addThing(
+					$type . '.' . U::CamelTodashed($thing)
 				);
 			}
 		}
@@ -65,7 +66,7 @@ class Module
 
 	public function hasThing( $bit )
 	{
-		return ($this->things & $bit) == $bit;
+		return ($this->registry & $bit) == $bit;
 	}
 
 	/**
@@ -87,28 +88,11 @@ class Module
 		return $class::getProvider();
 	}
 
-	public function provideList( $type )
-	{
-		if ( empty($this->$type) ) return array();
-
-		return $this->$type;
-	}
-
 	public function masterContext()
 	{
 		if ( empty($this->contexts) ) return false;
 
 		return U::CamelTodashed( $this->contexts[0] );
-	}
-
-	public function thingTypes()
-	{
-		return array(
-			'providers' => 'provider',
-			'contexts' => 'context',
-			'services' => 'service',
-			'entities' => 'entity'
-		);
 	}
 
 	/**
