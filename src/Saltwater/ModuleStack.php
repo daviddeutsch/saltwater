@@ -12,6 +12,11 @@ class ModuleStack extends \ArrayObject
 	 */
 	private $stack;
 
+	public function __construct()
+	{
+		$this->stack = new TempStack;
+	}
+
 	/**
 	 * Add module to stack and register its things
 	 *
