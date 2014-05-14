@@ -2,13 +2,8 @@
 
 namespace Saltwater;
 
-class Registry
+class Registry extends \ArrayObject
 {
-	/**
-	 * @var string[] array of Saltwater\Thing(s)
-	 */
-	private $things = array();
-
 	/**
 	 * Return true if the input is a registered thing
 	 *
@@ -16,9 +11,9 @@ class Registry
 	 *
 	 * @return bool
 	 */
-	public function isThing( $name )
+	public function exists( $name )
 	{
-		return in_array($name, $this->things) !== false;
+		return in_array($name, (array) $this);
 	}
 
 	/**
@@ -28,9 +23,9 @@ class Registry
 	 *
 	 * @return bool|int
 	 */
-	public function bitThing( $name )
+	public function bit( $name )
 	{
-		return array_search($name, $this->things);
+		return array_search($name, (array) $this);
 	}
 
 	/**
@@ -39,13 +34,13 @@ class Registry
 	 *
 	 * @return number
 	 */
-	public function addThing( $name )
+	public function append( $name )
 	{
-		if ( $id = $this->bitThing($name) ) return $id;
+		if ( $id = $this->bit($name) ) return $id;
 
-		$id = pow( 2, count($this->things) );
+		$id = pow( 2, count($this) );
 
-		$this->things[$id] = $name;
+		$this[$id] = $name;
 
 		return $id;
 	}

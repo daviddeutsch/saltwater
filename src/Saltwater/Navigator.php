@@ -91,27 +91,27 @@ class Navigator
 	}
 
 	/**
-	 * @see Registry::bitThing()
+	 * @see Registry::exists()
 	 */
 	public function isThing( $name )
 	{
-		return $this->registry->isThing($name);
+		return $this->registry->exists($name);
 	}
 
 	/**
-	 * @see Registry::bitThing()
+	 * @see Registry::bit()
 	 */
 	public function bitThing( $name )
 	{
-		return $this->registry->bitThing($name);
+		return $this->registry->bit($name);
 	}
 
 	/**
-	 * @see Registry::addThing()
+	 * @see Registry::append()
 	 */
 	public function addThing( $name )
 	{
-		return $this->registry->addThing($name);
+		return $this->registry->append($name);
 	}
 
 	/**
