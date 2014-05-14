@@ -22,15 +22,13 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function appendModule( $class, $master=false )
 	{
-		if ( !class_exists($class) ) return false;
-
 		$name = U::namespacedClassToDashed($class);
 
 		if ( isset($this[$name]) ) return null;
 
-		$module = $this->moduleInstance($class);
-
-		$module->register($name);
+		if ( !($module = $this->registeredModule($class, $name)) ) {
+			return false;
+		}
 
 		// Push late to preserve dependency order
 		$this[$name] = $module;
@@ -50,6 +48,22 @@ class ModuleStack extends \ArrayObject
 	public function getModule( $name )
 	{
 		return $this[$name];
+	}
+
+	/**
+	 * @param string $class
+	 *
+	 * @return Thing\Module
+	 */
+	private function registeredModule( $class, $name )
+	{
+		if ( !class_exists($class) ) return false;
+
+		$module = $this->moduleInstance($class);
+
+		$module->register($name);
+
+		return $module;
 	}
 
 	/**
@@ -114,11 +128,7 @@ class ModuleStack extends \ArrayObject
 
 		foreach ( $this->stack->modulePrecedence() as $name ) {
 			$return = $this->providerFromModule(
-				$this[$name],
-				$name,
-				$bit,
-				$caller,
-				$type
+				$this[$name], $name, $bit, $caller, $type
 			);
 
 			if ( $return ) return $return;
@@ -260,7 +270,7 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * @param boolean $first
 	 */
-	private function thingInList( $modules, $bit, $first )
+	private function thingInList( $modules, $bit, $first=false )
 	{
 		$return = array();
 		foreach ( $modules as $module ) {
