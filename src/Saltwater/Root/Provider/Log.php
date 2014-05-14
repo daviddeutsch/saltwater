@@ -7,7 +7,7 @@ use Saltwater\Common\Log as AbstractLog;
 
 class Log extends AbstractLog
 {
-	public static function getProvider() { return new Log(); }
+	public static function getProvider() { return new Log; }
 
 	public function log( $level, $message, array $context=array() )
 	{

@@ -28,6 +28,6 @@ abstract class Provider implements ProviderInterface
 	{
 		// return new Provider();
 
-		return new \stdClass();
+		return new \stdClass;
 	}
 }

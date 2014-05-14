@@ -7,7 +7,7 @@ use Saltwater\Thing\Provider;
 
 class Response extends Provider
 {
-	public static function getProvider() { return new Response(); }
+	public static function getProvider() { return new Response; }
 
 	/**
 	 * Redirect the client to a different URL

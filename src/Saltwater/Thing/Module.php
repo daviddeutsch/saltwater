@@ -86,6 +86,7 @@ class Module
 		if ( !($class = $this->makeProvider($type)) ) return false;
 
 		$class::setModule($module);
+
 		$class::setCaller($caller);
 
 		return $class::getProvider();

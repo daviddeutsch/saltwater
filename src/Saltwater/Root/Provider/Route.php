@@ -31,7 +31,7 @@ class Route extends AbstractRoute
 
 		$class = $module->namespace . '\Provider\Route';
 
-		return new $class();
+		return new $class;
 	}
 
 	/**
@@ -86,7 +86,7 @@ class Route extends AbstractRoute
 	{
 		$length = count($this->chain);
 
-		$service = new \Saltwater\Thing\Service();
+		$service = new \Saltwater\Thing\Service;
 
 		for ( $i=0; $i<$length; ++$i ) {
 			$result = $this->chain(

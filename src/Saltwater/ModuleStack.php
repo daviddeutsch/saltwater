@@ -109,7 +109,7 @@ class ModuleStack extends \ArrayObject
 	 */
 	private function moduleInstance( $class )
 	{
-		return new $class();
+		return new $class;
 	}
 
 	/**
@@ -340,7 +340,7 @@ class ModuleStack extends \ArrayObject
 
 	public function __sleep()
 	{
-		foreach ( $this as $k => $v ) {
+		foreach ( (array) $this as $k => $v ) {
 			$this[$k] = array(
 				'class' => get_class($v),
 				'things' => $v->things
@@ -350,10 +350,10 @@ class ModuleStack extends \ArrayObject
 
 	public function __wakeup()
 	{
-		foreach ( $this as $k => $v ) {
+		foreach ( (array) $this as $k => $v ) {
 			$class = $v['class'];
 
-			$this[$k] = new $class();
+			$this[$k] = new $class;
 			$this[$k]->things = $v['things'];
 		}
 	}

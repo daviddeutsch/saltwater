@@ -8,7 +8,7 @@ use Saltwater\Thing\Provider;
 
 class Entity extends Provider
 {
-	public static function getProvider() { return new Entity(); }
+	public static function getProvider() { return new Entity; }
 
 	/**
 	 * @param string $name
