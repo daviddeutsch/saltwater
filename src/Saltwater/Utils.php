@@ -75,9 +75,9 @@ class Utils
 	{
 		$args = func_get_args();
 
-		array_walk( $args, array('U::dashedToCamelCase') );
+		array_walk($args, '\Saltwater\Utils::dashedToCamelCase');
 
-		return implode( '\\', $args );
+		return implode('\\', $args);
 	}
 
 	/**

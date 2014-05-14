@@ -35,7 +35,7 @@ class Entity extends Provider
 
 		$bit = S::$n->bitThing('entity.' . $name);
 
-		if ( !$module->hasThing($bit) ) {
+		if ( !$module->has($bit) ) {
 			$module = $this->getOwnModule();
 		}
 
@@ -43,7 +43,7 @@ class Entity extends Provider
 
 		if ( class_exists($class) ) return $class;
 
-		if ( $module->hasThing($bit) ) {
+		if ( $module->has($bit) ) {
 			return '\Saltwater\Thing\Entity';
 		}
 

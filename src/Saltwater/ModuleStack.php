@@ -105,7 +105,7 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * @param string $class
 	 *
-	 * @return \Saltwater\Thing\Module
+	 * @return Thing\Module
 	 */
 	private function moduleInstance( $class )
 	{
@@ -115,18 +115,16 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * Return the master context for the current master module
 	 *
-	 * @param \Saltwater\Thing\Context|null $parent inject a parent context
+	 * @param Thing\Context|null $parent inject a parent context
 	 *
-	 * @return \Saltwater\Thing\Context
+	 * @return Thing\Context
 	 */
 	public function masterContext( $parent=null )
 	{
 		foreach ( (array) $this as $name => $module ) {
-			$context = $module->masterContext();
+			if ( $module->noContext() ) continue;
 
-			if ( !empty($context) ) {
-				$parent = S::$n->context->get($context, $parent);
-			}
+			$parent = S::$n->context->get($module->masterContext(), $parent);
 
 			if ( $name == $this->master ) break;
 		}
@@ -180,17 +178,17 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * @param \Saltwater\Thing\Module $module
-	 * @param string                  $name
-	 * @param int                     $bit
-	 * @param string                  $caller
-	 * @param string                  $type
+	 * @param Thing\Module $module
+	 * @param string       $name
+	 * @param int          $bit
+	 * @param string       $caller
+	 * @param string       $type
 	 *
 	 * @return bool
 	 */
 	private function providerFromModule( $module, $name, $bit, $caller, $type )
 	{
-		if ( !$module->hasThing($bit) ) return false;
+		if ( !$module->has($bit) ) return false;
 
 		return $module->provider($name, $caller, $type);
 	}
@@ -251,7 +249,7 @@ class ModuleStack extends \ArrayObject
 			return false;
 		}
 
-		return $module->hasThing($bit);
+		return $module->has($bit);
 	}
 
 	/**
@@ -342,7 +340,7 @@ class ModuleStack extends \ArrayObject
 
 	public function __sleep()
 	{
-		foreach ( (array) $this as $k => $v ) {
+		foreach ( $this as $k => $v ) {
 			$this[$k] = array(
 				'class' => get_class($v),
 				'things' => $v->things
@@ -352,7 +350,7 @@ class ModuleStack extends \ArrayObject
 
 	public function __wakeup()
 	{
-		foreach ( (array) $this as $k => $v ) {
+		foreach ( $this as $k => $v ) {
 			$class = $v['class'];
 
 			$this[$k] = new $class();

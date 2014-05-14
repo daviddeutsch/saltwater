@@ -24,7 +24,7 @@ class Module
 	protected $provide = array();
 
 	/**
-	 * @var int bitmask of thing registry
+	 * @var int bitmask of things passed to the registry
 	 */
 	public $registry = 0;
 
@@ -39,7 +39,7 @@ class Module
 
 		$this->registry |= S::$n->addThing('module.' . $name);
 
-		$this->registerThings();
+		$this->registerProvides();
 	}
 
 	private function ensureRequires()
@@ -51,25 +51,25 @@ class Module
 		}
 	}
 
-	private function registerThings()
+	private function registerProvides()
 	{
 		if ( empty($this->provide) ) return;
 
 		foreach ( $this->provide as $type => $content ) {
 			foreach ( $content as $thing ) {
-				$this->registerThing($type, $thing);
+				$this->registerProvide($type, $thing);
 			}
 		}
 	}
 
-	private function registerThing( $type, $thing )
+	private function registerProvide( $type, $thing )
 	{
 		$this->registry |= S::$n->addThing(
 			$type . '.' . U::CamelTodashed($thing)
 		);
 	}
 
-	public function hasThing( $bit )
+	public function has( $bit )
 	{
 		return ($this->registry & $bit) == $bit;
 	}
@@ -103,9 +103,14 @@ class Module
 		return class_exists($class) ? $class : false;
 	}
 
+	public function noContext()
+	{
+		return empty($this->provide['context']);
+	}
+
 	public function masterContext()
 	{
-		if ( empty($this->provide['context']) ) return false;
+		if ( $this->noContext() ) return false;
 
 		return U::CamelTodashed( $this->provide['context'][0] );
 	}
