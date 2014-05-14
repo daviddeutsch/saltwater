@@ -76,7 +76,7 @@ class ModuleStack extends \ArrayObject
 
 			$parent = S::$n->context->get($module->masterContext(), $parent);
 
-			if ( $name == $this->master ) break;
+			if ( $this->stack->isMaster($name) ) break;
 		}
 
 		return $parent;
