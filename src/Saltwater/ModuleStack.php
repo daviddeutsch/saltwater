@@ -166,33 +166,21 @@ class ModuleStack extends \ArrayObject
 	{
 		if ( empty($caller) ) return false;
 
-		$caller = $this->explodeCaller($caller, $provider);
+		$c = $this->explodeCaller($caller, $provider);
 
-		$bit = S::$n->bitThing($caller->thing);
+		$bit = S::$n->bitThing($c->thing);
 
 		foreach ( array_reverse((array) $this) as $k => $module ) {
-			if ( $this->bitInModule($module, $caller, $bit) ) return $k;
+			// A provider calling itself always gets a lower level provider
+			// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
+			if ( $c->is_provider === ($module->namespace == $c->namespace) ) {
+				return false;
+			}
+
+			if ( $module->has($bit) ) return $k;
 		}
 
 		return null;
-	}
-
-	/**
-	 * @param Thing\Module $module
-	 * @param object       $c
-	 * @param string       $bit
-	 *
-	 * @return bool
-	 */
-	private function bitInModule( $module, $c, $bit )
-	{
-		// A provider calling itself always gets a lower level provider
-		// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
-		if ( $c->is_provider === ($module->namespace == $c->namespace) ) {
-			return false;
-		}
-
-		return $module->has($bit);
 	}
 
 	/**
