@@ -25,7 +25,12 @@ class Utils
 	 */
 	public static function dashedToCamelCase( $string )
 	{
-		return self::CamelCaseSpaced( str_replace('-', ' ', $string) );
+		if ( strpos($string, '-') ) {
+			return self::CamelCaseSpaced( str_replace('-', ' ', $string) );
+		} else {
+			return strtoupper( substr($string, 0, 1) ) . substr($string, 1);
+		}
+
 	}
 
 	/**
@@ -73,9 +78,10 @@ class Utils
 	 */
 	public static function className()
 	{
-		$args = func_get_args();
-
-		array_walk($args, '\Saltwater\Utils::dashedToCamelCase');
+		$args = array();
+		foreach ( func_get_args() as $arg ) {
+			$args[] = self::dashedToCamelCase($arg);
+		}
 
 		return implode('\\', $args);
 	}
