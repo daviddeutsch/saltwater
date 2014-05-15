@@ -12,7 +12,7 @@ class TempStack extends \ArrayObject
 	/**
 	 * @var string
 	 */
-	private $master = '';
+	private $master = 'root';
 
 	public function __construct()
 	{
@@ -95,6 +95,8 @@ class TempStack extends \ArrayObject
 
 		if ( $master == ($this->count() - 1) ) return false;
 
-		return $this[$master+1];
+		$this->master = $this[$master+1];
+
+		return $this->master;
 	}
 }
