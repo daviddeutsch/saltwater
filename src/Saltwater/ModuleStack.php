@@ -54,7 +54,7 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * @param Thing\Module $class
+	 * @param string|Thing\Module $class
 	 *
 	 * @return Thing\Module
 	 */
