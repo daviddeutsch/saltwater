@@ -16,6 +16,9 @@
 		"daviddeutsch/redbean-adaptive": "dev-master",
 		"psr/log": "dev-master"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "4.1.*"
+	},
 	"autoload" : {
 		"psr-0" : {
 			"Saltwater\\" : "/src"
