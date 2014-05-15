@@ -245,7 +245,7 @@ class ModuleStack extends \ArrayObject
 
 		$return = array();
 		foreach ( $modules as $module ) {
-			if ( !$this[$module]->hasThing($bit) ) continue;
+			if ( !$this[$module]->has($bit) ) continue;
 
 			$return[] = $module;
 		}
@@ -258,7 +258,7 @@ class ModuleStack extends \ArrayObject
 		$modules = is_null($modules) ? array_keys((array) $this) : $modules;
 
 		foreach ( $modules as $module ) {
-			if ( $this[$module]->hasThing($bit) ) return $module;
+			if ( $this[$module]->has($bit) ) return $module;
 		}
 
 		return false;
