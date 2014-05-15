@@ -88,7 +88,7 @@ class Module
 
 		if ( !$class ) return false;
 
-		$class::setModule(self::$name);
+		$class::setModule($this::$name);
 
 		$class::setCaller($caller);
 
