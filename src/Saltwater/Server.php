@@ -26,13 +26,20 @@ class Server
 	{
 		self::start();
 
-		if ( $cache ) {
-			if ( self::loadCache($cache) ) return;
+		if ( empty($cache) ) {
+			self::addModules($modules);
+		} else {
+			self::initCached($modules, $cache);
 		}
+	}
+
+	private static function initCached( $modules, $cache )
+	{
+		if ( self::loadCache($cache) ) return;
 
 		self::addModules($modules);
 
-		if ( $cache ) self::$n->storeCache($cache);
+		self::$n->storeCache($cache);
 	}
 
 	/**
