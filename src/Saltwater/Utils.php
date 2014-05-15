@@ -104,13 +104,18 @@ class Utils
 	 */
 	public static function storeJSON( $path, $content )
 	{
-		if ( version_compare(phpversion(), '5.4.0', '<') ) {
+		if ( version_compare(phpversion(), '5.4.0', '>') ) {
+			return file_put_contents(
+				$path,
+				json_encode(
+					$content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+				)
+			);
+
+		} else {
 			return file_put_contents( $path, json_encode($content) );
 		}
 
-		return file_put_contents(
-			$path,
-			json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-		);
+
 	}
 }
