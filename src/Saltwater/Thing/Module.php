@@ -10,7 +10,9 @@ use Saltwater\Utils as U;
  */
 class Module
 {
-	public $namespace;
+	public static $name;
+
+	public static $namespace;
 
 	/**
 	 * @var array Associative Array of requirements that need to be in place
@@ -75,17 +77,18 @@ class Module
 	}
 
 	/**
-	 * @param string $module
 	 * @param string $type
 	 * @param string $caller
 	 *
 	 * @return \Saltwater\Thing\Provider
 	 */
-	public function provider( $module, $caller, $type )
+	public function provider( $caller, $type )
 	{
-		if ( !($class = $this->makeProvider($type)) ) return false;
+		$class = $this->makeProvider($type);
 
-		$class::setModule($module);
+		if ( !$class ) return false;
+
+		$class::setModule(self::name());
 
 		$class::setCaller($caller);
 

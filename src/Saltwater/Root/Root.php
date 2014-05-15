@@ -6,7 +6,9 @@ use Saltwater\Thing\Module;
 
 class Root extends Module
 {
-	public $namespace = 'Saltwater\Root';
+	public static $name = 'root';
+
+	public static $namespace = 'Saltwater\Root';
 
 	protected $provide = array(
 		'provider' => array(

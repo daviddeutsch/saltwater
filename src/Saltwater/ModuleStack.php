@@ -20,25 +20,23 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * Add module to stack and register its things
 	 *
-	 * @param string $class  Full Classname
-	 * @param bool   $master true if this is also the master module
+	 * @param Thing\Module $class  Full Classname
+	 * @param bool         $master true if this is also the master module
 	 *
 	 * @return bool|null
 	 */
 	public function appendModule( $class, $master=false )
 	{
-		$name = U::namespacedClassToDashed($class);
+		if ( isset($this[$class::$name]) ) return null;
 
-		if ( isset($this[$name]) ) return null;
-
-		if ( !($module = $this->registeredModule($class, $name)) ) {
+		if ( !($module = $this->registeredModule($class)) ) {
 			return false;
 		}
 
 		// Push late to preserve dependency order
-		$this[$name] = $module;
+		$this[$class::$name] = $module;
 
-		if ( $master ) $this->stack->setMaster($name);
+		if ( $master ) $this->stack->setMaster($class::$name);
 
 		return true;
 	}
@@ -56,17 +54,17 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * @param string $class
+	 * @param Thing\Module $class
 	 *
 	 * @return Thing\Module
 	 */
-	private function registeredModule( $class, $name )
+	private function registeredModule( $class )
 	{
 		if ( !class_exists($class) ) return false;
 
 		$module = $this->moduleInstance($class);
 
-		$module->register($name);
+		$module->register($class::$name);
 
 		return $module;
 	}
@@ -113,10 +111,8 @@ class ModuleStack extends \ArrayObject
 		// Depending on the caller, reset the module stack
 		$this->stack->setMaster($caller);
 
-		foreach ( $this->stack->modulePrecedence() as $name ) {
-			$return = $this->providerFromModule(
-				$this[$name], $name, $bit, $caller, $type
-			);
+		foreach ( $this->precedenceList() as $module ) {
+			$return = $this->providerFromModule($module, $bit, $caller, $type);
 
 			if ( $return ) return $return;
 		}
@@ -133,11 +129,11 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return bool
 	 */
-	private function providerFromModule( $module, $name, $bit, $caller, $type )
+	private function providerFromModule( $module, $bit, $caller, $type )
 	{
 		if ( !$module->has($bit) ) return false;
 
-		return $module->provider($name, $caller, $type);
+		return $module->provider($caller, $type);
 	}
 
 	/**
@@ -164,7 +160,7 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function findModule( $caller, $provider )
 	{
-		if ( empty($caller) ) return false;
+		if ( empty($caller) ) return $this->stack->getMaster();
 
 		$c = $this->explodeCaller($caller, $provider);
 
@@ -179,7 +175,7 @@ class ModuleStack extends \ArrayObject
 			// A provider calling itself always gets a lower level provider
 			// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
 			if ( $c->is_provider === ($module->namespace == $c->namespace) ) {
-				return false;
+				continue;
 			}
 
 			if ( $module->has($bit) ) return $k;
@@ -275,6 +271,16 @@ class ModuleStack extends \ArrayObject
 		} else {
 			return array_keys( array_reverse((array) $this) );
 		}
+	}
+
+	private function precedenceList()
+	{
+		$return = array();
+		foreach ( $this->stack->modulePrecedence() as $name ) {
+			$return[] = $this[$name];
+		}
+
+		return $return;
 	}
 
 	public function __sleep()

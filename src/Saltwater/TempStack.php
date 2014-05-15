@@ -36,6 +36,11 @@ class TempStack extends \ArrayObject
 		return $name == $this->root;
 	}
 
+	public function getRoot()
+	{
+		return $this->root;
+	}
+
 	/**
 	 * Set the master module by name
 	 *
@@ -53,6 +58,11 @@ class TempStack extends \ArrayObject
 	public function isMaster( $name )
 	{
 		return $name == $this->master;
+	}
+
+	public function getMaster()
+	{
+		return $this->master;
 	}
 
 	/**
