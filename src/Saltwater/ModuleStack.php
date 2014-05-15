@@ -12,11 +12,6 @@ class ModuleStack extends \ArrayObject
 	 */
 	private $stack;
 
-	/**
-	 * @var Thing\Module[]
-	 */
-	private $storage;
-
 	public function __construct()
 	{
 		$this->stack = new TempStack;
@@ -95,7 +90,7 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function masterContext( $parent=null )
 	{
-		foreach ( $this->storage as $name => $module ) {
+		foreach ( (array) $this as $name => $module ) {
 			if ( $module->noContext() ) continue;
 
 			$parent = S::$n->context->get($module->masterContext(), $parent);
@@ -180,7 +175,7 @@ class ModuleStack extends \ArrayObject
 	{
 		$bit = S::$n->bitThing($c->thing);
 
-		foreach ( array_reverse($this->storage) as $k => $module ) {
+		foreach ( array_reverse((array) $this) as $k => $module ) {
 			// A provider calling itself always gets a lower level provider
 			// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
 			if ( $c->is_provider === ($module->namespace == $c->namespace) ) {
@@ -250,7 +245,7 @@ class ModuleStack extends \ArrayObject
 
 	public function getThingModules( $bit, $modules=null )
 	{
-		$modules = is_null($modules) ? array_keys($this->storage) : $modules;
+		$modules = is_null($modules) ? array_keys((array) $this) : $modules;
 
 		$return = array();
 		foreach ( $modules as $module ) {
@@ -264,7 +259,7 @@ class ModuleStack extends \ArrayObject
 
 	public function getThingModule( $bit, $modules=null )
 	{
-		$modules = is_null($modules) ? array_keys($this->storage) : $modules;
+		$modules = is_null($modules) ? array_keys((array) $this) : $modules;
 
 		foreach ( $modules as $module ) {
 			if ( $this[$module]->hasThing($bit) ) return $module;
@@ -278,13 +273,13 @@ class ModuleStack extends \ArrayObject
 		if ( $stack_precedence ) {
 			return $this->stack->modulePrecedence();
 		} else {
-			return array_keys( array_reverse($this->storage) );
+			return array_keys( array_reverse((array) $this) );
 		}
 	}
 
 	public function __sleep()
 	{
-		foreach ( $this->storage as $k => $v ) {
+		foreach ( (array) $this as $k => $v ) {
 			$this[$k] = array(
 				'class' => get_class($v),
 				'registry' => $v->registry
@@ -294,7 +289,7 @@ class ModuleStack extends \ArrayObject
 
 	public function __wakeup()
 	{
-		foreach ( $this->storage as $k => $v ) {
+		foreach ( (array) $this as $k => $v ) {
 			$class = $v['class'];
 
 			$this[$k] = new $class;

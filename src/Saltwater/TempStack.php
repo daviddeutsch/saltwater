@@ -14,10 +14,10 @@ class TempStack extends \ArrayObject
 	 */
 	private $master = '';
 
-	/**
-	 * @var string[]
-	 */
-	private $storage;
+	public function __construct()
+	{
+		$this[] = $this->root;
+	}
 
 	/**
 	 * Set the root module by name
@@ -62,9 +62,7 @@ class TempStack extends \ArrayObject
 	 */
 	private function pushStack( $name )
 	{
-		if ( !$this->count() ) $this[] = $this->root;
-
-		if ( in_array($name, $this->storage) ) return;
+		if ( in_array($name, (array) $this) ) return;
 
 		$this[] = $name;
 	}
@@ -72,7 +70,7 @@ class TempStack extends \ArrayObject
 	public function modulePrecedence()
 	{
 		$return = array();
-		foreach ( $this->storage as $module ) {
+		foreach ( (array) $this as $module ) {
 			array_unshift($return, $module);
 
 			if ( $module == $this->master ) break;
@@ -83,7 +81,7 @@ class TempStack extends \ArrayObject
 
 	public function advanceMaster()
 	{
-		$master = array_search($this->master, $this->storage);
+		$master = array_search($this->master, (array) $this);
 
 		if ( $master == ($this->count() - 1) ) return false;
 

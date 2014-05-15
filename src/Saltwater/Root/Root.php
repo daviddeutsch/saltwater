@@ -8,14 +8,12 @@ class Root extends Module
 {
 	public $namespace = 'Saltwater\Root';
 
-	protected $providers = array(
-		'entity', 'context', 'service',
-		'db', 'log', 'route', 'response'
+	protected $provide = array(
+		'provider' => array(
+			'entity', 'context', 'service', 'db', 'log', 'route', 'response'
+		),
+		'context' => array('root'),
+		'service' => array('rest', 'info'),
+		'entity' => array('log')
 	);
-
-	protected $contexts = array('root');
-
-	protected $services = array('rest', 'info');
-
-	protected $entities = array('log');
 }
