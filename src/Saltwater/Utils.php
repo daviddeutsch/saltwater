@@ -25,12 +25,7 @@ class Utils
 	 */
 	public static function dashedToCamelCase( $string )
 	{
-		if ( strpos($string, '-') ) {
-			return self::CamelCaseSpaced( str_replace('-', ' ', $string) );
-		} else {
-			return strtoupper( substr($string, 0, 1) ) . substr($string, 1);
-		}
-
+		return self::CamelCaseSpaced( str_replace('-', ' ', $string) );
 	}
 
 	/**
