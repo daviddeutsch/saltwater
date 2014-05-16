@@ -123,7 +123,7 @@ class Utils
 	 */
 	public static function storeJSON( $path, $content )
 	{
-		if ( S::$gt54 ) {
+		if ( S::$gt['54'] ) {
 			return file_put_contents(
 				$path,
 				json_encode(
