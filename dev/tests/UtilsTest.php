@@ -102,6 +102,21 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
+	public function testClassExplode()
+	{
+		$name = 'Saltwater\Thing\Module';
+
+		$this->assertEquals(
+			array('Saltwater', 'Thing', 'Module'),
+			U::explodeClass($name)
+		);
+
+		$this->assertEquals(
+			array('Saltwater', 'Thing', 'Module'),
+			U::explodeClass(new $name)
+		);
+	}
+
 	public function testJSON()
 	{
 		$path = __DIR__ . '/test.json';
