@@ -188,7 +188,7 @@ class Navigator
 	private function lastCaller()
 	{
 		// Let me tell you about my boat
-		if ( version_compare(phpversion(), '5.4.0', '>') ) {
+		if ( S::$gt['54'] ) {
 			$trace = debug_backtrace(2, 22);
 		} else {
 			$trace = debug_backtrace(false);

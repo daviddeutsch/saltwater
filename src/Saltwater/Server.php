@@ -14,6 +14,8 @@ class Server
 	 */
 	public static $start;
 
+	public static $gt = array();
+
 	/**
 	 * Kick off the server with a set of modules.
 	 *
@@ -25,6 +27,9 @@ class Server
 	public static function init( $modules=array(), $cache=null )
 	{
 		self::start();
+
+		self::$gt['36'] = version_compare(phpversion(), '5.3.6', '>=');
+		self::$gt['54'] = version_compare(phpversion(), '5.4.0', '>=');
 
 		if ( empty($cache) ) {
 			self::addModules($modules);

@@ -2,6 +2,8 @@
 
 namespace Saltwater;
 
+use Saltwater\Server as S;
+
 class Utils
 {
 	/**
@@ -121,7 +123,7 @@ class Utils
 	 */
 	public static function storeJSON( $path, $content )
 	{
-		if ( version_compare(phpversion(), '5.4.0', '>') ) {
+		if ( S::$gt54 ) {
 			return file_put_contents(
 				$path,
 				json_encode(
