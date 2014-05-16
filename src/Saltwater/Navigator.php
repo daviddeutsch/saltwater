@@ -188,7 +188,12 @@ class Navigator
 	private function lastCaller()
 	{
 		// Let me tell you about my boat
-		$trace = debug_backtrace(2, 22);
+		if ( version_compare(phpversion(), '5.4.0', '>') ) {
+			$trace = debug_backtrace(2, 22);
+		} else {
+			$trace = debug_backtrace(false);
+		}
+
 
 		$depth = count($trace);
 
