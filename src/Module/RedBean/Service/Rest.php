@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Root\Service;
+namespace Saltwater\RedBean\Service;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;

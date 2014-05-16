@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Root\Provider;
+namespace Saltwater\App\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Thing\Provider;

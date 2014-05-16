@@ -11,17 +11,17 @@ use Saltwater\Server as S;
  *
  * List of known providers:
  *
- * @property \Saltwater\Root\Provider\Context $context
- * @property \Saltwater\Root\Provider\Entity  $entity
- * @property \Saltwater\Root\Provider\Service $service
+ * @property \Saltwater\Root\Provider\Context    $context
+ * @property \Saltwater\RedBean\Provider\Entity  $entity
+ * @property \Saltwater\Root\Provider\Service    $service
  *
  * @property \RedBean_Instance $db
  *
- * @property \Saltwater\Root\Provider\Log      $log
- * @property \Saltwater\Root\Provider\Response $response
- * @property \Saltwater\Root\Provider\Route    $route
+ * @property \Saltwater\RedBean\Provider\Log  $log
+ * @property \Saltwater\App\Provider\Response $response
+ * @property \Saltwater\App\Provider\Route    $route
  *
- * @property \Saltwater\Common\Config $config
+ * @property \Saltwater\App\Common\Config $config
  */
 class Navigator
 {

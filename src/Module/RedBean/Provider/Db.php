@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Root\Provider;
+namespace Saltwater\RedBean\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Thing\Provider;

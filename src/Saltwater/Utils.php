@@ -130,11 +130,8 @@ class Utils
 					$content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
 				)
 			);
-
 		} else {
 			return file_put_contents( $path, json_encode($content) );
 		}
-
-
 	}
 }

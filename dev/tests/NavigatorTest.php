@@ -65,8 +65,8 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$this->assertEquals(
-			'Saltwater\Root\Provider\Entity',
-			get_class(S::$n->entity())
+			'Saltwater\Root\Provider\Service',
+			get_class(S::$n->service())
 		);
 
 		$path = __DIR__ . '/cache/cache.cache';

@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Root\Provider;
+namespace Saltwater\RedBean\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
@@ -44,7 +44,7 @@ class Entity extends Provider
 		if ( class_exists($class) ) return $class;
 
 		if ( $module->has($bit) ) {
-			return '\Saltwater\Thing\Entity';
+			return '\Saltwater\RedBean\Thing\Entity';
 		}
 
 		return null;

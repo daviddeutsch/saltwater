@@ -1,10 +1,10 @@
 <?php
 
-namespace Saltwater\Root\Provider;
+namespace Saltwater\App\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
-use Saltwater\Common\Route as AbstractRoute;
+use Saltwater\App\Common\Route as AbstractRoute;
 
 class Route extends AbstractRoute
 {

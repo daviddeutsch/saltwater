@@ -20,8 +20,11 @@
 		"phpunit/phpunit": "4.1.*"
 	},
 	"autoload" : {
-		"psr-0" : {
-			"Saltwater\\" : "/src"
+		"psr-4" : {
+			"Saltwater\\" : "/src/Saltwater",
+			"Saltwater\Root\\" : "/src/Module/Root",
+			"Saltwater\App\\" : "/src/Module/App",
+			"Saltwater\RedBean\\" : "/src/Module/RedBean"
 		}
 	}
 }
