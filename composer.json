@@ -22,9 +22,9 @@
 	"autoload" : {
 		"psr-4" : {
 			"Saltwater\\" : "/src/Saltwater",
-			"Saltwater\Root\\" : "/src/Module/Root",
-			"Saltwater\App\\" : "/src/Module/App",
-			"Saltwater\RedBean\\" : "/src/Module/RedBean"
+			"Saltwater\\Root\\" : "/src/Module/Root",
+			"Saltwater\\App\\" : "/src/Module/App",
+			"Saltwater\\RedBean\\" : "/src/Module/RedBean"
 		}
 	}
 }
