@@ -71,7 +71,7 @@ class Navigator
 
 		if ( !is_dir($info['dirname']) ) mkdir($info['dirname'], 0744, true);
 
-		file_put_contents( $path, serialize($this) );
+		return file_put_contents( $path, serialize($this) );
 	}
 
 	/**
