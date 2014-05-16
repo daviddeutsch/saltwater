@@ -36,7 +36,7 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertTrue( S::$n->addModule($class, true) );
 
-		$this->assertNull( S::$n->addModule($class) );
+		$this->assertNull( S::addModule($class) );
 
 		$module = S::$n->getModule('root');
 
@@ -77,11 +77,10 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 		S::$n->loadCache($path);
 
-		$this->assertEquals( $copy, S::$n );
+		$this->assertEquals($copy, S::$n);
 
 		unlink($path);
 
 		rmdir(__DIR__.'/cache');
 	}
-
 }
