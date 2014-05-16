@@ -14,11 +14,11 @@ class Db extends Provider
 
 	protected static function makeDB()
 	{
+		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
+
 		$cfg = S::$n->config->database;
 
 		if ( !isset($cfg->type) ) $cfg->type = 'mysql';
-
-		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
 
 		self::setupDB($cfg);
 

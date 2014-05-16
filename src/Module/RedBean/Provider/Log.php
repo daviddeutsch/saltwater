@@ -3,7 +3,7 @@
 namespace Saltwater\RedBean\Provider;
 
 use Saltwater\Server as S;
-use Saltwater\Common\Log as AbstractLog;
+use Saltwater\App\Common\Log as AbstractLog;
 
 class Log extends AbstractLog
 {

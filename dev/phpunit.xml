@@ -4,5 +4,11 @@
 		<testsuite name="Core Saltwater">
 			<directory>./suites/core</directory>
 		</testsuite>
+		<testsuite name="Root Module">
+			<directory>./suites/root</directory>
+		</testsuite>
+		<testsuite name="RedBean Module">
+			<directory>./suites/redbean</directory>
+		</testsuite>
 	</testsuites>
 </phpunit>
