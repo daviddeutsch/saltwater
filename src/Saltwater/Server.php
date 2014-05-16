@@ -124,4 +124,11 @@ class Server
 	{
 		header("HTTP/1.1 " . $code . " " . $message); exit;
 	}
+
+	public static function destroy()
+	{
+		self::$n = null;
+
+		self::$start = null;
+	}
 }

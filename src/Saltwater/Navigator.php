@@ -147,8 +147,10 @@ class Navigator
 	 */
 	public function getContextModule( $name )
 	{
-		return $this->modules->getThingModule(
-			S::$n->bitThing('context.' . $name)
+		return $this->getModule(
+			$this->modules->getThingModule(
+				S::$n->bitThing('context.' . $name)
+			)
 		);
 	}
 

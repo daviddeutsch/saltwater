@@ -18,7 +18,7 @@ class Service extends Provider
 	 */
 	public function get( $name, $context )
 	{
-		$class = $this->getServiceClass( $context, $name );
+		$class = $this->getServiceClass($context, $name);
 
 		if ( class_exists($class) ) return new $class($context);
 
@@ -40,21 +40,18 @@ class Service extends Provider
 	 */
 	private function getServiceClass( $context, $service )
 	{
-		$class = $context->namespace
-			. '\Service\\'
-			. U::dashedToCamelCase($service);
+		$class = U::className($context->namespace, 'service', $service);
 
 		if ( class_exists($class) ) return $class;
 
-		$class = 'Saltwater\Root\Service\\'
-			. U::dashedToCamelCase($service);
+		$class = U::className('saltwater', 'root', 'service', $service);
 
 		if ( class_exists($class) ) return $class;
 
-		$class = $context->namespace . '\Service\Rest';
+		$class = U::className($context->namespace, 'service', 'rest');
 
 		if ( class_exists($class) ) return $class;
 
-		return 'Saltwater\Root\Service\Rest';
+		return U::className('saltwater', 'root', 'service', 'rest');
 	}
 }

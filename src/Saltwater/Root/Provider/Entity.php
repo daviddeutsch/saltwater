@@ -74,8 +74,6 @@ class Entity extends Provider
 	 */
 	private function fromModule( $name, $module )
 	{
-		$name = U::snakeToCamelCase($name);
-
-		return $module->namespace . '\Entity\\' . U::snakeToCamelCase($name);
+		return U::className($module::$namespace, 'entity', $name);
 	}
 }

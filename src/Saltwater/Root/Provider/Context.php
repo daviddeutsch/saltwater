@@ -22,9 +22,7 @@ class Context extends Provider
 
 		if ( empty($module) ) return null;
 
-		$class = $module->namespace
-			. '\Context\\'
-			. U::dashedToCamelCase($name);
+		$class = U::className($module::$namespace, 'context', $name);
 
 		if ( !class_exists($class) ) return null;
 

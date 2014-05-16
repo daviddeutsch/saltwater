@@ -27,6 +27,8 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function appendModule( $class, $master=false )
 	{
+		if ( !class_exists($class) ) return false;
+
 		if ( isset($this[$class::$name]) ) return null;
 
 		if ( !($module = $this->registeredModule($class)) ) {
@@ -60,8 +62,6 @@ class ModuleStack extends \ArrayObject
 	 */
 	private function registeredModule( $class )
 	{
-		if ( !class_exists($class) ) return false;
-
 		$module = $this->moduleInstance($class);
 
 		$module->register($class::$name);
@@ -174,7 +174,7 @@ class ModuleStack extends \ArrayObject
 		foreach ( array_reverse((array) $this) as $k => $module ) {
 			// A provider calling itself always gets a lower level provider
 			// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
-			if ( $c->is_provider === ($module->namespace == $c->namespace) ) {
+			if ( $c->is_provider === ($module::$namespace == $c->namespace) ) {
 				continue;
 			}
 

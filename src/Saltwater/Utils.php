@@ -75,10 +75,27 @@ class Utils
 	{
 		$args = array();
 		foreach ( func_get_args() as $arg ) {
-			$args[] = self::dashedToCamelCase($arg);
+			if ( strpos($arg, '_') ) {
+				$args[] = self::snakeToCamelCase($arg);
+			} else {
+				$args[] = self::dashedToCamelCase($arg);
+			}
+
 		}
 
 		return implode('\\', $args);
+	}
+
+	/**
+	 * @param string|object $input
+	 *
+	 * @return array
+	 */
+	public static function explodeClass( $input )
+	{
+		if ( is_object($input) ) $input = get_class($input);
+
+		return explode('\\', $input );
 	}
 
 	/**

@@ -102,7 +102,7 @@ class Module
 	 */
 	private function makeProvider( $type )
 	{
-		$class = U::className($this->namespace, 'provider', $type);
+		$class = U::className($this::$namespace, 'provider', $type);
 
 		return class_exists($class) ? $class : false;
 	}

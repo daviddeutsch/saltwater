@@ -3,13 +3,14 @@
 namespace Saltwater\Root\Service;
 
 use Saltwater\Server as S;
+use Saltwater\Utils as U;
 use Saltwater\Thing\Service;
 
 class Rest extends Service
 {
 	public function is_callable( $method )
 	{
-		$class = explode('\\', get_class($this) );
+		$class = U::explodeClass($this);
 
 		return strpos( $method, array_pop($class) ) !== false;
 	}

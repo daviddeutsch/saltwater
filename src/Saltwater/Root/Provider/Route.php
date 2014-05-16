@@ -25,7 +25,7 @@ class Route extends AbstractRoute
 	{
 		$module = S::$n->getModule(self::$module);
 
-		$class = $module->namespace . '\Provider\Route';
+		$class = U::className($module::$namespace, 'provider', 'route');
 
 		return new $class;
 	}
