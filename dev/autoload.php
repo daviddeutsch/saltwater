@@ -20,4 +20,6 @@ function sw_autoloader($class) {
 	return false;
 }
 
+include_once __DIR__ . '/../vendor/autoload.php';
+
 spl_autoload_register('sw_autoloader');
