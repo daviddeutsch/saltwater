@@ -10,6 +10,10 @@ class RedBean extends Module
 
 	public static $namespace = 'Saltwater\RedBean';
 
+	protected $require = array(
+		'module' => array('Saltwater\Root\Root')
+	);
+
 	protected $provide = array(
 		'provider' => array('entity', 'db', 'log'),
 		'service' => array('rest'),
