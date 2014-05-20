@@ -43,14 +43,14 @@ class Service
 	 *
 	 * @return bool
 	 */
-	public function is_callable( $method )
+	public function isCallable( $method )
 	{
 		return method_exists($this, $method);
 	}
 
 	public function prepareCall( $call )
 	{
-		return $this->is_callable($call->function);
+		return $this->isCallable($call->function);
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Service
 	 */
 	public function call( $call, $data=null )
 	{
-		if ( !$this->is_callable($call->function) ) return null;
+		if ( !$this->isCallable($call->function) ) return null;
 
 		return $this->executeCall($call, $call->function, $data);
 	}

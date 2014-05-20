@@ -8,7 +8,7 @@ use Saltwater\Thing\Service;
 
 class Rest extends Service
 {
-	public function is_callable( $method )
+	public function isCallable( $method )
 	{
 		$class = U::explodeClass($this);
 
@@ -17,7 +17,7 @@ class Rest extends Service
 
 	public function call( $call, $data=null )
 	{
-		if ( parent::is_callable($call->function) ) {
+		if ( parent::isCallable($call->function) ) {
 			return parent::call($call, $data);
 		}
 
