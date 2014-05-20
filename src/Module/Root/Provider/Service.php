@@ -52,6 +52,6 @@ class Service extends Provider
 
 		if ( class_exists($class) ) return $class;
 
-		return U::className('saltwater', 'root', 'service', 'rest');
+		return 'Saltwater\RedBean\Service\Rest';
 	}
 }
