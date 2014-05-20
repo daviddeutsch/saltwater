@@ -49,7 +49,7 @@ class Module
 		if ( empty($this->require['module']) ) return;
 
 		foreach ( $this->require['module'] as $module ) {
-			S::$n->addModule($module);
+			S::$n->addModule($module, true);
 		}
 	}
 
