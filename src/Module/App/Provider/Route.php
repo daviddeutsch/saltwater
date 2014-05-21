@@ -86,7 +86,7 @@ class Route extends AbstractRoute
 
 		for ( $i=0; $i<$length; ++$i ) {
 			$result = $this->chain(
-				$service, $this->chain[$i], $input, $result, ($i == $length)
+				$service, $this->chain[$i], $input, $result, ($i == $length-1)
 			);
 		}
 

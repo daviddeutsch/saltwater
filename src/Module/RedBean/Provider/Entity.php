@@ -38,6 +38,8 @@ class Entity extends Provider
 		foreach ( array($injected, self::$caller, self::$module) as $name ) {
 			$module = S::$n->getModule($name);
 
+			if ( !is_object($module) ) continue;
+
 			if ( !$module->has($bit) ) continue;
 
 			$class = $this->fromModule($name, $module);
