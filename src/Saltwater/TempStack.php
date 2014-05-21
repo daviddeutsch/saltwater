@@ -45,14 +45,20 @@ class TempStack extends \ArrayObject
 	 * Set the master module by name
 	 *
 	 * @param string $name
+	 *
+	 * @return string previous master
 	 */
 	public function setMaster( $name )
 	{
-		if ( empty($name) || ($name == $this->master) ) return;
+		if ( empty($name) || ($name == $this->master) ) return $this->master;
+
+		$previous_master = $this->master;
 
 		$this->master = $name;
 
 		$this->pushStack($name);
+
+		return $previous_master;
 	}
 
 	public function isMaster( $name )

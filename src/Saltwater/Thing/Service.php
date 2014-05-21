@@ -19,9 +19,17 @@ class Service
 	 */
 	protected $module = null;
 
+	/**
+	 * @param \Saltwater\Thing\Context|null $context
+	 * @param \Saltwater\Thing\Module|null $module
+	 */
 	public function __construct( $context=null, $module=null )
 	{
 		$this->setContext($context);
+
+		if ( is_null($module) && !empty($context->module) ) {
+			$module = $context->module;
+		}
 
 		$this->setModule($module);
 	}

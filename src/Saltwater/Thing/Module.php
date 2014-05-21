@@ -121,11 +121,11 @@ class Module
 
 	public function getName()
 	{
-		return self::$name;
+		return $this::$name;
 	}
 
 	public function getNamespace()
 	{
-		return self::$namespace;
+		return $this::$namespace;
 	}
 }
