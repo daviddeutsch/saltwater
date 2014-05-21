@@ -131,6 +131,14 @@ class Navigator
 	}
 
 	/**
+	 * @see ModuleStack::moduleByThing()
+	 */
+	public function moduleByThing( $name )
+	{
+		return $this->modules->moduleByThing($name);
+	}
+
+	/**
 	 * @see ModuleStack::masterContext()
 	 */
 	public function masterContext( $parent=null )
@@ -193,7 +201,6 @@ class Navigator
 		} else {
 			$trace = debug_backtrace(false);
 		}
-
 
 		$depth = count($trace);
 
