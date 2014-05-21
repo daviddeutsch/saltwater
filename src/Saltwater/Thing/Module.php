@@ -118,4 +118,14 @@ class Module
 
 		return U::CamelTodashed( $this->provide['context'][0] );
 	}
+
+	public function getName()
+	{
+		return self::$name;
+	}
+
+	public function getNamespace()
+	{
+		return self::$namespace;
+	}
 }

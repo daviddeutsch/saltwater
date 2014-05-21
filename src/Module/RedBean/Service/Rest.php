@@ -47,6 +47,6 @@ class Rest extends Service
 
 	protected function restHandler()
 	{
-		return new \RedBean_Plugin_BeanCan(S::$n->db);
+		return new \RedBean_Plugin_BeanCan(S::$n->db($this->module->getName()));
 	}
 }
