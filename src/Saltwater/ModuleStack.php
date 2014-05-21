@@ -109,13 +109,19 @@ class ModuleStack extends \ArrayObject
 	public function provider( $bit, $caller, $type)
 	{
 		// Depending on the caller, reset the module stack
-		$this->stack->setMaster($caller);
+		$previous_master = $this->stack->setMaster($caller);
 
 		foreach ( $this->precedenceList() as $module ) {
 			$return = $this->providerFromModule($module, $bit, $caller, $type);
 
-			if ( $return ) return $return;
+			if ( $return ) {
+				$this->stack->setMaster($previous_master);
+
+				return $return;
+			}
 		}
+
+		$this->stack->setMaster($previous_master);
 
 		return $this->tryModuleFallback($bit, $type);
 	}
@@ -234,8 +240,8 @@ class ModuleStack extends \ArrayObject
 		$call = $first ? 'getThingModule' : 'getThingModules';
 
 		return $this->$call(
-			$this->getPrecedence($precedence),
-			S::$n->bitThing($thing)
+			S::$n->bitThing($thing),
+			$this->getPrecedence($precedence)
 		);
 	}
 
