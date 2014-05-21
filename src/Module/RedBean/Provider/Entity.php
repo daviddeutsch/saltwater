@@ -31,39 +31,25 @@ class Entity extends Provider
 	 */
 	private function formatModel( $name )
 	{
-		$module = $this->getCallerModule();
-
 		$bit = S::$n->bitThing('entity.' . $name);
 
-		if ( !$module->has($bit) ) {
-			$module = $this->getOwnModule();
-		}
+		$injected = S::$n->moduleByThing('entity.' . $name);
 
-		$class = $this->fromModule($name, $module);
+		foreach ( array($injected, self::$caller, self::$module) as $name ) {
+			$module = S::$n->getModule($name);
 
-		if ( class_exists($class) ) return $class;
+			if ( !$module->has($bit) ) continue;
 
-		if ( $module->has($bit) ) {
-			return '\Saltwater\RedBean\Thing\Entity';
+			$class = $this->fromModule($name, $module);
+
+			if ( class_exists($class) ) {
+				return $class;
+			} else {
+				return 'Saltwater\RedBean\Thing\Entity';
+			}
 		}
 
 		return null;
-	}
-
-	/**
-	 * @return \Saltwater\Thing\Module
-	 */
-	private function getCallerModule()
-	{
-		return S::$n->getModule(self::$caller);
-	}
-
-	/**
-	 * @return \Saltwater\Thing\Module
-	 */
-	private function getOwnModule()
-	{
-		return S::$n->getModule(self::$module);
 	}
 
 	/**

@@ -28,7 +28,7 @@ class Service
 		$this->setContext($context);
 
 		if ( is_null($module) && !empty($context->module) ) {
-			$module = $context->module;
+			$module = $context->module->getName();
 		}
 
 		$this->setModule($module);
