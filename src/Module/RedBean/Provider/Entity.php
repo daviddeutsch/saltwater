@@ -33,10 +33,11 @@ class Entity extends Provider
 	{
 		$bit = S::$n->bitThing('entity.' . $name);
 
+		// TODO: This is a bit wasteful since self::$caller is very likely to work
 		$injected = S::$n->moduleByThing('entity.' . $name);
 
-		foreach ( array($injected, self::$caller, self::$module) as $name ) {
-			$module = S::$n->getModule($name);
+		foreach ( array(self::$caller, $injected, self::$module) as $m ) {
+			$module = S::$n->getModule($m);
 
 			if ( !is_object($module) ) continue;
 
