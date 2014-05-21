@@ -16,7 +16,7 @@ class Db extends Provider
 	{
 		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
 
-		$cfg = S::$n->config->database;
+		$cfg = S::$n->config(self::$caller)->database;
 
 		if ( !isset($cfg->type) ) $cfg->type = 'mysql';
 
