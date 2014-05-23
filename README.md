@@ -10,3 +10,7 @@ saltwater
 You should not necessarily drink this.
 
 License: GPLv3 or later
+
+Logo: CC BY-NC-SA 3.0
+
+Crystal designed by [Yo Szczepanska](http://www.thenounproject.com/joszczepanska) from the Noun Project
