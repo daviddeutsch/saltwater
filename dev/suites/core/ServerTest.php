@@ -42,7 +42,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$this->assertEquals(
-			'\Saltwater\RedBean\Thing\Entity',
+			'Saltwater\RedBean\Thing\Entity',
 			S::entity('log')
 		);
 	}
