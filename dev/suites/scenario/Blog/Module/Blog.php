@@ -35,15 +35,23 @@ class Blog extends Module
 
 	protected $provide = array(
 		/**
-		 * We define 'article' and 'comment' as entities so that the RedBean
-		 * Module can load them properly.
-		 *
+		 * The RedBean DbProvider requires a ConfigProvider to tell its the
+		 * database details, so we make a dummy one for this test
+		 */
+		'provider' => array(
+			'config'
+		),
+		/**
 		 * Defining them as services tells the router that they can be accessed
 		 * through /article[/:id] and /comment[/:id]
 		 */
 		'service' => array(
 			'article', 'comment'
 		),
+		/**
+		 * We define 'article' and 'comment' as entities so that the RedBean
+		 * Module can load them properly.
+		 */
 		'entity' => array(
 			'article', 'comment',
 			'article-comment', 'comment-comment'

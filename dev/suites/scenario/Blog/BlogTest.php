@@ -9,30 +9,57 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		S::init('Saltwater\Blog');
 	}
 
+	public static function tearDownAfterClass()
+	{
+		S::$n->db->nuke();
+	}
+
 	public function setUp()
 	{
 		S::destroy();
 	}
 
-	public function testServiceProvider()
+	public function testArticlePost()
 	{
-		S::init('Saltwater\Root\Root');
-
-		S::$n->addModule('Saltwater\RedBean\RedBean', true);
-
-		$this->assertEquals(
-			'Saltwater\RedBean\Provider\Entity',
-			get_class(S::$n->entity)
+		// POST /article
+		$this->request(
+			'post',
+			'/article',
+			array(
+				'title' => 'My first Blog Post',
+				'content' => 'Hey there, first time posting'
+			)
 		);
+	}
 
-		$this->assertEquals(
-			'Saltwater\RedBean\Provider\Log',
-			get_class(S::$n->log)
-		);
+	private function request( $method, $path, $input=null )
+	{
+		$_SERVER['REQUEST_METHOD'] = $method;
 
-		/*$this->assertEquals(
-			'\RedBean_Instance',
-			get_class(S::$n->db)
-		);*/
+		if ( $input ) {
+			file_put_contents("php://input", $this->convertInputToJSON($input));
+		}
+
+		S::$n->route->go();
+	}
+
+	private function convertInputToJSON( $input )
+	{
+		return json_encode( $this->recursiveConvertArrayToObject($input) );
+	}
+
+	private function recursiveConvertArrayToObject( $input )
+	{
+		$output = new stdClass();
+
+		if ( is_array($input) ) {
+			foreach ( $input as $k => $v ) {
+				$output->$k = $this->recursiveConvertArrayToObject($v);
+			}
+		} else {
+			$output = $input;
+		}
+
+		return $output;
 	}
 }

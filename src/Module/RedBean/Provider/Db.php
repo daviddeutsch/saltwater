@@ -44,9 +44,15 @@ class Db extends Provider
 	{
 		if ( isset(self::$r->toolboxes[$cfg->name]) ) return;
 
+		if ( isset($cfg->dsn) ) {
+			$dsn = $cfg->dsn;
+		} else {
+			$dsn = $cfg->type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name;
+		}
+
 		self::$r->addDatabase(
 			$cfg->name,
-			$cfg->type . ':host=' . $cfg->host . ';' . 'dbname=' . $cfg->name,
+			$dsn,
 			$cfg->user,
 			$cfg->password
 		);
