@@ -14,6 +14,7 @@ matrix:
 before_script:
   - composer self-update
   - composer install
+  - touch /tmp/oodb.db
 
 script:
   - phpunit -c dev/phpunit.xml --coverage-clover=coverage.clover
