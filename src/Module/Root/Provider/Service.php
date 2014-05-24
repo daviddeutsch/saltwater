@@ -22,15 +22,6 @@ class Service extends Provider
 
 		if ( class_exists($class) ) return new $class($context);
 
-		if ( in_array($name, $context->services) ) {
-			return S::$n->service->get('rest', $context);
-		} elseif ( !empty($context->parent) ) {
-			return S::$n->service->get(
-				U::namespacedClassToDashed($class),
-				$context->parent
-			);
-		}
-
 		return null;
 	}
 
@@ -40,18 +31,24 @@ class Service extends Provider
 	 */
 	private function getServiceClass( $context, $service )
 	{
+		// See whether the current context namespace has this service
 		$class = U::className($context->namespace, 'service', $service);
 
 		if ( class_exists($class) ) return $class;
 
+		// Next up, try for a root service
 		$class = U::className('saltwater', 'root', 'service', $service);
 
 		if ( class_exists($class) ) return $class;
 
+		// Check whether we have a RestService in the context namespace
 		$class = U::className($context->namespace, 'service', 'rest');
 
 		if ( class_exists($class) ) return $class;
 
+		// Fall back to the RedBean RestService
 		return 'Saltwater\RedBean\Service\Rest';
+
+		// TODO: RB Fallback is rather dirty, try parent context or fail out
 	}
 }
