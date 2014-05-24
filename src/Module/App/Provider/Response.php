@@ -36,7 +36,7 @@ class Response extends Provider
 
 		header( 'X-Execution-Time: ' . $this->executionTime() . 'ms' );
 
-		echo json_encode( self::prepareOutput($data) );
+		echo json_encode( $this->prepareOutput($data) );
 
 		exit;
 	}
@@ -83,7 +83,7 @@ class Response extends Provider
 	 *
 	 * @return array
 	 */
-	private function prepareOutput( $input )
+	protected function prepareOutput( $input )
 	{
 		if ( is_array($input) ) {
 			return $this->outputArray($input);

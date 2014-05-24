@@ -34,13 +34,16 @@ class Blog extends Module
 		 * The RedBean DbProvider requires a ConfigProvider to tell its the
 		 * database details, so we make a dummy one for this test.
 		 *
-		 * Furthermore, we want to simulate php://input, so we declare it
-		 * in our own router override
+		 * Furthermore, we don't want an actual HTTP output, so we fake our
+		 * router and the response a bit to make testing easier
 		 */
 		'provider' => array(
-			'config', 'route'
+			'config', 'response', 'route'
 		),
 
+		/**
+		 * This creates a new master context for this application
+		 */
 		'context' => array(
 			'Blog'
 		),
@@ -50,14 +53,14 @@ class Blog extends Module
 		 */
 		'service' => array(
 			'article', 'comment'
-		),
+		)/*,
 		/**
 		 * We define 'article' and 'comment' as entities so that the RedBean
 		 * Module can load them properly.
 		 */
-		'entity' => array(
+		/*'entity' => array(
 			'article', 'comment',
 			'article-comment', 'comment-comment'
-		)
+		)*/
 	);
 }

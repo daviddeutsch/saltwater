@@ -9,11 +9,13 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		S::destroy();
 
 		S::init('Saltwater\Blog\Blog');
+
+		S::$n->db->nuke();
 	}
 
 	public static function tearDownAfterClass()
 	{
-		//S::$n->db->nuke();
+		S::$n->db->nuke();
 	}
 
 	public function setUp()
@@ -37,10 +39,10 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$this->assertEquals(
-			1,
+			'{"id":1,"title":"My first Blog Post","content":"Hey there, first time posting"}',
 			$this->request(
 				'get',
-				'/article',
+				'/article/1',
 				array(
 					'title' => 'My first Blog Post',
 					'content' => 'Hey there, first time posting'
@@ -56,11 +58,13 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$_SERVER['REQUEST_URI'] = $path;
 
-		$GLOBALS['input'] = $input ? $this->convertInputToJSON($input) : null;
+		$input = $input ? $this->convertInputToJSON($input) : null;
+
+		$GLOBALS['mock_input'] = $input;
 
 		ob_start();
 
-		S::$n->route->go();
+		S::$n->route('blog')->go();
 
 		return ob_get_clean();
 	}

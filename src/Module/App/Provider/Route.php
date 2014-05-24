@@ -84,7 +84,7 @@ class Route extends AbstractRoute
 		return empty($input) ? null : json_decode($input);
 	}
 
-	private function resolveChain( $input, $result=null )
+	protected function resolveChain( $input, $result=null )
 	{
 		$length = count($this->chain);
 

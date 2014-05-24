@@ -89,7 +89,7 @@ class Server
 				self::$n->addModule($module, $i==0);
 			}
 		} else {
-			self::$n->addModule($array);
+			self::$n->addModule($array, true);
 		}
 	}
 
