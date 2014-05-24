@@ -32,7 +32,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 			1,
 			$this->request(
 				'post',
-				'/article',
+				'article',
 				array(
 					'title' => 'My first Blog Post',
 					'content' => 'Hey there, first time posting'
@@ -44,7 +44,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 			'{"id":1,"title":"My first Blog Post","content":"Hey there, first time posting"}',
 			$this->request(
 				'get',
-				'/article/1',
+				'article/1',
 				array(
 					'title' => 'My first Blog Post',
 					'content' => 'Hey there, first time posting'
@@ -56,9 +56,9 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 	private function request( $method, $path, $input=null )
 	{
-		$_SERVER['REQUEST_METHOD'] = $method;
+		$GLOBALS['METHOD'] = $method;
 
-		$_SERVER['REQUEST_URI'] = $path;
+		$GLOBALS['PATH'] = $path;
 
 		$input = $input ? $this->convertInputToJSON($input) : null;
 

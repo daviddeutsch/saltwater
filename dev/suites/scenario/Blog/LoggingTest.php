@@ -15,7 +15,7 @@ class LoggingTest extends \PHPUnit_Framework_TestCase
 
 	public static function tearDownAfterClass()
 	{
-		//S::$n->db->nuke();
+		S::$n->db->nuke();
 	}
 
 	public function testLogging()

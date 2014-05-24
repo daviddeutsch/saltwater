@@ -13,4 +13,14 @@ class Route extends AppRoute
 			$this->resolveChain( json_decode($GLOBALS['mock_input']) )
 		);
 	}
+
+	protected function getURI()
+	{
+		return $GLOBALS['PATH'];
+	}
+
+	protected function getHTTP()
+	{
+		return $GLOBALS['METHOD'];
+	}
 }
