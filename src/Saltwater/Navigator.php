@@ -25,17 +25,17 @@ use Saltwater\Server as S;
  *
  * Same as the above, but as methods for injecting a caller
  *
- * @method \Saltwater\Root\Provider\Context    context()
- * @method \Saltwater\RedBean\Provider\Entity  entity()
- * @method \Saltwater\Root\Provider\Service    service()
+ * @method \Saltwater\Root\Provider\Context    context( $caller )
+ * @method \Saltwater\RedBean\Provider\Entity  entity( $caller )
+ * @method \Saltwater\Root\Provider\Service    service( $caller )
  *
- * @method \RedBean_Instance db()
+ * @method \RedBean_Instance db( $caller )
  *
- * @method \Saltwater\RedBean\Provider\Log  log()
- * @method \Saltwater\App\Provider\Response response()
- * @method \Saltwater\App\Provider\Route    route()
+ * @method \Saltwater\RedBean\Provider\Log  log( $caller )
+ * @method \Saltwater\App\Provider\Response response( $caller )
+ * @method \Saltwater\App\Provider\Route    route( $caller )
  *
- * @method \Saltwater\App\Common\Config config()
+ * @method \Saltwater\App\Common\Config config( $caller )
  */
 class Navigator
 {
