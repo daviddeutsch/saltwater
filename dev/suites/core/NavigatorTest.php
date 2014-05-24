@@ -4,15 +4,23 @@ use Saltwater\Server as S;
 
 class NavigatorTest extends \PHPUnit_Framework_TestCase
 {
-	public function setUp()
+	public static function setUpBeforeClass()
 	{
 		S::destroy();
 	}
 
-	public function testThingHandling()
+	protected function tearDown()
+	{
+		S::destroy();
+	}
+
+	protected function setUp()
 	{
 		S::init();
+	}
 
+	public function testThingHandling()
+	{
 		$this->assertEquals( 1, S::$n->addThing('thing') );
 
 		$this->assertEquals( 2, S::$n->addThing('thing2') );
@@ -28,8 +36,6 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 	public function testWithRootModule()
 	{
-		S::init();
-
 		$this->assertFalse( S::$n->addModule('\N\Existe\Pas') );
 
 		$class = 'Saltwater\Root\Root';

@@ -4,7 +4,12 @@ use Saltwater\Server as S;
 
 class RootProviderTest extends \PHPUnit_Framework_TestCase
 {
-	public function setUp()
+	public static function setUpBeforeClass()
+	{
+		S::destroy();
+	}
+
+	protected function tearDown()
 	{
 		S::destroy();
 	}
