@@ -31,13 +31,11 @@ class Db extends Provider
 	{
 		if ( !empty(self::$r->toolboxes) ) return;
 
-		if ( isset($cfg->dsn) ) {
-			$dsn = $cfg->dsn;
-		} else {
-			$dsn = self::makeDSN($cfg->type, $cfg->host, $cfg->name);
-		}
-
-		self::$r->setup($dsn, $cfg->user, $cfg->password);
+		self::$r->setup(
+			self::cfgToDSN($cfg),
+			$cfg->user,
+			$cfg->password
+		);
 
 		self::$r->setupPipeline();
 	}
@@ -46,13 +44,12 @@ class Db extends Provider
 	{
 		if ( isset(self::$r->toolboxes[$cfg->name]) ) return;
 
-		if ( isset($cfg->dsn) ) {
-			$dsn = $cfg->dsn;
-		} else {
-			$dsn = self::makeDSN($cfg->type, $cfg->host, $cfg->name);
-		}
-
-		self::$r->addDatabase($cfg->name, $dsn, $cfg->user, $cfg->password);
+		self::$r->addDatabase(
+			$cfg->name,
+			self::cfgToDSN($cfg),
+			$cfg->user,
+			$cfg->password
+		);
 	}
 
 	private static function configureDB( $cfg )
@@ -68,6 +65,15 @@ class Db extends Provider
 		);
 
 		self::$r->useWriterCache(true);
+	}
+
+	private static function cfgToDSN( $cfg )
+	{
+		if ( isset($cfg->dsn) ) {
+			return $cfg->dsn;
+		} else {
+			return self::makeDSN($cfg->type, $cfg->host, $cfg->name);
+		}
 	}
 
 	private static function makeDSN( $type, $host, $name )

@@ -13,7 +13,7 @@ class Log extends AbstractLog
 	{
 		$db = S::$n->db;
 
-		$db->_(
+		return $db->_(
 			'log',
 			array_merge(
 				array(
