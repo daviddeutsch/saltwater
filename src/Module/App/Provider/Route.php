@@ -5,6 +5,7 @@ namespace Saltwater\App\Provider;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 use Saltwater\App\Common\Route as AbstractRoute;
+use Saltwater\Thing\Service;
 
 class Route extends AbstractRoute
 {
@@ -71,18 +72,23 @@ class Route extends AbstractRoute
 
 	public function go()
 	{
+		S::$n->response->response(
+			$this->resolveChain( $this->getInput() )
+		);
+	}
+
+	protected function getInput()
+	{
 		$input = @file_get_contents('php://input');
 
-		$input = empty($input) ? null : json_decode($input);
-
-		S::$n->response->response( $this->resolveChain($input) );
+		return empty($input) ? null : json_decode($input);
 	}
 
 	private function resolveChain( $input, $result=null )
 	{
 		$length = count($this->chain);
 
-		$service = new \Saltwater\Thing\Service;
+		$service = new Service;
 
 		for ( $i=0; $i<$length; ++$i ) {
 			$result = $this->chain(
