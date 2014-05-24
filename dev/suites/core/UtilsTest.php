@@ -1,6 +1,7 @@
 <?php
 
 use Saltwater\Utils as U;
+use Saltwater\Server as S;
 
 class UtilsTest extends \PHPUnit_Framework_TestCase
 {
@@ -100,6 +101,11 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 			'Namespaced\Class\Here',
 			U::className('namespaced', 'class', 'here')
 		);
+
+		$this->assertEquals(
+			'Namespaced\ClassSnake',
+			U::className('namespaced', 'class_snake')
+		);
 	}
 
 	public function testClassExplode()
@@ -129,6 +135,16 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 		$this->assertNotFalse(
 			U::storeJSON($path, $content)
 		);
+
+		$store = S::$gt['54'];
+
+		S::$gt['54'] = false;
+
+		$this->assertNotFalse(
+			U::storeJSON($path, $content)
+		);
+
+		S::$gt['54'] = $store;
 
 		$this->assertEquals(
 			(object) $content,
