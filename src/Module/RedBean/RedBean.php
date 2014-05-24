@@ -14,7 +14,6 @@ class RedBean extends Module
 
 	protected $provide = array(
 		'provider' => array('entity', 'db', 'log'),
-		'service' => array('rest'),
-		'entity' => array('log')
+		'service' => array('rest')
 	);
 }

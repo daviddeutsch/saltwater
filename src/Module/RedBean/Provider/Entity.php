@@ -33,6 +33,8 @@ class Entity extends Provider
 	{
 		$bit = S::$n->bitThing('entity.' . $name);
 
+		if ( !$bit ) return null;
+
 		// TODO: This is a bit wasteful since self::$caller is very likely to work
 		$injected = S::$n->moduleByThing('entity.' . $name);
 
@@ -42,7 +44,7 @@ class Entity extends Provider
 			if ( !is_object($module) ) continue;
 
 			if ( !$module->has($bit) ) continue;
-
+			if ( $name == 'log'){var_dump($name, $module);print_r(S::$n);}
 			$class = $this->fromModule($name, $module);
 
 			if ( class_exists($class) ) {

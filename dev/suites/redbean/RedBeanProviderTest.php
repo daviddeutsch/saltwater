@@ -29,10 +29,5 @@ class RedBeanProviderTest extends \PHPUnit_Framework_TestCase
 			'Saltwater\RedBean\Provider\Log',
 			get_class(S::$n->log)
 		);
-
-		/*$this->assertEquals(
-			'\RedBean_Instance',
-			get_class(S::$n->db)
-		);*/
 	}
 }

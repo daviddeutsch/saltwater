@@ -45,10 +45,5 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 			'Saltwater\RedBean\RedBean',
 			get_class( S::$n->getModule('redbean') )
 		);
-
-		$this->assertEquals(
-			'Saltwater\RedBean\Thing\Entity',
-			S::entity('log')
-		);
 	}
 }

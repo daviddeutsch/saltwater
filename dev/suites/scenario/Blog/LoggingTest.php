@@ -15,12 +15,22 @@ class LoggingTest extends \PHPUnit_Framework_TestCase
 
 	public static function tearDownAfterClass()
 	{
-		S::$n->db->nuke();
+		//S::$n->db->nuke();
 	}
 
 	public function testLogging()
 	{
 		$log = S::$n->log;
+
+		$this->assertEquals(
+			'RedBean_Instance',
+			get_class(S::$n->db)
+		);
+
+		$this->assertEquals(
+			'log',
+			S::entity('log')
+		);
 
 		$this->assertEquals( 1, $log->debug('test')->id );
 
