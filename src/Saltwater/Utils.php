@@ -15,7 +15,7 @@ class Utils
 	 */
 	public static function snakeToCamelCase( $string )
 	{
-		return self::CamelCaseSpaced( str_replace('_', ' ', $string) );
+		return self::camelCaseSpaced( str_replace('_', ' ', $string) );
 	}
 
 	/**
@@ -27,7 +27,7 @@ class Utils
 	 */
 	public static function dashedToCamelCase( $string )
 	{
-		return self::CamelCaseSpaced( str_replace('-', ' ', $string) );
+		return self::camelCaseSpaced( str_replace('-', ' ', $string) );
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Utils
 	 *
 	 * @return string
 	 */
-	public static function CamelCaseSpaced( $string )
+	public static function camelCaseSpaced( $string )
 	{
 		return str_replace( ' ', '', ucwords($string) );
 	}
@@ -49,7 +49,7 @@ class Utils
 	 *
 	 * @return string
 	 */
-	public static function CamelTodashed( $string )
+	public static function camelTodashed( $string )
 	{
 		return strtolower(
 			preg_replace('/([a-zA-Z])(?=[A-Z])/', '$1-', $string)
@@ -67,7 +67,23 @@ class Utils
 	{
 		$array = explode('\\', $string);
 
-		return self::CamelTodashed( array_pop($array) );
+		return self::camelTodashed( array_pop($array) );
+	}
+
+	/**
+	 * Convert a /Namespaced/Class to a dashed-class
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function namespaceFromClass( $string )
+	{
+		$array = explode('\\', $string);
+
+		array_pop($array);
+
+		return implode('\\', $array);
 	}
 
 	/**

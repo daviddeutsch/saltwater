@@ -288,24 +288,4 @@ class ModuleStack extends \ArrayObject
 
 		return $return;
 	}
-
-	public function __sleep()
-	{
-		foreach ( (array) $this as $k => $v ) {
-			$this[$k] = array(
-				'class' => get_class($v),
-				'registry' => $v->registry
-			);
-		}
-	}
-
-	public function __wakeup()
-	{
-		foreach ( (array) $this as $k => $v ) {
-			$class = $v['class'];
-
-			$this[$k] = new $class;
-			$this[$k]->registry = $v['registry'];
-		}
-	}
 }

@@ -44,7 +44,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			'ThisIsATest',
-			U::CamelCaseSpaced('This is a Test')
+			U::camelCaseSpaced('This is a Test')
 		);
 	}
 
@@ -52,17 +52,17 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->assertEquals(
 			'this-is-a-test',
-			U::CamelTodashed('ThisIsATest')
+			U::camelTodashed('ThisIsATest')
 		);
 
 		$this->assertEquals(
 			'short',
-			U::CamelTodashed('Short')
+			U::camelTodashed('Short')
 		);
 
 		$this->assertEquals(
 			'very-very-very-very-long',
-			U::CamelTodashed('VeryVeryVeryVeryLong')
+			U::camelTodashed('VeryVeryVeryVeryLong')
 		);
 	}
 

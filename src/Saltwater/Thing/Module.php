@@ -30,6 +30,19 @@ class Module
 	 */
 	public $registry = 0;
 
+	public static function prepare()
+	{
+		$class = get_called_class();
+
+		if ( empty($class::$name) ) {
+			$class::$name = U::namespacedClassToDashed($class);
+		}
+
+		if ( empty($class::$namespace) ) {
+			$class::$namespace = U::namespaceFromClass($class);
+		}
+	}
+
 	/**
 	 * @param string $name
 	 */
@@ -67,7 +80,7 @@ class Module
 	private function registerProvide( $type, $thing )
 	{
 		$this->registry |= S::$n->addThing(
-			$type . '.' . U::CamelTodashed($thing)
+			$type . '.' . U::camelTodashed($thing)
 		);
 	}
 
@@ -116,7 +129,7 @@ class Module
 	{
 		if ( $this->noContext() ) return null;
 
-		return U::CamelTodashed( $this->provide['context'][0] );
+		return U::camelTodashed( $this->provide['context'][0] );
 	}
 
 	public function getName()
