@@ -22,6 +22,20 @@ use Saltwater\Server as S;
  * @property \Saltwater\App\Provider\Route    $route
  *
  * @property \Saltwater\App\Common\Config $config
+ *
+ * Same as the above, but as methods for injecting a caller
+ *
+ * @method \Saltwater\Root\Provider\Context    context()
+ * @method \Saltwater\RedBean\Provider\Entity  entity()
+ * @method \Saltwater\Root\Provider\Service    service()
+ *
+ * @method \RedBean_Instance db()
+ *
+ * @method \Saltwater\RedBean\Provider\Log  log()
+ * @method \Saltwater\App\Provider\Response response()
+ * @method \Saltwater\App\Provider\Route    route()
+ *
+ * @method \Saltwater\App\Common\Config config()
  */
 class Navigator
 {
