@@ -6,41 +6,63 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 {
 	public static function setUpBeforeClass()
 	{
-		S::init('Saltwater\Blog');
+		S::destroy();
+
+		S::init('Saltwater\Blog\Blog');
 	}
 
 	public static function tearDownAfterClass()
 	{
-		S::$n->db->nuke();
+		//S::$n->db->nuke();
 	}
 
 	public function setUp()
 	{
-		S::destroy();
+
 	}
 
 	public function testArticlePost()
 	{
 		// POST /article
-		$this->request(
-			'post',
-			'/article',
-			array(
-				'title' => 'My first Blog Post',
-				'content' => 'Hey there, first time posting'
+		$this->assertEquals(
+			1,
+			$this->request(
+				'post',
+				'/article',
+				array(
+					'title' => 'My first Blog Post',
+					'content' => 'Hey there, first time posting'
+				)
 			)
 		);
+
+		$this->assertEquals(
+			1,
+			$this->request(
+				'get',
+				'/article',
+				array(
+					'title' => 'My first Blog Post',
+					'content' => 'Hey there, first time posting'
+				)
+			)
+		);
+
 	}
 
 	private function request( $method, $path, $input=null )
 	{
 		$_SERVER['REQUEST_METHOD'] = $method;
 
-		if ( $input ) {
-			file_put_contents("php://input", $this->convertInputToJSON($input));
-		}
+		$_SERVER['REQUEST_URI'] = $path;
+
+		$GLOBALS['input'] = $input ? $this->convertInputToJSON($input) : null;
+
+		ob_start();
 
 		S::$n->route->go();
+
+		return ob_get_clean();
 	}
 
 	private function convertInputToJSON( $input )

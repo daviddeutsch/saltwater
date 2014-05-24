@@ -6,10 +6,6 @@ use Saltwater\Thing\Module;
 
 class Blog extends Module
 {
-	public static $name = 'blog';
-
-	public static $namespace = 'Saltwater\Blog';
-
 	/**
 	 * In a modules $require, you set up the modules that need to be loaded
 	 * in saltwater in order to have this module function properly.
@@ -36,10 +32,17 @@ class Blog extends Module
 	protected $provide = array(
 		/**
 		 * The RedBean DbProvider requires a ConfigProvider to tell its the
-		 * database details, so we make a dummy one for this test
+		 * database details, so we make a dummy one for this test.
+		 *
+		 * Furthermore, we want to simulate php://input, so we declare it
+		 * in our own router override
 		 */
 		'provider' => array(
-			'config'
+			'config', 'route'
+		),
+
+		'context' => array(
+			'Blog'
 		),
 		/**
 		 * Defining them as services tells the router that they can be accessed

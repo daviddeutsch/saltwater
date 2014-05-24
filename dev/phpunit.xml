@@ -10,5 +10,10 @@
 		<testsuite name="RedBean Module">
 			<directory>./suites/redbean</directory>
 		</testsuite>
+
+		<testsuite name="Blog Scenario">
+			<directory>./suites/scenario/Blog</directory>
+		</testsuite>
+
 	</testsuites>
 </phpunit>

@@ -1,10 +1,10 @@
 <?php
+
 namespace Saltwater\Blog\Provider;
 
-use Saltwater\Server as S;
-use Saltwater\Thing\Provider;
+use Saltwater\App\Common\Config as AbstractConfig;
 
-class Config extends Provider
+class Config extends AbstractConfig
 {
 	public static function getProvider()
 	{
