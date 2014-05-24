@@ -25,6 +25,8 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 	public function testArticlePost()
 	{
+		S::$n->db->debug(true);
+
 		// POST /article
 		$this->assertEquals(
 			1,

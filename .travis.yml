@@ -12,8 +12,7 @@ matrix:
     - php: hhvm
 
 before_script:
-  - composer self-update
-  - composer install
+  - composer install --no-dev
   - touch /tmp/oodb.db
 
 script:

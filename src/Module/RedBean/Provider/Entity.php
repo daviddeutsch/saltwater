@@ -35,26 +35,34 @@ class Entity extends Provider
 
 		if ( !$bit ) return null;
 
-		// TODO: This is a bit wasteful since self::$caller is very likely to work
+		if ( $class = $this->entityFromModule(self::$caller, $bit) ) {
+			return $class;
+		}
+
 		$injected = S::$n->moduleByThing('entity.' . $name);
 
-		foreach ( array(self::$caller, $injected, self::$module) as $m ) {
-			$module = S::$n->getModule($m);
+		if ( $class = $this->entityFromModule($injected, $bit) ) {
+			return $class;
+		}
 
-			if ( !is_object($module) ) continue;
-
-			if ( !$module->has($bit) ) continue;
-			if ( $name == 'log'){var_dump($name, $module);print_r(S::$n);}
-			$class = $this->fromModule($name, $module);
-
-			if ( class_exists($class) ) {
-				return $class;
-			} else {
-				return 'Saltwater\RedBean\Thing\Entity';
-			}
+		if ( $class = $this->entityFromModule(self::$module, $bit) ) {
+			return $class;
 		}
 
 		return null;
+	}
+
+	private function entityFromModule( $name, $bit )
+	{
+		$module = S::$n->getModule($name);
+
+		if ( !is_object($module) ) return false;
+
+		if ( !$module->has($bit) ) return false;
+
+		$class = $this->fromModule($name, $module);
+
+		return class_exists($class) ? $class : 'Saltwater\RedBean\Thing\Entity';
 	}
 
 	/**
