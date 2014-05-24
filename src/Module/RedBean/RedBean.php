@@ -8,8 +8,6 @@ class RedBean extends Module
 {
 	public static $name = 'redbean';
 
-	public static $namespace = 'Saltwater\RedBean';
-
 	protected $require = array(
 		'module' => array('Saltwater\Root\Root')
 	);

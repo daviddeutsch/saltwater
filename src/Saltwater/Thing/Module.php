@@ -30,19 +30,6 @@ class Module
 	 */
 	public $registry = 0;
 
-	public static function prepare()
-	{
-		$class = get_called_class();
-
-		if ( empty($class::$name) ) {
-			$class::$name = U::namespacedClassToDashed($class);
-		}
-
-		if ( empty($class::$namespace) ) {
-			$class::$namespace = U::namespaceFromClass($class);
-		}
-	}
-
 	/**
 	 * @param string $name
 	 */
@@ -101,7 +88,7 @@ class Module
 
 		if ( !$class ) return false;
 
-		$class::setModule($this::$name);
+		$class::setModule($this::getName());
 
 		$class::setCaller($caller);
 
@@ -115,7 +102,7 @@ class Module
 	 */
 	private function makeProvider( $type )
 	{
-		$class = U::className($this::$namespace, 'provider', $type);
+		$class = U::className($this::getNamespace(), 'provider', $type);
 
 		return class_exists($class) ? $class : false;
 	}
@@ -132,13 +119,21 @@ class Module
 		return U::camelTodashed( $this->provide['context'][0] );
 	}
 
-	public function getName()
+	public static function getName()
 	{
-		return $this::$name;
+		$class = get_called_class();
+
+		if ( !empty($class::$name) ) return $class::$name;
+
+		return U::namespacedClassToDashed($class);
 	}
 
-	public function getNamespace()
+	public static function getNamespace()
 	{
-		return $this::$namespace;
+		$class = get_called_class();
+
+		if ( !empty($class::$namespace) ) return $class::$namespace;
+
+		return U::namespaceFromClass($class);
 	}
 }

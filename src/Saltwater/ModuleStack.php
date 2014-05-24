@@ -29,16 +29,16 @@ class ModuleStack extends \ArrayObject
 	{
 		if ( !class_exists($class) ) return false;
 
-		if ( isset($this[$class::$name]) ) return null;
+		if ( isset($this[$class::getName()]) ) return null;
 
 		if ( !($module = $this->registeredModule($class)) ) {
 			return false;
 		}
 
 		// Push late to preserve dependency order
-		$this[$class::$name] = $module;
+		$this[$class::getName()] = $module;
 
-		if ( $master ) $this->stack->setMaster($class::$name);
+		if ( $master ) $this->stack->setMaster($class::getName());
 
 		return true;
 	}
@@ -64,7 +64,7 @@ class ModuleStack extends \ArrayObject
 	{
 		$module = $this->moduleInstance($class);
 
-		$module->register($class::$name);
+		$module->register($class::getName());
 
 		return $module;
 	}
@@ -180,7 +180,7 @@ class ModuleStack extends \ArrayObject
 		foreach ( array_reverse((array) $this) as $k => $module ) {
 			// A provider calling itself always gets a lower level provider
 			// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
-			if ( $c->is_provider === ($module::$namespace == $c->namespace) ) {
+			if ( $c->is_provider === ($module::getNamespace() == $c->namespace) ) {
 				continue;
 			}
 

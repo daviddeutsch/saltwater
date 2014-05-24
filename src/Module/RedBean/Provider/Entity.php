@@ -63,6 +63,6 @@ class Entity extends Provider
 	 */
 	private function fromModule( $name, $module )
 	{
-		return U::className($module::$namespace, 'entity', $name);
+		return U::className($module::getNamespace(), 'entity', $name);
 	}
 }
