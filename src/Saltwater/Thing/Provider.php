@@ -24,10 +24,8 @@ abstract class Provider implements ProviderInterface
 		self::$caller = $caller;
 	}
 
-	public static function getProvider()
+	/*public static function getProvider()
 	{
-		// return new Provider();
-
-		return new \stdClass;
-	}
+		return new Provider();
+	}*/
 }
