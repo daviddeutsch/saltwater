@@ -30,6 +30,12 @@ function sw_autoloader($class) {
 		return include_once $path;
 	}
 
+	$path = __DIR__ . '/suites/edge/Module/' . $class . '.php';
+
+	if ( file_exists($path) ) {
+		return include_once $path;
+	}
+
 	// Scenario Modules
 	foreach ( get_scenarios() as $scenario ) {
 		$path = $scenario . '/Module/' . $class . '.php';

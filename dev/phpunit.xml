@@ -4,11 +4,17 @@
 		<testsuite name="Core Saltwater">
 			<directory>./suites/core</directory>
 		</testsuite>
+
 		<testsuite name="Root Module">
 			<directory>./suites/root</directory>
 		</testsuite>
+
 		<testsuite name="RedBean Module">
 			<directory>./suites/redbean</directory>
+		</testsuite>
+
+		<testsuite name="Edge cases and bad configurations">
+			<directory>./suites/edge</directory>
 		</testsuite>
 
 		<testsuite name="Blog Scenario">
