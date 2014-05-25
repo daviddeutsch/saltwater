@@ -21,6 +21,11 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
 		$context = S::$n->context->get('test-service');
 
+		$this->assertEquals(
+			'Saltwater\RedBean\Service\Rest',
+			get_class(S::$n->service->get('nonexistent', $context))
+		);
+
 		$lacking = S::$n->service->get('lacking', $context);
 
 		$call = $this->makeCall($context, 'get', 'lacking', 'true');

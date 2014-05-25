@@ -20,9 +20,8 @@ class Service extends Provider
 	{
 		$class = $this->getServiceClass($context, $name);
 
-		if ( class_exists($class) ) return new $class($context);
-
-		return null;
+		// TODO: RB Fallback is rather dirty, try parent context or fail out
+		return new $class($context);
 	}
 
 	/**
@@ -48,7 +47,5 @@ class Service extends Provider
 
 		// Fall back to the RedBean RestService
 		return 'Saltwater\RedBean\Service\Rest';
-
-		// TODO: RB Fallback is rather dirty, try parent context or fail out
 	}
 }
