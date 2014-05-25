@@ -18,11 +18,6 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		S::$n->db->nuke();
 	}
 
-	public function setUp()
-	{
-
-	}
-
 	public function testArticlePost()
 	{
 		// POST /article
@@ -38,6 +33,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 			)
 		);
 
+		// GET /article/1
 		$this->assertEquals(
 			'{"id":1,"title":"My first Blog Post","content":"Hey there, first time posting"}',
 			$this->request(
