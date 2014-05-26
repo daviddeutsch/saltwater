@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Blog\Provider;
+namespace Saltwater\Test\Provider;
 
 use Saltwater\App\Provider\Response as AppResponse;
 
