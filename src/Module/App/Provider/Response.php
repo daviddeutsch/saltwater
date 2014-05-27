@@ -18,9 +18,7 @@ class Response extends Provider
 	{
 		header('HTTP/1.1 307 Temporary Redirect');
 
-		header("Location: " . $url);
-
-		exit;
+		header('Location: ' . $url);
 	}
 
 	/**
@@ -34,11 +32,9 @@ class Response extends Provider
 
 		header('Content-type: application/json');
 
-		header( 'X-Execution-Time: ' . $this->executionTime() . 'ms' );
+		header('X-Execution-Time: ' . $this->executionTime() . 'ms');
 
-		echo json_encode( $this->prepareOutput($data) );
-
-		exit;
+		return json_encode( $this->prepareOutput($data) );
 	}
 
 	/**
@@ -49,9 +45,9 @@ class Response extends Provider
 	public function response( $data )
 	{
 		if ( is_object($data) || is_array($data) ) {
-			$this->json($data);
+			return $this->json($data);
 		} else {
-			$this->plain($data);
+			return $this->plain($data);
 		}
 	}
 
@@ -64,16 +60,16 @@ class Response extends Provider
 	{
 		header('HTTP/1.0 200 OK');
 
-		header( 'X-Execution-Time: ' . $this->executionTime() . 'ms' );
+		header('X-Execution-Time: ' . $this->executionTime() . 'ms');
 
-		echo $data;
-
-		exit;
+		return $data;
 	}
 
 	private function executionTime()
 	{
-		return round((microtime(true) - S::$start)*1000, 2);
+		$time = microtime(true);
+
+		return round( ($time - S::$start) * 1000, 2 );
 	}
 
 	/**
