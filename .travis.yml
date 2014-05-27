@@ -8,11 +8,15 @@ php:
   - hhvm
   - hhvm-nightly
 
+matrix:
+  allow_failures:
+    - php: hhvm-nightly
+
 before_script:
   - composer install --no-dev
   - touch /tmp/oodb.db
 
 script:
-  - phpunit -c dev/phpunit.xml --colors --report-useless-tests --coverage-clover=coverage.clover
+  - phpunit --configuration dev/phpunit.xml --colors --report-useless-tests --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" && "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;'
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;'
