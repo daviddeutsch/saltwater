@@ -15,7 +15,7 @@ class Response extends AppResponse
 	 */
 	public function redirect( $url )
 	{
-		echo "Location: " . $url;
+		return "Location: " . $url;
 	}
 
 	/**
@@ -25,7 +25,7 @@ class Response extends AppResponse
 	 */
 	public function json( $data )
 	{
-		echo json_encode( $this->prepareOutput($data) );
+		return json_encode( $this->prepareOutput($data) );
 	}
 
 	/**
@@ -35,6 +35,6 @@ class Response extends AppResponse
 	 */
 	public function plain( $data )
 	{
-		echo $data;
+		return $data;
 	}
 }

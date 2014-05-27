@@ -8,17 +8,17 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 	public static function setUpBeforeClass()
 	{
 		S::destroy();
+
+		S::init('Saltwater\TestService\TestService');
 	}
 
-	protected function tearDown()
+	public static function tearDownAfterClass()
 	{
 		S::destroy();
 	}
 
 	public function testServiceProvider()
 	{
-		S::init('Saltwater\TestService\TestService');
-
 		$context = S::$n->context->get('test-service');
 
 		$this->assertEquals(

@@ -72,7 +72,7 @@ class Route extends AbstractRoute
 
 	public function go()
 	{
-		S::$n->response->response(
+		echo S::$n->response->response(
 			$this->resolveChain( $this->getInput() )
 		);
 	}

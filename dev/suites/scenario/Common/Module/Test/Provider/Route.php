@@ -9,7 +9,7 @@ class Route extends AppRoute
 {
 	public function go()
 	{
-		S::$n->response('test')->response(
+		return S::$n->response('test')->response(
 			$this->resolveChain( json_decode($GLOBALS['mock_input']) )
 		);
 	}
