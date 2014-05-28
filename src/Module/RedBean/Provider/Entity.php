@@ -35,26 +35,26 @@ class Entity extends Provider
 
 		if ( !$bit ) return null;
 
-		if ( $class = $this->entityFromModule(self::$caller, $bit) ) {
+		if ( $class = $this->entityFromModule(self::$caller, $name, $bit) ) {
 			return $class;
 		}
 
 		$injected = S::$n->moduleByThing('entity.' . $name);
 
-		if ( $class = $this->entityFromModule($injected, $bit) ) {
+		if ( $class = $this->entityFromModule($injected, $name, $bit) ) {
 			return $class;
 		}
 
-		if ( $class = $this->entityFromModule(self::$module, $bit) ) {
+		if ( $class = $this->entityFromModule(self::$module, $name, $bit) ) {
 			return $class;
 		}
 
 		return null;
 	}
 
-	private function entityFromModule( $name, $bit )
+	private function entityFromModule( $module, $name, $bit )
 	{
-		$module = S::$n->getModule($name);
+		$module = S::$n->getModule($module);
 
 		if ( !is_object($module) ) return false;
 

@@ -6,6 +6,7 @@ use Saltwater\Server as S;
 use Saltwater\Utils as U;
 use Saltwater\App\Common\Route as AbstractRoute;
 use Saltwater\Thing\Service;
+use Saltwater\Thing\Context;
 
 class Route extends AbstractRoute
 {
@@ -100,11 +101,11 @@ class Route extends AbstractRoute
 	}
 
 	/**
-	 * @param \Saltwater\Thing\Service $service
-	 * @param object                   $item
-	 * @param mixed                    $input
-	 * @param mixed                    $result
-	 * @param bool                     $last
+	 * @param Service $service
+	 * @param object  $item
+	 * @param mixed   $input
+	 * @param mixed   $result
+	 * @param bool    $last
 	 *
 	 * @return mixed|null
 	 */
@@ -147,8 +148,8 @@ class Route extends AbstractRoute
 	}
 
 	/**
-	 * @param \Saltwater\Thing\Context $context
-	 * @param string $cmd
+	 * @param Context $context
+	 * @param string  $cmd
 	 */
 	private function explodePush( $path, $context, $cmd, $root )
 	{
@@ -166,10 +167,10 @@ class Route extends AbstractRoute
 	}
 
 	/**
-	 * @param \Saltwater\Thing\Context $context
-	 * @param string                   $cmd
-	 * @param string                   $service
-	 * @param string                   $path
+	 * @param Context $context
+	 * @param string  $cmd
+	 * @param string  $service
+	 * @param string  $path
 	 */
 	protected function push( $context, $cmd, $service, $path=null )
 	{
