@@ -10,6 +10,8 @@ class Rest extends Service
 {
 	public function isCallable( $method )
 	{
+		if ( parent::isCallable($method) ) return true;
+
 		$class = U::explodeClass($this);
 
 		return strpos( $method, array_pop($class) ) !== false;
