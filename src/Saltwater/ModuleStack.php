@@ -151,9 +151,9 @@ class ModuleStack extends \ArrayObject
 		// As a last resort, step one module up within stack and try again
 		if ( $caller = $this->stack->advanceMaster() ) {
 			return $this->provider($bit, $caller, $type);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -274,9 +274,9 @@ class ModuleStack extends \ArrayObject
 	{
 		if ( $stack_precedence ) {
 			return $this->stack->modulePrecedence();
-		} else {
-			return array_keys( array_reverse((array) $this) );
 		}
+
+		return array_keys( array_reverse((array) $this) );
 	}
 
 	private function precedenceList()
