@@ -88,5 +88,10 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 		unlink($path);
 
 		rmdir(__DIR__.'/cache');
+
+		$this->assertEquals(
+			'root',
+			S::$n->moduleByThing('provider.context')
+		);
 	}
 }
