@@ -39,11 +39,6 @@ class Entity extends Provider
 			return $class;
 		}
 
-		return $this->formatFallback($name, $bit);
-	}
-
-	private function formatFallback( $name, $bit )
-	{
 		$injected = S::$n->moduleByThing('entity.' . $name);
 
 		if ( $class = $this->entityFromModule($injected, $name, $bit) ) {
