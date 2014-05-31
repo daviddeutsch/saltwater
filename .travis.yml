@@ -17,6 +17,6 @@ before_script:
   - touch /tmp/oodb.db
 
 script:
-  - phpunit --configuration dev/phpunit.xml --colors --report-useless-tests --coverage-clover=coverage.clover
+  - phpunit --configuration dev/phpunit.xml --colors --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
   - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi;'

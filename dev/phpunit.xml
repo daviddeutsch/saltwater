@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./autoload.php">
+<phpunit bootstrap="./autoload.php"
+		 backupGlobals="false"
+		 beStrictAboutTestsThatDoNotTestAnything="true"
+		>
 	<testsuites>
 		<testsuite name="Core Saltwater">
 			<directory>./suites/core</directory>
