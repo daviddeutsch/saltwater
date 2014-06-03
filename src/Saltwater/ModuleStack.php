@@ -3,7 +3,6 @@
 namespace Saltwater;
 
 use Saltwater\Server as S;
-use Saltwater\Utils as U;
 
 class ModuleStack extends \ArrayObject
 {
@@ -151,9 +150,9 @@ class ModuleStack extends \ArrayObject
 		// As a last resort, step one module up within stack and try again
 		if ( $caller = $this->stack->advanceMaster() ) {
 			return $this->provider($bit, $caller, $type);
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -177,9 +176,17 @@ class ModuleStack extends \ArrayObject
 	{
 		$bit = S::$n->bitThing($c->thing);
 
+		/**
+		 * @var Thing\Module $module
+		 */
 		foreach ( array_reverse((array) $this) as $k => $module ) {
-			// A provider calling itself always gets a lower level provider
-			// ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
+			/**
+			 * A provider calling itself always gets a lower level provider
+			 *
+			 * The if is a condensed version of:
+			 *
+			 * ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
+			 */
 			if ( $c->is_provider === ($module::getNamespace() == $c->namespace) ) {
 				continue;
 			}
@@ -274,9 +281,9 @@ class ModuleStack extends \ArrayObject
 	{
 		if ( $stack_precedence ) {
 			return $this->stack->modulePrecedence();
-		} else {
-			return array_keys( array_reverse((array) $this) );
 		}
+
+		return array_keys( array_reverse((array) $this) );
 	}
 
 	private function precedenceList()

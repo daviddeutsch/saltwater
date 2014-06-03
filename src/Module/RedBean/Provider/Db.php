@@ -69,11 +69,9 @@ class Db extends Provider
 
 	private static function cfgToDSN( $cfg )
 	{
-		if ( isset($cfg->dsn) ) {
-			return $cfg->dsn;
-		} else {
-			return self::makeDSN($cfg->type, $cfg->host, $cfg->name);
-		}
+		if ( isset($cfg->dsn) ) return $cfg->dsn;
+
+		return self::makeDSN($cfg->type, $cfg->host, $cfg->name);
 	}
 
 	private static function makeDSN( $type, $host, $name )
