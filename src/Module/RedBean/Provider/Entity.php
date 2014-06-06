@@ -56,9 +56,7 @@ class Entity extends Provider
 	{
 		$module = S::$n->getModule($module);
 
-		if ( !is_object($module) ) return false;
-
-		if ( !$module->has($bit) ) return false;
+		if ( !is_object($module) || !$module->has($bit) ) return false;
 
 		$class = $this->fromModule($name, $module);
 

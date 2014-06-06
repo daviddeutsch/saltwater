@@ -46,9 +46,9 @@ class Response extends Provider
 	{
 		if ( is_object($data) || is_array($data) ) {
 			return $this->json($data);
-		} else {
-			return $this->plain($data);
 		}
+
+		return $this->plain($data);
 	}
 
 	/**
@@ -83,9 +83,9 @@ class Response extends Provider
 	{
 		if ( is_array($input) ) {
 			return $this->outputArray($input);
-		} else {
-			return $this->output($input);
 		}
+
+		return $this->output($input);
 	}
 
 	private function output( $input )

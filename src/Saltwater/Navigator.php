@@ -220,9 +220,10 @@ class Navigator
 
 		// Iterate through backtrace, find the last caller class
 		for ( $i=2; $i<$depth; ++$i ) {
-			if ( !isset($trace[$i]['class']) ) continue;
-
-			if ( $this->skipCaller($trace[$i]['class']) ) continue;
+			if (
+				!isset($trace[$i]['class'])
+				|| $this->skipCaller($trace[$i]['class'])
+			) continue;
 
 			return explode('\\', $trace[$i]['class']);
 		}
