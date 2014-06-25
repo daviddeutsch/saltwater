@@ -3,7 +3,7 @@
 namespace Saltwater\Interfaces;
 
 /**
- * Interface Provider
+ * Provider Interface
  *
  * A Provider returns Things
  */

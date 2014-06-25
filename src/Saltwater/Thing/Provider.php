@@ -6,8 +6,10 @@ use Saltwater\Interfaces\Provider as ProviderInterface;
 
 abstract class Provider implements ProviderInterface
 {
+	/** @var string */
 	protected static $module;
 
+	/** @var string */
 	protected static $caller;
 
 	protected function __construct() {}
@@ -24,8 +26,10 @@ abstract class Provider implements ProviderInterface
 		self::$caller = $caller;
 	}
 
-	/*public static function getProvider()
+	/*
+	public static function getProvider()
 	{
 		return new Provider();
-	}*/
+	}
+	*/
 }

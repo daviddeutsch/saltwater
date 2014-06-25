@@ -3,26 +3,19 @@
 namespace Saltwater\Thing;
 
 use Saltwater\Server as S;
+use Saltwater\Interfaces\Service as ServiceInterface;
 
 /**
  * Services provide data or functionality
  */
-class Service
+class Service implements ServiceInterface
 {
-	/**
-	 * @var Context
-	 */
+	/** @var Context */
 	protected $context = null;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $module = null;
 
-	/**
-	 * @param \Saltwater\Thing\Context|null $context
-	 * @param \Saltwater\Thing\Module|null $module
-	 */
 	public function __construct( $context=null, $module=null )
 	{
 		$this->setContext($context);
@@ -44,13 +37,6 @@ class Service
 		$this->module = $module;
 	}
 
-	/**
-	 * Check whether a method is callable in this service
-	 *
-	 * @param string $method
-	 *
-	 * @return bool
-	 */
 	public function isCallable( $method )
 	{
 		return method_exists($this, $method);
