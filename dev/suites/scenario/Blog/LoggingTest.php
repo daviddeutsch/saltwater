@@ -29,7 +29,7 @@ class LoggingTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(
 			'log',
-			S::entity('log')
+			Saltwater\RedBean\Provider\Db::entity('log')
 		);
 
 		$this->assertEquals( 1, $log->debug('test')->id );

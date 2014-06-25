@@ -61,7 +61,7 @@ class Db extends Provider
 		}
 
 		self::$r->redbean->beanhelper->setModelFormatter(
-			'Saltwater\RedBean\Provider::entity'
+			'Saltwater\RedBean\Provider\Db::entity'
 		);
 
 		self::$r->useWriterCache(true);
