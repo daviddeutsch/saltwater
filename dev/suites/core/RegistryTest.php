@@ -1,6 +1,6 @@
 <?php
 
-use Saltwater\Registry;
+use Saltwater\Water\Registry;
 
 class RegistryTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,7 @@
 namespace Saltwater\TestService\Service;
 
 use Saltwater\Server as S;
-use Saltwater\Thing\Service;
+use Saltwater\Salt\Service;
 
 class Lacking extends Service
 {

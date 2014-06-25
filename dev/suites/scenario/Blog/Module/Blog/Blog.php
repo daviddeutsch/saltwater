@@ -2,7 +2,7 @@
 
 namespace Saltwater\Blog;
 
-use Saltwater\Thing\Module;
+use Saltwater\Salt\Module;
 
 class Blog extends Module
 {

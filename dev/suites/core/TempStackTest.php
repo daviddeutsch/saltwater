@@ -1,6 +1,6 @@
 <?php
 
-use Saltwater\TempStack;
+use Saltwater\Water\TempStack;
 
 class TempStackTest extends \PHPUnit_Framework_TestCase
 {

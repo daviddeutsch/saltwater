@@ -110,15 +110,15 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 
 	public function testClassExplode()
 	{
-		$name = 'Saltwater\Thing\Module';
+		$name = 'Saltwater\Salt\Module';
 
 		$this->assertEquals(
-			array('Saltwater', 'Thing', 'Module'),
+			array('Saltwater', 'Salt', 'Module'),
 			U::explodeClass($name)
 		);
 
 		$this->assertEquals(
-			array('Saltwater', 'Thing', 'Module'),
+			array('Saltwater', 'Salt', 'Module'),
 			U::explodeClass(new $name)
 		);
 	}

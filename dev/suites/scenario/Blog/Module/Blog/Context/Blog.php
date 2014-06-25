@@ -2,7 +2,7 @@
 
 namespace Saltwater\Blog\Context;
 
-use Saltwater\Thing\Context;
+use Saltwater\Salt\Context;
 
 class Blog extends Context
 {

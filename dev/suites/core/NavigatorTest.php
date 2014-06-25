@@ -19,19 +19,19 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 		S::init();
 	}
 
-	public function testThingHandling()
+	public function testSaltHandling()
 	{
-		$this->assertEquals( 1, S::$n->addThing('thing') );
+		$this->assertEquals( 1, S::$n->addSalt('thing') );
 
-		$this->assertEquals( 2, S::$n->addThing('thing2') );
+		$this->assertEquals( 2, S::$n->addSalt('thing2') );
 
-		$this->assertEquals( 4, S::$n->addThing('thing3') );
+		$this->assertEquals( 4, S::$n->addSalt('thing3') );
 
-		$this->assertEquals( 4, S::$n->addThing('thing3') );
+		$this->assertEquals( 4, S::$n->addSalt('thing3') );
 
-		$this->assertTrue( S::$n->isThing('thing2') );
+		$this->assertTrue( S::$n->isSalt('thing2') );
 
-		$this->assertEquals( 1, S::$n->bitThing('thing') );
+		$this->assertEquals( 1, S::$n->bitSalt('thing') );
 	}
 
 	public function testWithRootModule()
@@ -48,15 +48,15 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals( $class, get_class($module) );
 
-		$this->assertTrue( S::$n->isThing('module.root') );
+		$this->assertTrue( S::$n->isSalt('module.root') );
 
-		$this->assertEquals( 1, S::$n->bitThing('module.root') );
+		$this->assertEquals( 1, S::$n->bitSalt('module.root') );
 
 		$this->assertEquals( 'root', $module->masterContext() );
 
 		$this->assertEquals(
 			'root',
-			S::$n->moduleByThing('provider.context')
+			S::$n->moduleBySalt('provider.context')
 		);
 
 		$this->assertEquals(

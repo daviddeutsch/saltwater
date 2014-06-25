@@ -2,7 +2,7 @@
 
 namespace Saltwater\TestService\Context;
 
-use Saltwater\Thing\Context;
+use Saltwater\Salt\Context;
 
 class TestService extends Context
 {

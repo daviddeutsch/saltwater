@@ -2,7 +2,7 @@
 
 namespace Saltwater\Test;
 
-use Saltwater\Thing\Module;
+use Saltwater\Salt\Module;
 
 class Test extends Module
 {
