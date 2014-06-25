@@ -2,9 +2,7 @@
 
 namespace Saltwater\Thing;
 
-use Saltwater\Interfaces\Provider as ProviderInterface;
-
-abstract class Provider implements ProviderInterface
+abstract class Provider
 {
 	/** @var string */
 	protected static $module;

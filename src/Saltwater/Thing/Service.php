@@ -3,12 +3,11 @@
 namespace Saltwater\Thing;
 
 use Saltwater\Server as S;
-use Saltwater\Interfaces\Service as ServiceInterface;
 
 /**
  * Services provide data or functionality
  */
-class Service implements ServiceInterface
+class Service
 {
 	/** @var Context */
 	protected $context = null;
