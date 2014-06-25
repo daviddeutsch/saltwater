@@ -61,10 +61,22 @@ class Db extends Provider
 		}
 
 		self::$r->redbean->beanhelper->setModelFormatter(
-			'Saltwater\Server::entity'
+			'Saltwater\RedBean\Provider::entity'
 		);
 
 		self::$r->useWriterCache(true);
+	}
+
+	/**
+	 * Return an Entity class name from the EntityProvider
+	 *
+	 * @param string $name
+	 *
+	 * @return string
+	 */
+	public static function entity( $name )
+	{
+		return S::$n->entity->get($name);
 	}
 
 	private static function cfgToDSN( $cfg )

@@ -108,18 +108,6 @@ class Server
 	}
 
 	/**
-	 * Return an Entity class name from the EntityProvider
-	 *
-	 * @param string $name
-	 *
-	 * @return string
-	 */
-	public static function entity( $name )
-	{
-		return self::$n->entity->get($name);
-	}
-
-	/**
 	 * Halt the server and send a html header response
 	 *
 	 * @param int    $code
