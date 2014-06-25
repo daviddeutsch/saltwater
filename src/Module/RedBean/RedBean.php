@@ -2,7 +2,7 @@
 
 namespace Saltwater\RedBean;
 
-use Saltwater\Thing\Module;
+use Saltwater\Salt\Module;
 
 class RedBean extends Module
 {

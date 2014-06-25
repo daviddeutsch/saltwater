@@ -1,5 +1,5 @@
 <?php
 
-namespace Saltwater\RedBean\Thing;
+namespace Saltwater\RedBean\Salt;
 
 class Association extends \RedBean_PipelineAssociationModel {}

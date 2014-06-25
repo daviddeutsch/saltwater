@@ -4,17 +4,22 @@ namespace Saltwater\Root\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
-use Saltwater\Thing\Provider;
+use Saltwater\Salt\Provider;
+use Saltwater\Salt\Context as SwContext;
+use Saltwater\Salt\Module;
 
 class Context extends Provider
 {
-	public static function getProvider() { return new Context(); }
+	public static function getProvider()
+	{
+		return new Context;
+	}
 
 	/**
-	 * @param string                        $name
-	 * @param \Saltwater\Thing\Context|null $context Parent Context
+	 * @param string         $name
+	 * @param SwContext|null $context Parent Context
 	 *
-	 * @return \Saltwater\Thing\Context|null
+	 * @return SwContext|null
 	 */
 	public function get( $name, $context=null )
 	{
@@ -30,11 +35,11 @@ class Context extends Provider
 	}
 
 	/**
-	 * @param string                        $class
-	 * @param \Saltwater\Thing\Context|null $context
-	 * @param \Saltwater\Thing\Module       $module
+	 * @param string         $class
+	 * @param SwContext|null $context
+	 * @param Module         $module
 	 *
-	 * @return \Saltwater\Thing\Context
+	 * @return SwContext
 	 */
 	private function newContext( $class, $context, $module )
 	{

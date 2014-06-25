@@ -3,7 +3,7 @@
 namespace Saltwater\App\Provider;
 
 use Saltwater\Server as S;
-use Saltwater\Thing\Provider;
+use Saltwater\Salt\Provider;
 
 class Response extends Provider
 {

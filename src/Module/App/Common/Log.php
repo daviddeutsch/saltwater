@@ -3,7 +3,7 @@
 namespace Saltwater\App\Common;
 
 use Psr\Log\LoggerInterface;
-use Saltwater\Thing\Provider;
+use Saltwater\Salt\Provider;
 
 abstract class Log extends Provider implements LoggerInterface
 {

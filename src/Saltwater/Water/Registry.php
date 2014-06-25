@@ -1,11 +1,11 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Water;
 
 class Registry extends \ArrayObject
 {
 	/**
-	 * Return true if the input is a registered thing
+	 * Return true if the input is a registered Salt
 	 *
 	 * @param string $name in the form "type.name"
 	 *
@@ -17,7 +17,7 @@ class Registry extends \ArrayObject
 	}
 
 	/**
-	 * Return the bitmask integer of a thing
+	 * Return the bitmask integer of a Salt
 	 *
 	 * @param string $name in the form "type.name"
 	 *
@@ -29,7 +29,7 @@ class Registry extends \ArrayObject
 	}
 
 	/**
-	 * Register a thing and return its bitmask integer
+	 * Register a Salt and return its bitmask integer
 	 * @param $name
 	 *
 	 * @return number

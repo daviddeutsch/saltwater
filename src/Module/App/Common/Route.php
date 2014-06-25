@@ -2,7 +2,7 @@
 
 namespace Saltwater\App\Common;
 
-use Saltwater\Thing\Provider;
+use Saltwater\Salt\Provider;
 
 /**
  * A route converts a uri path and http method

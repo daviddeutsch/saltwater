@@ -4,7 +4,8 @@ namespace Saltwater\RedBean\Provider;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
-use Saltwater\Thing\Provider;
+use Saltwater\Salt\Provider;
+use Saltwater\Salt\Module;
 
 class Entity extends Provider
 {
@@ -31,7 +32,7 @@ class Entity extends Provider
 	 */
 	private function formatModel( $name )
 	{
-		$bit = S::$n->bitThing('entity.' . $name);
+		$bit = S::$n->bitSalt('entity.' . $name);
 
 		if ( !$bit ) return null;
 
@@ -39,7 +40,7 @@ class Entity extends Provider
 			return $class;
 		}
 
-		$injected = S::$n->moduleByThing('entity.' . $name);
+		$injected = S::$n->moduleBySalt('entity.' . $name);
 
 		if ( $class = $this->entityFromModule($injected, $name, $bit) ) {
 			return $class;
@@ -60,12 +61,12 @@ class Entity extends Provider
 
 		$class = $this->fromModule($name, $module);
 
-		return class_exists($class) ? $class : 'Saltwater\RedBean\Thing\Entity';
+		return class_exists($class) ? $class : 'Saltwater\RedBean\Salt\Entity';
 	}
 
 	/**
-	 * @param string                  $name
-	 * @param \Saltwater\Thing\Module $module
+	 * @param string $name
+	 * @param Module $module
 	 *
 	 * @return string
 	 */

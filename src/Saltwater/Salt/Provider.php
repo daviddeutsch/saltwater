@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Thing;
+namespace Saltwater\Salt;
 
 abstract class Provider
 {
@@ -24,10 +24,11 @@ abstract class Provider
 		self::$caller = $caller;
 	}
 
-	/*
+	/**
+	 * @return Provider
+	 */
 	public static function getProvider()
 	{
-		return new Provider();
+		return new \stdClass();
 	}
-	*/
 }

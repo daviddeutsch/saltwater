@@ -2,7 +2,7 @@
 
 namespace Saltwater\App;
 
-use Saltwater\Thing\Module;
+use Saltwater\Salt\Module;
 
 class App extends Module
 {

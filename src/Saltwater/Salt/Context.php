@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Thing;
+namespace Saltwater\Salt;
 
 /**
  * A context accepts and returns services, decides provider priority(?)

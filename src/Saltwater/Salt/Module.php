@@ -1,9 +1,10 @@
 <?php
 
-namespace Saltwater\Thing;
+namespace Saltwater\Salt;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
+use Saltwater\Salt\Provider;
 
 /**
  * An object that can register and return providers, contexts and services
@@ -21,12 +22,12 @@ class Module
 	protected $require = array();
 
 	/**
-	 * @var array Associative Array of things that this module provides
+	 * @var array Associative Array of Salts that this module provides
 	 */
 	protected $provide = array();
 
 	/**
-	 * @var int bitmask of things passed to the registry
+	 * @var int bitmask of Salts passed to the registry
 	 */
 	public $registry = 0;
 
@@ -35,11 +36,11 @@ class Module
 	 */
 	public function register( $name )
 	{
-		if ( S::$n->isThing('module.' . $name) || $this->registry ) return null;
+		if ( S::$n->isSalt('module.' . $name) || $this->registry ) return null;
 
 		$this->ensureRequires();
 
-		$this->registry |= S::$n->addThing('module.' . $name);
+		$this->registry |= S::$n->addSalt('module.' . $name);
 
 		$this->registerProvides();
 	}
@@ -58,16 +59,16 @@ class Module
 		if ( empty($this->provide) ) return;
 
 		foreach ( $this->provide as $type => $content ) {
-			foreach ( $content as $thing ) {
-				$this->registerProvide($type, $thing);
+			foreach ( $content as $Salt ) {
+				$this->registerProvide($type, $Salt);
 			}
 		}
 	}
 
-	private function registerProvide( $type, $thing )
+	private function registerProvide( $type, $Salt )
 	{
-		$this->registry |= S::$n->addThing(
-			$type . '.' . U::camelTodashed($thing)
+		$this->registry |= S::$n->addSalt(
+			$type . '.' . U::camelTodashed($Salt)
 		);
 	}
 
@@ -80,13 +81,13 @@ class Module
 	 * @param string $type
 	 * @param string $caller
 	 *
-	 * @return \Saltwater\Thing\Provider
+	 * @return Provider
 	 */
 	public function provider( $caller, $type )
 	{
 		$class = $this->makeProvider($type);
 
-		if ( !$class ) return false;
+		if ( $class === false ) return false;
 
 		$class::setModule($this::getName());
 
@@ -98,7 +99,7 @@ class Module
 	/**
 	 * @param string $type
 	 *
-	 * @return false|\Saltwater\Thing\Provider
+	 * @return false|Provider
 	 */
 	private function makeProvider( $type )
 	{

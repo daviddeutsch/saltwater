@@ -2,6 +2,8 @@
 
 namespace Saltwater;
 
+use Saltwater\Water\Navigator;
+
 class Server
 {
 	/**
@@ -49,6 +51,8 @@ class Server
 
 	/**
 	 * Set timestamp and Navigator instance
+	 *
+	 * @return void
 	 */
 	private static function start()
 	{
@@ -112,12 +116,19 @@ class Server
 	 *
 	 * @param int    $code
 	 * @param string $message
+	 *
+	 * @return void
 	 */
 	public static function halt( $code, $message )
 	{
 		header("HTTP/1.1 " . $code . " " . $message); exit;
 	}
 
+	/**
+	 * Forget everything
+	 *
+	 * @return void
+	 */
 	public static function destroy()
 	{
 		self::$n = null;

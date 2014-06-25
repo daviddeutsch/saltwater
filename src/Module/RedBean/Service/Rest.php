@@ -4,7 +4,7 @@ namespace Saltwater\RedBean\Service;
 
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
-use Saltwater\Thing\Service;
+use Saltwater\Salt\Service;
 
 class Rest extends Service
 {

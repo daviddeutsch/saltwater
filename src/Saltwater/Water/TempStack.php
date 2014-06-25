@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Water;
 
 class TempStack extends \ArrayObject
 {

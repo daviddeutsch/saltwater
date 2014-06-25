@@ -1,8 +1,10 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Water;
 
 use Saltwater\Server as S;
+use Saltwater\Salt\Module;
+use Saltwater\Salt\Provider;
 
 /**
  * Class Navigator
@@ -107,7 +109,7 @@ class Navigator
 	/**
 	 * @see Registry::exists()
 	 */
-	public function isThing( $name )
+	public function isSalt( $name )
 	{
 		return $this->registry->exists($name);
 	}
@@ -115,7 +117,7 @@ class Navigator
 	/**
 	 * @see Registry::bit()
 	 */
-	public function bitThing( $name )
+	public function bitSalt( $name )
 	{
 		return $this->registry->bit($name);
 	}
@@ -123,7 +125,7 @@ class Navigator
 	/**
 	 * @see Registry::append()
 	 */
-	public function addThing( $name )
+	public function addSalt( $name )
 	{
 		return $this->registry->append($name);
 	}
@@ -145,11 +147,11 @@ class Navigator
 	}
 
 	/**
-	 * @see ModuleStack::moduleByThing()
+	 * @see ModuleStack::moduleBySalt()
 	 */
-	public function moduleByThing( $name )
+	public function moduleBySalt( $name )
 	{
-		return $this->modules->moduleByThing($name);
+		return $this->modules->moduleBySalt($name);
 	}
 
 	/**
@@ -165,13 +167,13 @@ class Navigator
 	 *
 	 * @param string $name plain name of the context
 	 *
-	 * @return Thing\Module|null
+	 * @return Module|null
 	 */
 	public function getContextModule( $name )
 	{
 		return $this->getModule(
-			$this->modules->getThingModule(
-				S::$n->bitThing('context.' . $name)
+			$this->modules->getSaltModule(
+				S::$n->bitSalt('context.' . $name)
 			)
 		);
 	}
@@ -182,18 +184,18 @@ class Navigator
 	 * @param string $type
 	 * @param string $caller Caller module name
 	 *
-	 * @return Thing\Provider
+	 * @return Provider
 	 */
 	public function provider( $type, $caller=null )
 	{
-		$thing = 'provider.' . $type;
+		$Salt = 'provider.' . $type;
 
-		if ( !$bit = $this->bitThing($thing) ) {
+		if ( !$bit = $this->bitSalt($Salt) ) {
 			S::halt(500, 'provider does not exist: ' . $type);
 		};
 
 		if ( empty($caller) ) {
-			$caller = $this->modules->findModule($this->lastCaller(), $thing);
+			$caller = $this->modules->findModule($this->lastCaller(), $Salt);
 		}
 
 		return $this->modules->provider($bit, $caller, $type);

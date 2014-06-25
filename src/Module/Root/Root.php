@@ -2,7 +2,7 @@
 
 namespace Saltwater\Root;
 
-use Saltwater\Thing\Module;
+use Saltwater\Salt\Module;
 
 class Root extends Module
 {

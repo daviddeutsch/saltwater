@@ -5,8 +5,8 @@ namespace Saltwater\App\Provider;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 use Saltwater\App\Common\Route as AbstractRoute;
-use Saltwater\Thing\Service;
-use Saltwater\Thing\Context;
+use Saltwater\Salt\Service;
+use Saltwater\Salt\Context;
 
 class Route extends AbstractRoute
 {
@@ -123,9 +123,9 @@ class Route extends AbstractRoute
 	}
 
 	/**
-	 * @param \Saltwater\Thing\Context $context
-	 * @param string                   $cmd
-	 * @param array                    $path
+	 * @param Context $context
+	 * @param string  $cmd
+	 * @param array   $path
 	 */
 	protected function explode( $context, $cmd, $path )
 	{

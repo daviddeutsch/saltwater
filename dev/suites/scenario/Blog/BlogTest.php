@@ -64,7 +64,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan(10, $average);
+		$this->assertLessThan(30, $average);
 
 		print_r("\n\n Average POST speed: " . $average . "ms");
 	}
@@ -82,7 +82,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan(5, $average);
+		$this->assertLessThan(15, $average);
 
 		print_r("\n\n Average GET speed: " . $average . "ms");
 	}

@@ -1,8 +1,11 @@
 <?php
 
-namespace Saltwater;
+namespace Saltwater\Water;
 
 use Saltwater\Server as S;
+use Saltwater\Salt\Module;
+use Saltwater\Salt\Context;
+use Saltwater\Salt\Provider;
 
 class ModuleStack extends \ArrayObject
 {
@@ -17,10 +20,10 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * Add module to stack and register its things
+	 * Add module to stack and register its Salts
 	 *
-	 * @param Thing\Module $class  Full Classname
-	 * @param bool         $master true if this is also the master module
+	 * @param Module $class  Full Classname
+	 * @param bool   $master true if this is also the master module
 	 *
 	 * @return bool|null
 	 */
@@ -47,7 +50,7 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @param string $name
 	 *
-	 * @return Thing\Module
+	 * @return Module
 	 */
 	public function getModule( $name )
 	{
@@ -55,9 +58,9 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * @param string|Thing\Module $class
+	 * @param string|Module $class
 	 *
-	 * @return Thing\Module
+	 * @return Module
 	 */
 	private function registeredModule( $class )
 	{
@@ -71,7 +74,7 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * @param string $class
 	 *
-	 * @return Thing\Module
+	 * @return Module
 	 */
 	private function moduleInstance( $class )
 	{
@@ -81,9 +84,9 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * Return the master context for the current master module
 	 *
-	 * @param Thing\Context|null $parent inject a parent context
+	 * @param Context|null $parent inject a parent context
 	 *
-	 * @return Thing\Context
+	 * @return Context
 	 */
 	public function masterContext( $parent=null )
 	{
@@ -103,7 +106,7 @@ class ModuleStack extends \ArrayObject
 	 * @param string $caller
 	 * @param string $type
 	 *
-	 * @return bool|Thing\Provider
+	 * @return bool|Provider
 	 */
 	public function provider( $bit, $caller, $type)
 	{
@@ -126,7 +129,7 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * @param Thing\Module $module
+	 * @param Module $module
 	 * @param string       $name
 	 * @param int          $bit
 	 * @param string       $caller
@@ -174,10 +177,10 @@ class ModuleStack extends \ArrayObject
 
 	private function findModuleWithCaller( $c )
 	{
-		$bit = S::$n->bitThing($c->thing);
+		$bit = S::$n->bitSalt($c->Salt);
 
 		/**
-		 * @var Thing\Module $module
+		 * @var Module $module
 		 */
 		foreach ( array_reverse((array) $this) as $k => $module ) {
 			/**
@@ -205,54 +208,54 @@ class ModuleStack extends \ArrayObject
 	 */
 	private function explodeCaller( $caller, $provider )
 	{
-		// Extract a thing from the last two particles
+		// Extract a Salt from the last two particles
 		$class = array_pop($caller);
 
-		$thing = strtolower( array_pop($caller) . '.' . $class );
+		$Salt = strtolower( array_pop($caller) . '.' . $class );
 
 		// The rest is the namespace
 		return (object) array(
-			'thing'        => $thing,
+			'Salt'        => $Salt,
 			'namespace'    => implode('\\', $caller),
-			'is_provider'  => $thing == $provider
+			'is_provider'  => $Salt == $provider
 		);
 	}
 
 	/**
-	 * Return top candidate Module for providing a Thing
+	 * Return top candidate Module for providing a Salt
 	 *
-	 * @param string $thing
+	 * @param string $Salt
 	 * @param bool   $precedence Use the current module precedence rules
 	 *
 	 * @return bool|mixed
 	 */
-	public function moduleByThing( $thing, $precedence=true )
+	public function moduleBySalt( $Salt, $precedence=true )
 	{
-		return $this->modulesByThing($thing, $precedence, true);
+		return $this->modulesBySalt($Salt, $precedence, true);
 	}
 
 	/**
-	 * Return a list of Modules providing a Thing
+	 * Return a list of Modules providing a Salt
 	 *
-	 * @param string $thing
+	 * @param string $Salt
 	 * @param bool   $precedence
 	 * @param bool   $first      only return the first item on the list
 	 *
 	 * @return array|bool
 	 */
-	public function modulesByThing( $thing, $precedence=true, $first=false )
+	public function modulesBySalt( $Salt, $precedence=true, $first=false )
 	{
-		if ( !S::$n->isThing($thing) ) return false;
+		if ( !S::$n->isSalt($Salt) ) return false;
 
-		$call = $first ? 'getThingModule' : 'getThingModules';
+		$call = $first ? 'getSaltModule' : 'getSaltModules';
 
 		return $this->$call(
-			S::$n->bitThing($thing),
+			S::$n->bitSalt($Salt),
 			$this->getPrecedence($precedence)
 		);
 	}
 
-	public function getThingModules( $bit, $modules=null )
+	public function getSaltModules( $bit, $modules=null )
 	{
 		$modules = is_null($modules) ? array_keys((array) $this) : $modules;
 
@@ -266,7 +269,7 @@ class ModuleStack extends \ArrayObject
 		return $return;
 	}
 
-	public function getThingModule( $bit, $modules=null )
+	public function getSaltModule( $bit, $modules=null )
 	{
 		$modules = is_null($modules) ? array_keys((array) $this) : $modules;
 

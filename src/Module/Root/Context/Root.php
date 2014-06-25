@@ -2,7 +2,7 @@
 
 namespace Saltwater\Root\Context;
 
-use Saltwater\Thing\Context;
+use Saltwater\Salt\Context;
 
 class Root extends Context
 {

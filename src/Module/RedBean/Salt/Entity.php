@@ -1,5 +1,5 @@
 <?php
 
-namespace Saltwater\RedBean\Thing;
+namespace Saltwater\RedBean\Salt;
 
 class Entity extends \RedBean_PipelineModel {}
