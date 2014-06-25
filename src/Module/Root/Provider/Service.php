@@ -4,7 +4,7 @@ namespace Saltwater\Root\Provider;
 
 use Saltwater\Utils as U;
 use Saltwater\Salt\Provider;
-use Saltwater\Salt\Context;
+use Saltwater\Salt\Context as SwContext;
 use Saltwater\Salt\Service as SwService;
 
 class Service extends Provider
@@ -12,8 +12,8 @@ class Service extends Provider
 	public static function getProvider() { return new Service; }
 
 	/**
-	 * @param string                   $name
-	 * @param Context $context
+	 * @param string  $name
+	 * @param SwContext $context
 	 *
 	 * @return SwService
 	 */
@@ -26,8 +26,8 @@ class Service extends Provider
 	}
 
 	/**
-	 * @param Context $context
-	 * @param string $service
+	 * @param SwContext $context
+	 * @param string  $service
 	 */
 	private function getServiceClass( $context, $service )
 	{
