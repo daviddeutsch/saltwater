@@ -98,7 +98,6 @@ class Utils
 			} else {
 				$args[] = self::dashedToCamelCase($arg);
 			}
-
 		}
 
 		return implode('\\', $args);

@@ -17,6 +17,12 @@ class Rest extends Service
 		return strpos( $method, array_pop($class) ) !== false;
 	}
 
+	/**
+	 * @param object $call
+	 * @param mixed  $data
+	 *
+	 * @return array|int|\RedBean_OODBBean
+	 */
 	public function call( $call, $data=null )
 	{
 		if ( parent::isCallable($call->function) ) {
@@ -26,6 +32,12 @@ class Rest extends Service
 		return $this->restCall($call, $data);
 	}
 
+	/**
+	 * @param object $call
+	 * @param mixed  $data
+	 *
+	 * @return array|int|\RedBean_OODBBean
+	 */
 	protected function restCall( $call, $data=null )
 	{
 		$path = $call->method;
@@ -38,7 +50,9 @@ class Rest extends Service
 	}
 
 	/**
+	 * @param string $http
 	 * @param string $path
+	 * @param mixed  $data
 	 */
 	protected function callPath( $http, $path, $data=null )
 	{

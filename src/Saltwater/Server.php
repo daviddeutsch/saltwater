@@ -88,12 +88,10 @@ class Server
 	{
 		if ( empty(self::$start) ) self::init();
 
-		if ( is_array($array) ) {
-			foreach ( $array as $i => $module ) {
-				self::$n->addModule($module, $i==0);
-			}
-		} else {
-			self::$n->addModule($array, true);
+		if ( !is_array($array) ) $array = array($array);
+
+		foreach ( $array as $i => $module ) {
+			self::$n->addModule($module, $i==0);
 		}
 	}
 

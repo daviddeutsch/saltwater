@@ -12,16 +12,20 @@ abstract class Provider
 
 	protected function __construct() {}
 
+	/**
+	 * @param string $module
+	 */
 	public static function setModule( $module )
 	{
 		self::$module = $module;
 	}
 
+	/**
+	 * @param string $caller
+	 */
 	public static function setCaller( $caller )
 	{
-		if ( empty($caller) ) $caller = 'root';
-
-		self::$caller = $caller;
+		self::$caller = empty($caller) ? 'root' : $caller;
 	}
 
 	/**

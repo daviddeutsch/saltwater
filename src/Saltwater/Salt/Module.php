@@ -16,13 +16,12 @@ class Module
 	public static $namespace;
 
 	/**
-	 * @var array Associative Array of requirements that need to be in place
-	 *            for this module
+	 * @var array Requirements that need to be in place for this module
 	 */
 	protected $require = array();
 
 	/**
-	 * @var array Associative Array of Salts that this module provides
+	 * @var array Salts that this module provides
 	 */
 	protected $provide = array();
 
@@ -36,11 +35,13 @@ class Module
 	 */
 	public function register( $name )
 	{
-		if ( S::$n->isSalt('module.' . $name) || $this->registry ) return null;
+		$name = 'module.' . $name;
+
+		if ( S::$n->isSalt($name) || $this->registry ) return null;
 
 		$this->ensureRequires();
 
-		$this->registry |= S::$n->addSalt('module.' . $name);
+		$this->registry |= S::$n->addSalt($name);
 
 		$this->registerProvides();
 	}
@@ -108,14 +109,14 @@ class Module
 		return class_exists($class) ? $class : false;
 	}
 
-	public function noContext()
+	public function lacksContext()
 	{
 		return empty($this->provide['context']);
 	}
 
 	public function masterContext()
 	{
-		if ( $this->noContext() ) return null;
+		if ( $this->lacksContext() ) return null;
 
 		return U::camelTodashed( $this->provide['context'][0] );
 	}

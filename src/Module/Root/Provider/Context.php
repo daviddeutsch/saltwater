@@ -17,11 +17,11 @@ class Context extends Provider
 
 	/**
 	 * @param string         $name
-	 * @param SwContext|null $context Parent Context
+	 * @param SwContext|null $parent
 	 *
 	 * @return SwContext|null
 	 */
-	public function get( $name, $context=null )
+	public function get( $name, $parent=null )
 	{
 		$module = S::$n->getContextModule($name);
 
@@ -31,18 +31,18 @@ class Context extends Provider
 
 		if ( !class_exists($class) ) return null;
 
-		return $this->newContext($class, $context, $module);
+		return $this->newContext($class, $parent, $module);
 	}
 
 	/**
 	 * @param string         $class
-	 * @param SwContext|null $context
+	 * @param SwContext|null $parent
 	 * @param Module         $module
 	 *
 	 * @return SwContext
 	 */
-	private function newContext( $class, $context, $module )
+	private function newContext( $class, $parent, $module )
 	{
-		return new $class($context, $module);
+		return new $class($parent, $module);
 	}
 }

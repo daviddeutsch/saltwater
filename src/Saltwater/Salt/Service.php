@@ -49,10 +49,10 @@ class Service
 	/**
 	 * Attempt to execute a call on this service
 	 *
-	 * @param            $call
-	 * @param mixed|null $data
+	 * @param object $call
+	 * @param mixed  $data
 	 *
-	 * @return mixed|null
+	 * @return mixed
 	 */
 	public function call( $call, $data=null )
 	{
@@ -64,9 +64,9 @@ class Service
 	/**
 	 * Execute a call
 	 *
-	 * @param object     $call
-	 * @param string     $method
-	 * @param mixed|null $data
+	 * @param object $call
+	 * @param string $method
+	 * @param mixed  $data
 	 *
 	 * @return mixed
 	 */
@@ -74,20 +74,26 @@ class Service
 	{
 		$reflect = new \ReflectionMethod($this, $method);
 
-		if ( !$reflect->getNumberOfParameters() ) {
-			return call_user_func( array($this, $method) );
+		// Check whether we need to inject parameters
+		if ( $reflect->getNumberOfParameters() ) {
+			return call_user_func_array(
+				array($this, $method),
+				$this->getMethodArgs($reflect, $call->path, $data)
+			);
 		}
 
-		return call_user_func_array(
-			array($this, $method),
-			$this->getMethodArgs($reflect, $call->path, $data)
-		);
+		// No parameter assembly necessary
+		return call_user_func( array($this, $method) );
 	}
 
 	/**
+	 * Assemble injected method parameters
+	 *
+	 * Note: $path and $data are reserved parameters
+	 *
 	 * @param \ReflectionMethod $reflect
-	 * @param $path
-	 * @param $data
+	 * @param string            $path
+	 * @param mixed             $data
 	 *
 	 * @return array
 	 */

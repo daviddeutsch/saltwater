@@ -91,7 +91,7 @@ class ModuleStack extends \ArrayObject
 	public function masterContext( $parent=null )
 	{
 		foreach ( (array) $this as $name => $module ) {
-			if ( $module->noContext() ) continue;
+			if ( $module->lacksContext() ) continue;
 
 			$parent = S::$n->context->get($module->masterContext(), $parent);
 

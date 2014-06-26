@@ -47,6 +47,7 @@ class Service extends Provider
 		if ( class_exists($class) ) return $class;
 
 		// Fall back to the RedBean RestService
+		// TODO: Needs to be decoupled
 		return 'Saltwater\RedBean\Service\Rest';
 	}
 }

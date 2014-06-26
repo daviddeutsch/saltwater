@@ -3,7 +3,8 @@
 namespace Saltwater\Salt;
 
 /**
- * A context accepts and returns services, decides provider priority(?)
+ * A context accepts and returns services, decides provider priority through
+ * module stacking.
  *
  * In a path, contexts provide hierarchy and encapsulation
  */
