@@ -64,7 +64,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan( getenv('TRAVIS') ? 50 : 10, $average );
+		$this->assertLessThan( getenv('TRAVIS') ? 70 : 10, $average );
 
 		print_r("\n\n Average POST speed: " . round($average, 4) . "ms");
 	}
@@ -82,7 +82,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan( getenv('TRAVIS') ? 30 : 5, $average );
+		$this->assertLessThan( getenv('TRAVIS') ? 45 : 5, $average );
 
 		print_r("\n\n Average GET speed: " . round($average, 4) . "ms");
 	}
