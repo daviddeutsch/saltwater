@@ -172,53 +172,50 @@ class ModuleStack extends \ArrayObject
 	{
 		if ( empty($caller) ) return $this->stack->getMaster();
 
-		$c = $this->explodeCaller($caller, $provider);
-
-		return $this->findModuleWithCaller($c);
-	}
-
-	private function findModuleWithCaller( $c )
-	{
-		$bit = S::$n->bitSalt($c->Salt);
+		$check = $this->moduleChecker($caller, $provider);
 
 		/** @var Module $module */
 		foreach ( $this->getReverseList() as $k => $module ) {
-			/**
-			 * A provider calling itself always gets a lower level provider
-			 *
-			 * The if is a condensed version of:
-			 *
-			 * ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
-			 */
-			if ( $c->is_provider === ($module::getNamespace() == $c->namespace) ) {
-				continue;
-			}
-
-			if ( $module->has($bit) ) return $k;
+			if ( $check($module) ) return $k;
 		}
 
 		return null;
 	}
 
 	/**
-	 * @param array  $caller
+	 * @param string $caller
 	 * @param string $provider
 	 *
-	 * @return object
+	 * @return callable
 	 */
-	private function explodeCaller( $caller, $provider )
+	private function moduleChecker( $caller, $provider )
 	{
 		// Extract a Salt from the last two particles
 		$class = array_pop($caller);
 
 		$salt = strtolower( array_pop($caller) . '.' . $class );
 
-		// The rest is the namespace
-		return (object) array(
-			'Salt'        => $salt,
-			'namespace'    => implode('\\', $caller),
-			'is_provider'  => $salt == $provider
-		);
+		$is_provider = $salt == $provider;
+
+		$bit = S::$n->bitSalt($salt);
+
+		$namespace = implode('\\', $caller);
+
+		/**
+		 * A provider calling itself always gets a lower level provider
+		 *
+		 * The if is a condensed version of:
+		 *
+		 * ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
+		 */
+		return function($module) use ($is_provider, $bit, $namespace) {
+			/** @var Module $module */
+			if ( $is_provider !== ($module::getNamespace() == $namespace) ) {
+				if ( $module->has($bit) ) return true;
+			}
+
+			return false;
+		};
 	}
 
 	/**
@@ -255,6 +252,14 @@ class ModuleStack extends \ArrayObject
 		);
 	}
 
+	/**
+	 * Find all the modules that provide a bit
+	 *
+	 * @param int  $bit
+	 * @param null $modules
+	 *
+	 * @return array
+	 */
 	public function getSaltModules( $bit, $modules=null )
 	{
 		$modules = is_null($modules) ? array_keys($this->getList()) : $modules;
@@ -270,6 +275,13 @@ class ModuleStack extends \ArrayObject
 		return $return;
 	}
 
+	/**
+	 * Find the most likely module to provide a bit
+	 * @param int  $bit
+	 * @param null $modules
+	 *
+	 * @return bool
+	 */
 	public function getSaltModule( $bit, $modules=null )
 	{
 		$modules = is_null($modules) ? array_keys($this->getList()) : $modules;
