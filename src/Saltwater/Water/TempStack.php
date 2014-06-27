@@ -61,11 +61,23 @@ class TempStack extends \ArrayObject
 		return $previous_master;
 	}
 
+	/**
+	 * Test whether a module name is the current master module
+	 *
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
 	public function isMaster( $name )
 	{
 		return $name == $this->master;
 	}
 
+	/**
+	 * Get the name of the current master module
+	 *
+	 * @return string
+	 */
 	public function getMaster()
 	{
 		return $this->master;
@@ -83,6 +95,11 @@ class TempStack extends \ArrayObject
 		$this[] = $name;
 	}
 
+	/**
+	 * Get the current ordered stack of modules that are loaded
+	 *
+	 * @return array
+	 */
 	public function modulePrecedence()
 	{
 		$return = array();
@@ -95,6 +112,11 @@ class TempStack extends \ArrayObject
 		return $return;
 	}
 
+	/**
+	 * Jump to the next master or return false if we're already on it
+	 *
+	 * @return bool|string
+	 */
 	public function advanceMaster()
 	{
 		$master = array_search($this->master, (array) $this);

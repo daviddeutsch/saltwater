@@ -41,24 +41,23 @@ use Saltwater\Salt\Provider;
  */
 class Navigator
 {
-	/**
-	 * @var ModuleStack
-	 */
+	/** @var ModuleStack */
 	private $modules = array();
 
-	/**
-	 * @var Registry
-	 */
+	/** @var Registry */
 	private $registry = array();
 
-	/**
-	 * @var array classes that can be skipped during search for caller module
-	 */
+	/** @var string[] skipped classes during search for caller module */
 	private $skip = array(
 		'Saltwater\Navigator',
 		'Saltwater\Server'
 	);
 
+	/**
+	 * Initiate the navigator by setting up a ModuleStack and a Registry
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		$this->modules = new ModuleStack();
@@ -66,11 +65,26 @@ class Navigator
 		$this->registry = new Registry();
 	}
 
+	/**
+	 * Magic property to get a provider without a preset caller
+	 *
+	 * @param string $type
+	 *
+	 * @return Provider
+	 */
 	public function __get( $type )
 	{
 		return $this->provider($type);
 	}
 
+	/**
+	 * Magic function to get a provider with a preset caller
+	 *
+	 * @param string $type
+	 * @param mixed  $args
+	 *
+	 * @return Provider
+	 */
 	public function __call( $type, $args )
 	{
 		$caller = empty($args) ? null : array_shift($args);
@@ -79,6 +93,8 @@ class Navigator
 	}
 
 	/**
+	 * Store the navigator within a cache file
+	 *
 	 * @param string $path
 	 */
 	public function storeCache( $path )
@@ -91,6 +107,8 @@ class Navigator
 	}
 
 	/**
+	 * Recreate the navigator from a cache file
+	 *
 	 * @param string $path
 	 *
 	 * @return bool
@@ -188,14 +206,14 @@ class Navigator
 	 */
 	public function provider( $type, $caller=null )
 	{
-		$Salt = 'provider.' . $type;
+		$salt = 'provider.' . $type;
 
-		if ( !$bit = $this->bitSalt($Salt) ) {
+		if ( !$bit = $this->bitSalt($salt) ) {
 			S::halt(500, 'provider does not exist: ' . $type);
 		};
 
 		if ( empty($caller) ) {
-			$caller = $this->modules->findModule($this->lastCaller(), $Salt);
+			$caller = $this->modules->findModule($this->lastCaller(), $salt);
 		}
 
 		return $this->modules->provider($bit, $caller, $type);
@@ -233,6 +251,13 @@ class Navigator
 		return null;
 	}
 
+	/**
+	 * Check whether a caller class can be skipped
+	 *
+	 * @param string $class
+	 *
+	 * @return bool
+	 */
 	private function skipCaller( $class )
 	{
 		return (strpos($class, 'Saltwater\Root') !== false)

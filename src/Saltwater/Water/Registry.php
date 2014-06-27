@@ -30,6 +30,7 @@ class Registry extends \ArrayObject
 
 	/**
 	 * Register a Salt and return its bitmask integer
+	 *
 	 * @param $name
 	 *
 	 * @return number

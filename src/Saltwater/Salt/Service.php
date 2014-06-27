@@ -26,21 +26,45 @@ class Service
 		$this->setModule($module);
 	}
 
+	/**
+	 * @param Context $context
+	 *
+	 * @return void
+	 */
 	public function setContext( $context )
 	{
 		$this->context = $context;
 	}
 
+	/**
+	 * @param string $module
+	 *
+	 * @return void
+	 */
 	public function setModule( $module )
 	{
 		$this->module = $module;
 	}
 
+	/**
+	 * Ensure that a method can be called within this service
+	 *
+	 * @param string $method
+	 *
+	 * @return bool
+	 */
 	public function isCallable( $method )
 	{
 		return method_exists($this, $method);
 	}
 
+	/**
+	 * Prepare the calling of a method
+	 *
+	 * @param object $call
+	 *
+	 * @return bool
+	 */
 	public function prepareCall( $call )
 	{
 		return $this->isCallable($call->function);

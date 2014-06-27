@@ -6,16 +6,13 @@ use Saltwater\Water\Navigator;
 
 class Server
 {
-	/**
-	 * @var Navigator
-	 */
+	/** @var Navigator */
 	public static $n;
 
-	/**
-	 * @var float
-	 */
+	/** @var float */
 	public static $start;
 
+	/** @var array */
 	public static $gt = array();
 
 	/**
@@ -25,6 +22,8 @@ class Server
 	 *
 	 * @param string[] $modules array of class names of modules to include
 	 * @param string   $cache   filepath to a navigator cache file
+	 *
+	 * @return void
 	 */
 	public static function init( $modules=array(), $cache=null )
 	{
@@ -40,6 +39,14 @@ class Server
 		}
 	}
 
+	/**
+	 * Init Server from Cache
+	 *
+	 * @param $modules
+	 * @param $cache
+	 *
+	 * @return void
+	 */
 	private static function initCached( $modules, $cache )
 	{
 		if ( self::loadCache($cache) ) return;
@@ -58,6 +65,7 @@ class Server
 	{
 		if ( !empty(self::$start) ) return;
 
+		/** @var float $start */
 		self::$start = microtime(true);
 
 		self::$n = new Navigator();

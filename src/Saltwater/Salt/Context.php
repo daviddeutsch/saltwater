@@ -10,16 +10,25 @@ namespace Saltwater\Salt;
  */
 class Context
 {
+	/** @var string */
 	public $namespace;
 
+	/** @var Context */
 	public $parent;
 
+	/** @var string */
 	public $module;
 
+	/** @var mixed */
 	public $data;
 
+	/** @var array */
 	public $services = array();
 
+	/**
+	 * @param Context|null $parent
+	 * @param string|null  $module
+	 */
 	public function __construct( $parent=null, $module=null )
 	{
 		if ( !is_null($parent) ) $this->parent = $parent;
@@ -27,11 +36,17 @@ class Context
 		if ( !is_null($module) ) $this->module = $module;
 	}
 
+	/**
+	 * @param mixed $data
+	 */
 	public function pushData( $data )
 	{
 		$this->data = $data;
 	}
 
+	/**
+	 * @return null
+	 */
 	public function getInfo()
 	{
 		return null;

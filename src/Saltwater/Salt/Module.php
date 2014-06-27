@@ -11,8 +11,10 @@ use Saltwater\Salt\Provider;
  */
 class Module
 {
+	/** @var string Can be used to override the automatically generated value */
 	public static $name;
 
+	/** @var string Can be used to override the automatically generated value */
 	public static $namespace;
 
 	/**
@@ -32,12 +34,14 @@ class Module
 
 	/**
 	 * @param string $name
+	 *
+	 * @return void
 	 */
 	public function register( $name )
 	{
 		$name = 'module.' . $name;
 
-		if ( S::$n->isSalt($name) || $this->registry ) return null;
+		if ( S::$n->isSalt($name) || $this->registry ) return;
 
 		$this->ensureRequires();
 
@@ -46,6 +50,11 @@ class Module
 		$this->registerProvides();
 	}
 
+	/**
+	 * Make sure all required modules are loaded
+	 *
+	 * @return void
+	 */
 	private function ensureRequires()
 	{
 		if ( empty($this->require['module']) ) return;
@@ -55,30 +64,52 @@ class Module
 		}
 	}
 
+	/**
+	 * Register all salts the module provides
+	 *
+	 * @return void
+	 */
 	private function registerProvides()
 	{
 		if ( empty($this->provide) ) return;
 
 		foreach ( $this->provide as $type => $content ) {
-			foreach ( $content as $Salt ) {
-				$this->registerProvide($type, $Salt);
+			foreach ( $content as $salt ) {
+				$this->registerProvide($type, $salt);
 			}
 		}
 	}
 
-	private function registerProvide( $type, $Salt )
+	/**
+	 * Register a salt that this module provides
+	 *
+	 * @param $type
+	 * @param $salt
+	 *
+	 * @return void
+	 */
+	private function registerProvide( $type, $salt )
 	{
 		$this->registry |= S::$n->addSalt(
-			$type . '.' . U::camelTodashed($Salt)
+			$type . '.' . U::camelTodashed($salt)
 		);
 	}
 
+	/**
+	 * Check whether the module contains a salt
+	 *
+	 * @param $bit
+	 *
+	 * @return bool
+	 */
 	public function has( $bit )
 	{
 		return ($this->registry & $bit) == $bit;
 	}
 
 	/**
+	 * Create a new provider instance
+	 *
 	 * @param string $type
 	 * @param string $caller
 	 *
@@ -109,11 +140,21 @@ class Module
 		return class_exists($class) ? $class : false;
 	}
 
+	/**
+	 * Check whether this module provides a context
+	 *
+	 * @return bool
+	 */
 	public function lacksContext()
 	{
 		return empty($this->provide['context']);
 	}
 
+	/**
+	 * Return the master context for this module
+	 *
+	 * @return null|string
+	 */
 	public function masterContext()
 	{
 		if ( $this->lacksContext() ) return null;
@@ -121,6 +162,9 @@ class Module
 		return U::camelTodashed( $this->provide['context'][0] );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function getName()
 	{
 		$class = get_called_class();
@@ -130,6 +174,9 @@ class Module
 		return U::namespacedClassToDashed($class);
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function getNamespace()
 	{
 		$class = get_called_class();

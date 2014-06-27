@@ -90,7 +90,7 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function masterContext( $parent=null )
 	{
-		foreach ( (array) $this as $name => $module ) {
+		foreach ( $this->getList() as $name => $module ) {
 			if ( $module->lacksContext() ) continue;
 
 			$parent = S::$n->context->get($module->masterContext(), $parent);
@@ -130,12 +130,12 @@ class ModuleStack extends \ArrayObject
 
 	/**
 	 * @param Module $module
-	 * @param string       $name
-	 * @param int          $bit
-	 * @param string       $caller
-	 * @param string       $type
+	 * @param string $name
+	 * @param int    $bit
+	 * @param string $caller
+	 * @param string $type
 	 *
-	 * @return bool
+	 * @return Provider|bool
 	 */
 	private function providerFromModule( $module, $bit, $caller, $type )
 	{
@@ -147,6 +147,8 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * @param integer $bit
 	 * @param string $type
+	 *
+	 * @return Provider|bool
 	 */
 	private function tryModuleFallback( $bit, $type )
 	{
@@ -179,10 +181,8 @@ class ModuleStack extends \ArrayObject
 	{
 		$bit = S::$n->bitSalt($c->Salt);
 
-		/**
-		 * @var Module $module
-		 */
-		foreach ( array_reverse((array) $this) as $k => $module ) {
+		/** @var Module $module */
+		foreach ( $this->getReverseList() as $k => $module ) {
 			/**
 			 * A provider calling itself always gets a lower level provider
 			 *
@@ -211,56 +211,57 @@ class ModuleStack extends \ArrayObject
 		// Extract a Salt from the last two particles
 		$class = array_pop($caller);
 
-		$Salt = strtolower( array_pop($caller) . '.' . $class );
+		$salt = strtolower( array_pop($caller) . '.' . $class );
 
 		// The rest is the namespace
 		return (object) array(
-			'Salt'        => $Salt,
+			'Salt'        => $salt,
 			'namespace'    => implode('\\', $caller),
-			'is_provider'  => $Salt == $provider
+			'is_provider'  => $salt == $provider
 		);
 	}
 
 	/**
 	 * Return top candidate Module for providing a Salt
 	 *
-	 * @param string $Salt
+	 * @param string $salt
 	 * @param bool   $precedence Use the current module precedence rules
 	 *
 	 * @return bool|mixed
 	 */
-	public function moduleBySalt( $Salt, $precedence=true )
+	public function moduleBySalt( $salt, $precedence=true )
 	{
-		return $this->modulesBySalt($Salt, $precedence, true);
+		return $this->modulesBySalt($salt, $precedence, true);
 	}
 
 	/**
 	 * Return a list of Modules providing a Salt
 	 *
-	 * @param string $Salt
+	 * @param string $salt
 	 * @param bool   $precedence
 	 * @param bool   $first      only return the first item on the list
 	 *
 	 * @return array|bool
 	 */
-	public function modulesBySalt( $Salt, $precedence=true, $first=false )
+	public function modulesBySalt( $salt, $precedence=true, $first=false )
 	{
-		if ( !S::$n->isSalt($Salt) ) return false;
+		if ( !S::$n->isSalt($salt) ) return false;
 
 		$call = $first ? 'getSaltModule' : 'getSaltModules';
 
 		return $this->$call(
-			S::$n->bitSalt($Salt),
+			S::$n->bitSalt($salt),
 			$this->getPrecedence($precedence)
 		);
 	}
 
 	public function getSaltModules( $bit, $modules=null )
 	{
-		$modules = is_null($modules) ? array_keys((array) $this) : $modules;
+		$modules = is_null($modules) ? array_keys($this->getList()) : $modules;
 
 		$return = array();
 		foreach ( $modules as $module ) {
+			/** @var Module[] $this */
 			if ( !$this[$module]->has($bit) ) continue;
 
 			$return[] = $module;
@@ -271,24 +272,49 @@ class ModuleStack extends \ArrayObject
 
 	public function getSaltModule( $bit, $modules=null )
 	{
-		$modules = is_null($modules) ? array_keys((array) $this) : $modules;
+		$modules = is_null($modules) ? array_keys($this->getList()) : $modules;
 
 		foreach ( $modules as $module ) {
+			/** @var Module[] $this */
 			if ( $this[$module]->has($bit) ) return $module;
 		}
 
 		return false;
 	}
 
+	/**
+	 * @return Module[]
+	 */
+	private function getList()
+	{
+		return (array) $this;
+	}
+
+	/**
+	 * @return Module[]
+	 */
+	private function getReverseList()
+	{
+		return array_reverse( (array) $this );
+	}
+
+	/**
+	 * @param bool $stack_precedence
+	 *
+	 * @return string[]
+	 */
 	private function getPrecedence( $stack_precedence )
 	{
 		if ( $stack_precedence ) {
 			return $this->stack->modulePrecedence();
 		}
 
-		return array_keys( array_reverse((array) $this) );
+		return array_keys( $this->getReverseList() );
 	}
 
+	/**
+	 * @return Module[]
+	 */
 	private function precedenceList()
 	{
 		$return = array();
