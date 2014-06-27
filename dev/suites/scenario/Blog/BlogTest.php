@@ -54,7 +54,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$results = array();
-		for ( $i=0; $i<=100; ++$i ) {
+		for ( $i=0; $i<=1000; ++$i ) {
 			$start = microtime(true);
 
 			$this->request('post', 'article', $content);
@@ -64,15 +64,15 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan(30, $average);
+		$this->assertLessThan( getenv('TRAVIS') ? 30 : 10, $average );
 
-		print_r("\n\n Average POST speed: " . $average . "ms");
+		print_r("\n\n Average POST speed: " . round($average, 4) . "ms");
 	}
 
 	public function testGetSpeed()
 	{
 		$results = array();
-		for ( $i=1; $i<=100; ++$i ) {
+		for ( $i=1; $i<=1000; ++$i ) {
 			$start = microtime(true);
 
 			$this->request('get', 'article/' . $i);
@@ -82,9 +82,9 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan(15, $average);
+		$this->assertLessThan( getenv('TRAVIS') ? 15 : 5, $average );
 
-		print_r("\n\n Average GET speed: " . $average . "ms");
+		print_r("\n\n Average GET speed: " . round($average, 4) . "ms");
 	}
 
 	private function average($arr)
@@ -94,11 +94,9 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 	private function executionTime( $start )
 	{
-		$multiplier = getenv('TRAVIS') ? 0.1 : 1;
-
 		$time = microtime(true);
 
-		return round( ($time - $start) * 1000 * $multiplier, 2 );
+		return round( ($time - $start) * 1000, 2 );
 	}
 
 	private function request( $method, $path, $input=null )
