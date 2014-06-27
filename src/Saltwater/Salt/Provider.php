@@ -11,7 +11,7 @@ abstract class Provider
 	protected static $caller;
 
 	/**
-	 * Protected constructor, providers are instantiated through ::getProvider()
+	 * Protected constructor, instantiate through ::getProvider()
 	 */
 	protected function __construct() {}
 

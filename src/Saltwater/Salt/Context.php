@@ -16,7 +16,7 @@ class Context
 	/** @var Context */
 	public $parent;
 
-	/** @var string */
+	/** @var Module */
 	public $module;
 
 	/** @var mixed */
@@ -27,7 +27,7 @@ class Context
 
 	/**
 	 * @param Context|null $parent
-	 * @param string|null  $module
+	 * @param Module|null  $module
 	 */
 	public function __construct( $parent=null, $module=null )
 	{

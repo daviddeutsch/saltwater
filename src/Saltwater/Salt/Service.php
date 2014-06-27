@@ -15,6 +15,12 @@ class Service
 	/** @var string */
 	protected $module = null;
 
+	/**
+	 * @param Context $context
+	 * @param string  $module
+	 *
+	 * @return void
+	 */
 	public function __construct( $context=null, $module=null )
 	{
 		$this->setContext($context);

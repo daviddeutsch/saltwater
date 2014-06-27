@@ -54,7 +54,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		);
 
 		$results = array();
-		for ( $i=0; $i<100; ++$i ) {
+		for ( $i=0; $i<=100; ++$i ) {
 			$start = microtime(true);
 
 			$this->request('post', 'article', $content);
@@ -72,7 +72,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 	public function testGetSpeed()
 	{
 		$results = array();
-		for ( $i=1; $i<101; ++$i ) {
+		for ( $i=1; $i<=100; ++$i ) {
 			$start = microtime(true);
 
 			$this->request('get', 'article/' . $i);

@@ -116,6 +116,22 @@ class Utils
 	}
 
 	/**
+	 * @param array $class
+	 *
+	 * @return array Class Name, Salt and Namespace
+	 */
+	public static function extractFromClass( $class )
+	{
+		$class_name = array_pop($class);
+
+		$salt = strtolower( array_pop($class) . '.' . $class_name );
+
+		$namespace = implode('\\', $class);
+
+		return array($class_name, $salt, $namespace);
+	}
+
+	/**
 	 * Read a JSON file and return its content
 	 *
 	 * @param      $path

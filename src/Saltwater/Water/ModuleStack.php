@@ -3,6 +3,7 @@
 namespace Saltwater\Water;
 
 use Saltwater\Server as S;
+use Saltwater\Utils as U;
 use Saltwater\Salt\Module;
 use Saltwater\Salt\Context;
 use Saltwater\Salt\Provider;
@@ -183,23 +184,18 @@ class ModuleStack extends \ArrayObject
 	}
 
 	/**
-	 * @param string $caller
+	 * @param array  $caller
 	 * @param string $provider
 	 *
 	 * @return callable
 	 */
 	private function moduleChecker( $caller, $provider )
 	{
-		// Extract a Salt from the last two particles
-		$class = array_pop($caller);
-
-		$salt = strtolower( array_pop($caller) . '.' . $class );
+		list(, $salt, $namespace) = U::extractFromClass($caller);
 
 		$is_provider = $salt == $provider;
 
 		$bit = S::$n->bitSalt($salt);
-
-		$namespace = implode('\\', $caller);
 
 		/**
 		 * A provider calling itself always gets a lower level provider
