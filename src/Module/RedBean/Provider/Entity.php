@@ -38,33 +38,17 @@ class Entity extends Provider
 
 		if ( !$bit ) return null;
 
-		if ( $class = $this->entityFromModule(self::$caller, $name, $bit) ) {
+		$check = function($module) use ($name, $bit) {
+			return $this->entityFromModule($module, $name, $bit);
+		};
+
+		if ( $class = $check(self::$caller) ) return $class;
+
+		if ( $class = $check( S::$n->moduleBySalt('entity.' . $name) ) ) {
 			return $class;
 		}
 
-		return $this->formatModelFallback($name, $bit);
-	}
-
-	/**
-	 * Either try to find the entity via the module that declared it, or
-	 * through the module that this provider belongs to
-	 *
-	 * @param string $name
-	 * @param int    $bit
-	 *
-	 * @return string|null
-	 */
-	private function formatModelFallback($name, $bit)
-	{
-		$injected = S::$n->moduleBySalt('entity.' . $name);
-
-		if ( $class = $this->entityFromModule($injected, $name, $bit) ) {
-			return $class;
-		}
-
-		if ( $class = $this->entityFromModule(self::$module, $name, $bit) ) {
-			return $class;
-		}
+		if ( $class = $check(self::$module) ) return $class;
 
 		return null;
 	}
@@ -85,18 +69,19 @@ class Entity extends Provider
 
 		if ( !is_object($module) || !$module->has($bit) ) return false;
 
-		$class = $this->fromModule($name, $module);
+		$class = $this->getEntityClass($name, $module);
 
 		return class_exists($class) ? $class : 'Saltwater\RedBean\Salt\Entity';
 	}
 
 	/**
+	 * Get Entity class name from a name plus a module
 	 * @param string $name
 	 * @param Module $module
 	 *
 	 * @return string
 	 */
-	private function fromModule( $name, $module )
+	private function getEntityClass( $name, $module )
 	{
 		return U::className($module::getNamespace(), 'entity', $name);
 	}
