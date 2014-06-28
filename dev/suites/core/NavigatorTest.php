@@ -42,7 +42,7 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertTrue( S::$n->addModule($class, true) );
 
-		$this->assertNull( S::addModule($class) );
+		$this->assertFalse( S::addModule($class) );
 
 		$module = S::$n->getModule('root');
 
