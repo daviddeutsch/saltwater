@@ -233,7 +233,7 @@ class ModuleStack extends \ArrayObject
 
 		return $this->$call(
 			S::$n->bitSalt($salt),
-			$this->getPrecedence($precedence)
+			$precedence ? $this->precedenceList() : $this->getReverseList()
 		);
 	}
 
@@ -247,14 +247,10 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function getSaltModules( $bit, $modules=null )
 	{
-		$modules = is_null($modules) ? array_keys($this->getList()) : $modules;
-
 		$return = array();
-		foreach ( $modules as $module ) {
-			/** @var Module[] $this */
-			if ( !$this[$module]->has($bit) ) continue;
-
-			$return[] = $module;
+		foreach ( $modules ?: (array) $this as $module ) {
+			/** @var Module $module */
+			if ( $module->has($bit) ) $return[] = $module::getName();
 		}
 
 		return $return;
@@ -269,11 +265,9 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function getSaltModule( $bit, $modules=null )
 	{
-		$modules = is_null($modules) ? array_keys($this->getList()) : $modules;
-
-		foreach ( $modules as $module ) {
-			/** @var Module[] $this */
-			if ( $this[$module]->has($bit) ) return $module;
+		foreach ( $modules ?: (array) $this as $module ) {
+			/** @var Module $module */
+			if ( $module->has($bit) ) return $module::getName();
 		}
 
 		return false;
@@ -282,31 +276,9 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * @return Module[]
 	 */
-	private function getList()
-	{
-		return (array) $this;
-	}
-
-	/**
-	 * @return Module[]
-	 */
 	private function getReverseList()
 	{
 		return array_reverse( (array) $this );
-	}
-
-	/**
-	 * @param bool $stack_precedence
-	 *
-	 * @return string[]
-	 */
-	private function getPrecedence( $stack_precedence )
-	{
-		if ( $stack_precedence ) {
-			return $this->stack->modulePrecedence();
-		}
-
-		return array_keys( $this->getReverseList() );
 	}
 
 	/**
