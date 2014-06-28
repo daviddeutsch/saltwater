@@ -117,9 +117,7 @@ class Response extends Provider
 		}
 
 		foreach ( get_object_vars($object) as $k => $v ) {
-			if ( !is_numeric($v) ) continue;
-
-			$object->$k = $this->stringToNum($v);
+			if ( is_numeric($v) ) $object->$k = $this->stringToNum($v);
 		}
 
 		return $object;

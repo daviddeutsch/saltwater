@@ -236,6 +236,18 @@ class Navigator
 			$trace = debug_backtrace(false);
 		}
 
+		return $this->extractFromBacktrace($trace);
+	}
+
+	/**
+	 * Find and extract the last non-saltwater core class calling
+	 *
+	 * @param array $trace
+	 *
+	 * @return array|null
+	 */
+	private function extractFromBacktrace( $trace )
+	{
 		$depth = count($trace);
 
 		// Iterate through backtrace, find the last caller class

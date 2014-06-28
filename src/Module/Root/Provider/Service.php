@@ -36,13 +36,18 @@ class Service extends Provider
 
 		if ( class_exists($class) ) return $class;
 
-		// Next up, try for a root service
-		$class = U::className('saltwater', 'root', 'service', $service);
+		return $this->getServiceClassFallback($context, $service);
+	}
+
+	private function getServiceClassFallback( $context, $service )
+	{
+		// Check whether we have a RestService in the context namespace
+		$class = U::className($context->namespace, 'service', 'rest');
 
 		if ( class_exists($class) ) return $class;
 
-		// Check whether we have a RestService in the context namespace
-		$class = U::className($context->namespace, 'service', 'rest');
+		// Next up, try for a root service
+		$class = U::className('saltwater', 'root', 'service', $service);
 
 		if ( class_exists($class) ) return $class;
 
