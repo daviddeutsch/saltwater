@@ -63,21 +63,12 @@ class ModuleStack extends \ArrayObject
 	 */
 	private function registeredModule( $class )
 	{
-		$module = $this->moduleInstance($class);
+		/** @var Module $module */
+		$module = new $class;
 
 		$module->register($class::getName());
 
 		return $module;
-	}
-
-	/**
-	 * @param string $class
-	 *
-	 * @return Module
-	 */
-	private function moduleInstance( $class )
-	{
-		return new $class;
 	}
 
 	/**
