@@ -200,17 +200,17 @@ class ModuleStack extends \ArrayObject
 		/**
 		 * A provider calling itself always gets a lower level provider
 		 *
-		 * The if is a condensed version of:
+		 * The if is a condensed and inverted version of:
 		 *
 		 * ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
 		 */
 		return function($module) use ($is_provider, $bit, $namespace) {
 			/** @var Module $module */
-			if ( $is_provider !== ($module::getNamespace() == $namespace) ) {
-				if ( $module->has($bit) ) return true;
+			if ( $is_provider === ($module::getNamespace() == $namespace) ) {
+				return false;
 			}
 
-			return false;
+			return $module->has($bit);
 		};
 	}
 
