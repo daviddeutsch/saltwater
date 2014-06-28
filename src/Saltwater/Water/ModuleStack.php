@@ -30,15 +30,13 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function appendModule( $class, $master=false )
 	{
-		if ( !class_exists($class) ) return false;
+		if (
+			!class_exists($class)
+			|| isset($this[$class::getName()])
+			|| !($module = $this->registeredModule($class))
+		) return false;
 
-		if ( isset($this[$class::getName()]) ) return null;
-
-		if ( !($module = $this->registeredModule($class)) ) {
-			return false;
-		}
-
-		// Push late to preserve dependency order
+		// Push to stack after registering - to preserve order of dependencies
 		$this[$class::getName()] = $module;
 
 		if ( $master ) $this->stack->setMaster($class::getName());
