@@ -26,6 +26,8 @@ class Entity extends Provider
 	}
 
 	/**
+	 * Format a full class name from an entity name
+	 *
 	 * @param string $name
 	 *
 	 * @return string|null
@@ -40,6 +42,20 @@ class Entity extends Provider
 			return $class;
 		}
 
+		return $this->formatModelFallback($name, $bit);
+	}
+
+	/**
+	 * Either try to find the entity via the module that declared it, or
+	 * through the module that this provider belongs to
+	 *
+	 * @param string $name
+	 * @param int    $bit
+	 *
+	 * @return string|null
+	 */
+	private function formatModelFallback($name, $bit)
+	{
 		$injected = S::$n->moduleBySalt('entity.' . $name);
 
 		if ( $class = $this->entityFromModule($injected, $name, $bit) ) {
@@ -53,6 +69,16 @@ class Entity extends Provider
 		return null;
 	}
 
+	/**
+	 * Check whether a module has an entity declared, if so, either load the
+	 * entity class, or fall back to the basic salt
+	 *
+	 * @param Module $module
+	 * @param string $name
+	 * @param int    $bit
+	 *
+	 * @return bool|string
+	 */
 	private function entityFromModule( $module, $name, $bit )
 	{
 		$module = S::$n->getModule($module);
