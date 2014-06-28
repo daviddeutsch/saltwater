@@ -80,7 +80,8 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function masterContext( $parent=null )
 	{
-		foreach ( $this->getList() as $name => $module ) {
+		foreach ( (array) $this as $name => $module ) {
+			/** @var Module $module */
 			if ( $module->lacksContext() ) continue;
 
 			$parent = S::$n->context->get($module->masterContext(), $parent);
@@ -164,8 +165,8 @@ class ModuleStack extends \ArrayObject
 
 		$check = $this->moduleChecker($caller, $provider);
 
-		/** @var Module $module */
 		foreach ( $this->getReverseList() as $k => $module ) {
+			/** @var Module $module */
 			if ( $check($module) ) return $k;
 		}
 
