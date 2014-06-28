@@ -23,8 +23,8 @@ class ModuleStack extends \ArrayObject
 	/**
 	 * Add module to stack and register its Salts
 	 *
-	 * @param Module $class  Full Classname
-	 * @param bool   $master true if this is also the master module
+	 * @param Module|string $class  Full Classname
+	 * @param bool          $master true if this is also the master module
 	 *
 	 * @return bool|null
 	 */
@@ -107,7 +107,7 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return bool|Provider
 	 */
-	public function provider( $bit, $caller, $type)
+	public function provider( $bit, $caller, $type )
 	{
 		// Depending on the caller, reset the module stack
 		$previous_master = $this->stack->setMaster($caller);

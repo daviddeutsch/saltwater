@@ -47,12 +47,6 @@ class Navigator
 	/** @var Registry */
 	private $registry = array();
 
-	/** @var string[] skipped classes during search for caller module */
-	private $skip = array(
-		'Saltwater\Navigator',
-		'Saltwater\Server'
-	);
-
 	/**
 	 * Initiate the navigator by setting up a ModuleStack and a Registry
 	 *
@@ -165,6 +159,14 @@ class Navigator
 	}
 
 	/**
+	 * @see ModuleStack::findModule()
+	 */
+	public function findModule( $caller, $provider )
+	{
+		return $this->modules->findModule($caller, $provider);
+	}
+
+	/**
 	 * @see ModuleStack::moduleBySalt()
 	 */
 	public function moduleBySalt( $name )
@@ -208,72 +210,14 @@ class Navigator
 	{
 		$salt = 'provider.' . $type;
 
-		if ( !$bit = $this->bitSalt($salt) ) {
+		if ( !$bit = S::$n->bitSalt($salt) ) {
 			S::halt(500, 'provider does not exist: ' . $type);
 		};
 
 		if ( empty($caller) ) {
-			$caller = $this->modules->findModule($this->lastCaller(), $salt);
+			$caller = S::$n->findModule(Backtrace::lastCaller(), $salt);
 		}
 
 		return $this->modules->provider($bit, $caller, $type);
-	}
-
-	/**
-	 * Extracts the last calling class from a debug_backtrace, skipping the
-	 * Navigator and Server, of course.
-	 *
-	 * And - Yup, debug_backtrace().
-	 *
-	 * @return array|null
-	 */
-	private function lastCaller()
-	{
-		// Let me tell you about my boat
-		if ( S::$gt['54'] ) {
-			$trace = debug_backtrace(2, 22);
-		} else {
-			$trace = debug_backtrace(false);
-		}
-
-		return $this->extractFromBacktrace($trace);
-	}
-
-	/**
-	 * Find and extract the last non-saltwater core class calling
-	 *
-	 * @param array $trace
-	 *
-	 * @return array|null
-	 */
-	private function extractFromBacktrace( $trace )
-	{
-		$depth = count($trace);
-
-		// Iterate through backtrace, find the last caller class
-		for ( $i=2; $i<$depth; ++$i ) {
-			if (
-				!isset($trace[$i]['class'])
-				|| $this->skipCaller($trace[$i]['class'])
-			) continue;
-
-			return explode('\\', $trace[$i]['class']);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Check whether a caller class can be skipped
-	 *
-	 * @param string $class
-	 *
-	 * @return bool
-	 */
-	private function skipCaller( $class )
-	{
-		return (strpos($class, 'Saltwater\Root') !== false)
-			|| (strpos($class, '\\') === false)
-			|| in_array($class, $this->skip);
 	}
 }
