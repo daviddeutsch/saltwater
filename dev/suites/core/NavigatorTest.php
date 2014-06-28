@@ -21,47 +21,47 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 	public function testSaltHandling()
 	{
-		$this->assertEquals( 1, S::$n->addSalt('thing') );
+		$this->assertEquals( 1, S::$n->registry->append('thing') );
 
-		$this->assertEquals( 2, S::$n->addSalt('thing2') );
+		$this->assertEquals( 2, S::$n->registry->append('thing2') );
 
-		$this->assertEquals( 4, S::$n->addSalt('thing3') );
+		$this->assertEquals( 4, S::$n->registry->append('thing3') );
 
-		$this->assertEquals( 4, S::$n->addSalt('thing3') );
+		$this->assertEquals( 4, S::$n->registry->append('thing3') );
 
-		$this->assertTrue( S::$n->isSalt('thing2') );
+		$this->assertTrue( S::$n->registry->exists('thing2') );
 
-		$this->assertEquals( 1, S::$n->bitSalt('thing') );
+		$this->assertEquals( 1, S::$n->registry->bit('thing') );
 	}
 
 	public function testWithRootModule()
 	{
-		$this->assertFalse( S::$n->addModule('\N\Existe\Pas') );
+		$this->assertFalse( S::$n->modules->append('\N\Existe\Pas') );
 
 		$class = 'Saltwater\Root\Root';
 
-		$this->assertTrue( S::$n->addModule($class, true) );
+		$this->assertTrue( S::$n->modules->append($class, true) );
 
 		$this->assertFalse( S::addModule($class) );
 
-		$module = S::$n->getModule('root');
+		$module = S::$n->modules->get('root');
 
 		$this->assertEquals( $class, get_class($module) );
 
-		$this->assertTrue( S::$n->isSalt('module.root') );
+		$this->assertTrue( S::$n->registry->exists('module.root') );
 
-		$this->assertEquals( 1, S::$n->bitSalt('module.root') );
+		$this->assertEquals( 1, S::$n->registry->bit('module.root') );
 
 		$this->assertEquals( 'root', $module->masterContext() );
 
 		$this->assertEquals(
 			'root',
-			S::$n->moduleBySalt('provider.context')
+			S::$n->modules->moduleBySalt('provider.context')
 		);
 
 		$this->assertEquals(
 			'Saltwater\Root\Context\Root',
-			get_class(S::$n->masterContext())
+			get_class(S::$n->modules->masterContext())
 		);
 
 		// Testing different ways of calling in providers

@@ -43,7 +43,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(
 			'Saltwater\RedBean\RedBean',
-			get_class( S::$n->getModule('redbean') )
+			get_class( S::$n->modules->get('redbean') )
 		);
 	}
 }

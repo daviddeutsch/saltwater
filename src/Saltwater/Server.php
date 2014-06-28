@@ -99,7 +99,7 @@ class Server
 		if ( !is_array($array) ) $array = array($array);
 
 		foreach ( $array as $i => $module ) {
-			self::$n->addModule($module, $i==0);
+			self::$n->modules->append($module, $i==0);
 		}
 	}
 
@@ -114,7 +114,7 @@ class Server
 	 */
 	public static function addModule( $class )
 	{
-		return self::$n->addModule($class);
+		return self::$n->modules->append($class);
 	}
 
 	/**

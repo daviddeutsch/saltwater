@@ -18,7 +18,7 @@ class RedBeanProviderTest extends \PHPUnit_Framework_TestCase
 	{
 		S::init('Saltwater\Root\Root');
 
-		S::$n->addModule('Saltwater\RedBean\RedBean', true);
+		S::$n->modules->append('Saltwater\RedBean\RedBean', true);
 
 		$this->assertEquals(
 			'Saltwater\RedBean\Provider\Entity',

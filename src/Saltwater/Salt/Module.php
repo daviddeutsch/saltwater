@@ -41,11 +41,11 @@ class Module
 	{
 		$name = 'module.' . $name;
 
-		if ( S::$n->isSalt($name) || $this->registry ) return;
+		if ( S::$n->registry->exists($name) || $this->registry ) return;
 
 		$this->ensureRequires();
 
-		$this->registry |= S::$n->addSalt($name);
+		$this->registry |= S::$n->registry->append($name);
 
 		$this->registerProvides();
 	}
@@ -60,7 +60,7 @@ class Module
 		if ( empty($this->require['module']) ) return;
 
 		foreach ( $this->require['module'] as $module ) {
-			S::$n->addModule($module, true);
+			S::$n->modules->append($module, true);
 		}
 	}
 
@@ -90,7 +90,7 @@ class Module
 	 */
 	private function registerProvide( $type, $salt )
 	{
-		$this->registry |= S::$n->addSalt(
+		$this->registry |= S::$n->registry->append(
 			$type . '.' . U::camelTodashed($salt)
 		);
 	}

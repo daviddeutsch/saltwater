@@ -34,7 +34,7 @@ class Entity extends Provider
 	 */
 	private function formatModel( $name )
 	{
-		$bit = S::$n->bitSalt('entity.' . $name);
+		$bit = S::$n->registry->bit('entity.' . $name);
 
 		if ( !$bit ) return null;
 
@@ -50,9 +50,9 @@ class Entity extends Provider
 	{
 		if ( $class = $check(self::$caller) ) return $class;
 
-		if ( $class = $check( S::$n->moduleBySalt('entity.' . $name) ) ) {
-			return $class;
-		}
+		$class = $check( S::$n->modules->moduleBySalt('entity.' . $name) );
+
+		if ( $class ) return $class;
 
 		if ( $class = $check(self::$module) ) return $class;
 
@@ -71,7 +71,7 @@ class Entity extends Provider
 	 */
 	private function entityFromModule( $module, $name, $bit )
 	{
-		$module = S::$n->getModule($module);
+		$module = S::$n->modules->get($module);
 
 		if ( !is_object($module) || !$module->has($bit) ) return false;
 

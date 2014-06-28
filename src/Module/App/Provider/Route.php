@@ -16,7 +16,7 @@ class Route extends AbstractRoute
 
 		$this->http = $this->getHTTP();
 
-		$context = S::$n->masterContext();
+		$context = S::$n->modules->masterContext();
 
 		if ( empty($context) ) return;
 
@@ -25,7 +25,7 @@ class Route extends AbstractRoute
 
 	public static function getProvider()
 	{
-		$module = S::$n->getModule(self::$module);
+		$module = S::$n->modules->get(self::$module);
 
 		$class = U::className($module::getNamespace(), 'provider', 'route');
 

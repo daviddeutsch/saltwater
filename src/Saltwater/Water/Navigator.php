@@ -42,10 +42,10 @@ use Saltwater\Salt\Provider;
 class Navigator
 {
 	/** @var ModuleStack */
-	private $modules = array();
+	public $modules = array();
 
 	/** @var Registry */
-	private $registry = array();
+	public $registry = array();
 
 	/**
 	 * Initiate the navigator by setting up a ModuleStack and a Registry
@@ -119,70 +119,6 @@ class Navigator
 	}
 
 	/**
-	 * @see Registry::exists()
-	 */
-	public function isSalt( $name )
-	{
-		return $this->registry->exists($name);
-	}
-
-	/**
-	 * @see Registry::bit()
-	 */
-	public function bitSalt( $name )
-	{
-		return $this->registry->bit($name);
-	}
-
-	/**
-	 * @see Registry::append()
-	 */
-	public function addSalt( $name )
-	{
-		return $this->registry->append($name);
-	}
-
-	/**
-	 * @see ModuleStack::appendModule()
-	 */
-	public function addModule( $class, $master=false )
-	{
-		return $this->modules->appendModule($class, $master);
-	}
-
-	/**
-	 * @see ModuleStack::getModule()
-	 */
-	public function getModule( $name )
-	{
-		return $this->modules->getModule($name);
-	}
-
-	/**
-	 * @see ModuleStack::findModule()
-	 */
-	public function findModule( $caller, $provider )
-	{
-		return $this->modules->findModule($caller, $provider);
-	}
-
-	/**
-	 * @see ModuleStack::moduleBySalt()
-	 */
-	public function moduleBySalt( $name )
-	{
-		return $this->modules->moduleBySalt($name);
-	}
-
-	/**
-	 * @see ModuleStack::masterContext()
-	 */
-	public function masterContext( $parent=null )
-	{
-		return $this->modules->masterContext($parent);
-	}
-
-	/**
 	 * Get the Module that provides a context
 	 *
 	 * @param string $name plain name of the context
@@ -191,9 +127,9 @@ class Navigator
 	 */
 	public function getContextModule( $name )
 	{
-		return $this->getModule(
+		return $this->modules->get(
 			$this->modules->getSaltModule(
-				S::$n->bitSalt('context.' . $name)
+				$this->registry->bit('context.' . $name)
 			)
 		);
 	}
@@ -210,12 +146,12 @@ class Navigator
 	{
 		$salt = 'provider.' . $type;
 
-		if ( !$bit = S::$n->bitSalt($salt) ) {
+		if ( !$bit = $this->registry->bit($salt) ) {
 			S::halt(500, 'provider does not exist: ' . $type);
 		};
 
 		if ( empty($caller) ) {
-			$caller = S::$n->findModule(Backtrace::lastCaller(), $salt);
+			$caller = $this->modules->find(Backtrace::lastCaller(), $salt);
 		}
 
 		return $this->modules->provider($bit, $caller, $type);

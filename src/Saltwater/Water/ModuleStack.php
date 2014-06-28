@@ -28,7 +28,7 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return bool|null
 	 */
-	public function appendModule( $class, $master=false )
+	public function append( $class, $master=false )
 	{
 		if (
 			!class_exists($class)
@@ -51,7 +51,7 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return Module
 	 */
-	public function getModule( $name )
+	public function get( $name )
 	{
 		return $this[$name];
 	}
@@ -159,7 +159,7 @@ class ModuleStack extends \ArrayObject
 	 *
 	 * @return string module name
 	 */
-	public function findModule( $caller, $provider )
+	public function find( $caller, $provider )
 	{
 		if ( empty($caller) ) return $this->stack->getMaster();
 
@@ -185,7 +185,7 @@ class ModuleStack extends \ArrayObject
 
 		$is_provider = $salt == $provider;
 
-		$bit = S::$n->bitSalt($salt);
+		$bit = S::$n->registry->bit($salt);
 
 		/**
 		 * A provider calling itself always gets a lower level provider
@@ -228,12 +228,12 @@ class ModuleStack extends \ArrayObject
 	 */
 	public function modulesBySalt( $salt, $precedence=true, $first=false )
 	{
-		if ( !S::$n->isSalt($salt) ) return false;
+		if ( !S::$n->registry->exists($salt) ) return false;
 
 		$call = $first ? 'getSaltModule' : 'getSaltModules';
 
 		return $this->$call(
-			S::$n->bitSalt($salt),
+			S::$n->registry->bit($salt),
 			$precedence ? $this->precedenceList() : $this->getReverseList()
 		);
 	}
