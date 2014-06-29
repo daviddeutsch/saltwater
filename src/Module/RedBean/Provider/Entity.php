@@ -50,7 +50,9 @@ class Entity extends Provider
 	{
 		if ( $class = $check(self::$caller) ) return $class;
 
-		$class = $check( S::$n->modules->moduleBySalt('entity.' . $name) );
+		$class = $check(
+			S::$n->modules->finder->moduleBySalt('entity.' . $name)
+		);
 
 		if ( $class ) return $class;
 

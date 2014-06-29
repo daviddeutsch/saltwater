@@ -87,6 +87,47 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		print_r("\n\n Average GET speed: " . round($average, 4) . "ms");
 	}
 
+	public function testCommentPostSpeed()
+	{
+		$content = array(
+			'title' => 'Brine',
+			'content' => 'I think that is too salty.'
+		);
+
+		$results = array();
+		for ( $i=0; $i<=1000; ++$i ) {
+			$start = microtime(true);
+
+			$this->request('post', 'comment', $content);
+
+			$results[] = $this->executionTime($start);
+		}
+
+		$average = $this->average($results);
+
+		$this->assertLessThan( getenv('TRAVIS') ? 120 : 20, $average );
+
+		print_r("\n\n Average POST (+entity) speed: " . round($average, 4) . "ms");
+	}
+
+	public function testCommentGetSpeed()
+	{
+		$results = array();
+		for ( $i=1; $i<=1000; ++$i ) {
+			$start = microtime(true);
+
+			$this->request('get', 'comment/' . $i);
+
+			$results[] = $this->executionTime($start);
+		}
+
+		$average = $this->average($results);
+
+		$this->assertLessThan( getenv('TRAVIS') ? 80 : 5, $average );
+
+		print_r("\n\n Average GET (+entity) speed: " . round($average, 4) . "ms");
+	}
+
 	private function average($arr)
 	{
 		return array_sum($arr) / count($arr);

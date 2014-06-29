@@ -33,11 +33,11 @@ class Blog extends Module
 		),
 
 		/**
-		 * Finally, defining them as entities is a signal for the RedBean module
-		 * to track their lifecycle in an update stream
+		 * Finally, defining something as an entity is a signal for the RedBean
+		 * module to track its lifecycle in an update stream
 		 */
 		'entity' => array(
-			'article', 'comment'
+			'comment'
 		)
 	);
 }
