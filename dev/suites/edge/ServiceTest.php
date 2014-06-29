@@ -35,6 +35,38 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 		$call = $this->makeCall($context, 'get', 'lacking', 'null');
 
 		$this->assertNull( $lacking->call($call) );
+
+		$extensive = S::$n->service->get('extensive', $context);
+
+		$test = array( 'one' => 'two' );
+
+		$path = '/test/test';
+
+		$call = (object) array(
+			'context'  => $context,
+			'http'     => 'get',
+			'service'  => '',
+			'method'   => 'Providers',
+			'function' => 'getProviders',
+			'path'     => $path
+		);
+
+		$return = $extensive->call($call, $test);
+
+		$this->assertEquals(
+			$test,
+			$return[0]
+		);
+
+		$this->assertEquals(
+			$path,
+			$return[1]
+		);
+
+		$this->assertEquals(
+			'Saltwater\Root\Provider\Context',
+			get_class($return[2])
+		);
 	}
 
 	private function makeCall( $context, $cmd, $service, $path=null )
