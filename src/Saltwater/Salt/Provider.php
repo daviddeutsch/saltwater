@@ -2,6 +2,11 @@
 
 namespace Saltwater\Salt;
 
+/**
+ * Class Provider
+ *
+ * @package Saltwater\Salt
+ */
 abstract class Provider
 {
 	/** @var string */

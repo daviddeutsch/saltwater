@@ -9,7 +9,7 @@ use Saltwater\Salt\Provider;
 /**
  * Class Navigator
  *
- * @package Saltwater
+ * @package Saltwater\Water
  *
  * List of known providers:
  *
@@ -128,7 +128,7 @@ class Navigator
 	public function getContextModule( $name )
 	{
 		return $this->modules->get(
-			$this->modules->getSaltModule(
+			$this->modules->finder->getSaltModule(
 				$this->registry->bit('context.' . $name)
 			)
 		);
@@ -151,9 +151,9 @@ class Navigator
 		};
 
 		if ( empty($caller) ) {
-			$caller = $this->modules->find(Backtrace::lastCaller(), $salt);
+			$caller = $this->modules->finder->find(Backtrace::lastCaller(), $salt);
 		}
 
-		return $this->modules->provider($bit, $caller, $type);
+		return $this->modules->finder->provider($bit, $caller, $type);
 	}
 }

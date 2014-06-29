@@ -7,7 +7,11 @@ use Saltwater\Utils as U;
 use Saltwater\Salt\Provider;
 
 /**
- * An object that can register and return providers, contexts and services
+ * Module
+ *
+ * @package Saltwater\Salt
+ *
+ * An object that can register and return salts
  */
 class Module
 {

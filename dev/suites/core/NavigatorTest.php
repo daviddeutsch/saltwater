@@ -56,12 +56,12 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(
 			'root',
-			S::$n->modules->moduleBySalt('provider.context')
+			S::$n->modules->finder->moduleBySalt('provider.context')
 		);
 
 		$this->assertEquals(
 			'Saltwater\Root\Context\Root',
-			get_class(S::$n->modules->masterContext())
+			get_class(S::$n->modules->finder->masterContext())
 		);
 
 		// Testing different ways of calling in providers

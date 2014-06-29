@@ -63,9 +63,9 @@ class Entity extends Provider
 	 * Check whether a module has an entity declared, if so, either load the
 	 * entity class, or fall back to the basic salt
 	 *
-	 * @param Module $module
-	 * @param string $name
-	 * @param int    $bit
+	 * @param Module|string $module
+	 * @param string        $name
+	 * @param int           $bit
 	 *
 	 * @return bool|string
 	 */

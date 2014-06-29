@@ -31,8 +31,8 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 			'post',
 			'article',
 			array(
-				'title' => 'My first Blog Post',
-				'content' => 'Hey there, first time posting'
+				'title' => 'Saltwater',
+				'content' => 'Saltwater is water that contains a significant concentration of dissolved salts.'
 			)
 		);
 	}
@@ -40,7 +40,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 	public function testArticleGet()
 	{
 		$this->expectOutputString(
-			'{"id":1,"title":"My first Blog Post","content":"Hey there, first time posting"}'
+			'{"id":1,"title":"Saltwater","content":"Saltwater is water that contains a significant concentration of dissolved salts."}'
 		);
 
 		echo $this->request('get', 'article/1');
@@ -49,8 +49,8 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 	public function testPostSpeed()
 	{
 		$content = array(
-			'title' => 'Blog Post',
-			'content' => 'Lot\'s and lot\'s of content.'
+			'title' => 'Saltwater',
+			'content' => 'Saltwater is water that contains a significant concentration of dissolved salts.'
 		);
 
 		$results = array();

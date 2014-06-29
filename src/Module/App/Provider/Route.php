@@ -16,7 +16,7 @@ class Route extends AbstractRoute
 
 		$this->http = $this->getHTTP();
 
-		$context = S::$n->modules->masterContext();
+		$context = S::$n->modules->finder->masterContext();
 
 		if ( empty($context) ) return;
 
