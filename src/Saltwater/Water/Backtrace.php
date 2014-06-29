@@ -52,7 +52,7 @@ class Backtrace extends \ArrayIterator
 			}
 		}
 
-		return null;
+		return S::$n->modules->getStack()->getMaster();
 	}
 
 	/**

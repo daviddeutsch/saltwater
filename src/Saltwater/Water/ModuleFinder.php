@@ -97,32 +97,12 @@ class ModuleFinder
 	/**
 	 * Find the module of a caller class
 	 *
-	 * @param array|null $caller
-	 * @param string     $provider
+	 * @param array  $caller
+	 * @param string $provider
 	 *
 	 * @return string module name
 	 */
 	public function find( $caller, $provider )
-	{
-		if ( empty($caller) ) return S::$n->modules->getStack()->getMaster();
-
-		$check = $this->moduleChecker($caller, $provider);
-
-		foreach ( S::$n->modules->reverse() as $k => $module ) {
-			/** @var Module $module */
-			if ( $check($module) ) return $k;
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param array  $caller
-	 * @param string $provider
-	 *
-	 * @return callable
-	 */
-	private function moduleChecker( $caller, $provider )
 	{
 		list(, $salt, $namespace) = U::extractFromClass($caller);
 
@@ -130,21 +110,31 @@ class ModuleFinder
 
 		$bit = S::$n->registry->bit($salt);
 
-		/**
-		 * A provider calling itself always gets a lower level provider
-		 *
-		 * The if is a condensed and inverted version of:
-		 *
-		 * ($c->is_provider && $same_ns) || (!$c->is_provider && !$same_ns)
-		 */
-		return function($module) use ($is_provider, $bit, $namespace) {
+		foreach ( S::$n->modules->reverse() as $name => $module ) {
 			/** @var Module $module */
-			if ( $is_provider === ($module::getNamespace() == $namespace) ) {
-				return false;
+			if ( $this->check($module, $is_provider, $bit, $namespace) ) {
+				return $name;
 			}
+		}
 
-			return $module->has($bit);
-		};
+		return null;
+	}
+
+	/**
+	 * @param Module $module
+	 * @param bool   $is_provider
+	 * @param int    $bit
+	 * @param string $namespace
+	 *
+	 * @return bool
+	 */
+	private function check( $module, $is_provider, $bit, $namespace )
+	{
+		if ( $is_provider === ($module::getNamespace() == $namespace) ) {
+			return false;
+		}
+
+		return $module->has($bit);
 	}
 
 	/**
