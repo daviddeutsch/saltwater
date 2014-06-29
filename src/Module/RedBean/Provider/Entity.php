@@ -38,25 +38,24 @@ class Entity extends Provider
 
 		if ( !$bit ) return null;
 
-		return $this->findModel(
-			$name,
-			function($module) use ($name, $bit) {
-				return $this->entityFromModule($module, $name, $bit);
-			}
-		);
+		return $this->findModel($name, $bit);
 	}
 
-	private function findModel( $name, $check )
+	private function findModel( $name, $bit )
 	{
-		if ( $class = $check(self::$caller) ) return $class;
+		if ( $class = $this->entityFromModule(self::$caller, $name, $bit) ) {
+			return $class;
+		}
 
-		$class = $check(
-			S::$n->modules->finder->moduleBySalt('entity.' . $name)
-		);
+		if ( $class = $this->entityFromModule(
+			S::$n->modules->finder->moduleBySalt('entity.' . $name),
+			$name,
+			$bit
+		) ) return $class;
 
-		if ( $class ) return $class;
-
-		if ( $class = $check(self::$module) ) return $class;
+		if ( $class = $this->entityFromModule(self::$module, $name, $bit) ) {
+			return $class;
+		}
 
 		return null;
 	}
