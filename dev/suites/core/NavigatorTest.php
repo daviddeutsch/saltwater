@@ -93,5 +93,18 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 		unlink($path);
 
 		rmdir(__DIR__.'/cache');
+
+		$this->assertEquals(
+			'root',
+			S::$n->modules->search(S::$n->modules->get('root'))
+		);
+	}
+
+	/**
+	 * @expectedException BadMethodCallException
+	 */
+	public function testFinderException()
+	{
+		S::$n->modules->nope();
 	}
 }
