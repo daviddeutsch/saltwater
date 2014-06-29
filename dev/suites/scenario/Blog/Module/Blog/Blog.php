@@ -30,6 +30,14 @@ class Blog extends Module
 		 */
 		'service' => array(
 			'article', 'comment'
+		),
+
+		/**
+		 * Finally, defining them as entities is a signal for the RedBean module
+		 * to track their lifecycle in an update stream
+		 */
+		'entity' => array(
+			'article', 'comment'
 		)
 	);
 }
