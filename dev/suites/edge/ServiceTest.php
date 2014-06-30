@@ -40,28 +40,15 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
 		$test = array( 'one' => 'two' );
 
-		$path = '/test/test';
+		$path = 'providers';
 
-		$call = (object) array(
-			'context'  => $context,
-			'http'     => 'get',
-			'service'  => '',
-			'method'   => 'Providers',
-			'function' => 'getProviders',
-			'path'     => $path
-		);
+		$call = $this->makeCall($context, 'get', 'extensive', $path);
 
 		$return = $extensive->call($call, $test);
 
-		$this->assertEquals(
-			$test,
-			$return[0]
-		);
+		$this->assertEquals($test, $return[0]);
 
-		$this->assertEquals(
-			$path,
-			$return[1]
-		);
+		$this->assertNull($return[1]);
 
 		$this->assertEquals(
 			'Saltwater\Root\Provider\Context',
