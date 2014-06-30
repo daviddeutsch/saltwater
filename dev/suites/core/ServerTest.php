@@ -54,6 +54,11 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testHalt()
 	{
+		if (
+			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
+			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
+		) $this->markTestSkipped();
+
 		S::halt('404', 'Not Found');
 
 		$this->assertEquals(404, http_response_code());
