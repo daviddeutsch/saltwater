@@ -13,7 +13,7 @@ matrix:
     - php: hhvm-nightly
 
 before_script:
-  - composer install --no-dev
+  - composer install
   - touch /tmp/oodb.db
 
 script:
