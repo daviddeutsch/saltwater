@@ -4,7 +4,7 @@ filter:
 tools:
     # https://scrutinizer-ci.com/docs/tools/external-code-coverage/
     external_code_coverage:
-        runs: 4    # Wait for two code coverage submissions
+        runs: 6    # Wait for six code coverage submissions
 
     # https://scrutinizer-ci.com/docs/tools/php/php-analyzer/
     php_analyzer: true
