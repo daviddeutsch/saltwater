@@ -64,9 +64,11 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan( getenv('TRAVIS') ? 90 : 10, $average );
-
 		print_r("\n\n Average POST speed: " . round($average, 4) . "ms");
+
+		if ( getenv('TRAVIS') ) $this->markTestSkipped();
+
+		$this->assertLessThan( 10, $average );
 	}
 
 	public function testGetSpeed()
@@ -83,6 +85,8 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 		$average = $this->average($results);
 
 		$this->assertLessThan( getenv('TRAVIS') ? 45 : 5, $average );
+
+		if ( getenv('TRAVIS') ) $this->markTestSkipped();
 
 		print_r("\n\n Average GET speed: " . round($average, 4) . "ms");
 	}
@@ -105,9 +109,11 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan( getenv('TRAVIS') ? 90 : 20, $average );
-
 		print_r("\n\n Average POST (+entity) speed: " . round($average, 4) . "ms");
+
+		if ( getenv('TRAVIS') ) $this->markTestSkipped();
+
+		$this->assertLessThan( 20, $average );
 	}
 
 	public function testCommentGetSpeed()
@@ -123,9 +129,11 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 
 		$average = $this->average($results);
 
-		$this->assertLessThan( getenv('TRAVIS') ? 45 : 5, $average );
-
 		print_r("\n\n Average GET (+entity) speed: " . round($average, 4) . "ms");
+
+		if ( getenv('TRAVIS') ) $this->markTestSkipped();
+
+		$this->assertLessThan( 5, $average );
 	}
 
 	private function average($arr)
