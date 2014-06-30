@@ -33,7 +33,7 @@ class RedBeanServiceTest extends \PHPUnit_Framework_TestCase
 
 		$call = $this->makeCall($context, 'get', 'test', 'test');
 
-		$this->assertEquals( array(), $test->call($call) );
+		$this->assertEmpty( $test->call($call) );
 	}
 
 	private function makeCall( $context, $cmd, $service, $path=null )

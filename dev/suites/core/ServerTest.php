@@ -46,4 +46,16 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 			get_class( S::$n->modules->get('redbean') )
 		);
 	}
+
+	/**
+	 * @runInSeparateProcess
+	 *
+	 * @requires PHP 5.4
+	 */
+	public function testHalt()
+	{
+		S::halt('404', 'Not Found');
+
+		$this->assertEquals(404, http_response_code());
+	}
 }

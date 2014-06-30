@@ -127,7 +127,7 @@ class Server
 	 */
 	public static function halt( $code, $message )
 	{
-		header("HTTP/1.1 " . $code . " " . $message); exit;
+		header("HTTP/1.1 " . $code . " " . $message);
 	}
 
 	/**

@@ -142,7 +142,7 @@ class ModuleFinder
 	 *
 	 * @param string $salt
 	 *
-	 * @return bool|mixed
+	 * @return Module|string|false
 	 */
 	public function moduleBySalt( $salt )
 	{
@@ -155,7 +155,7 @@ class ModuleFinder
 	 * @param string $salt
 	 * @param bool   $first      only return the first item on the list
 	 *
-	 * @return array|bool
+	 * @return Module[]|string[]|false
 	 */
 	public function modulesBySalt( $salt, $first=false )
 	{
@@ -175,7 +175,7 @@ class ModuleFinder
 	 * @param int  $bit
 	 * @param null $modules
 	 *
-	 * @return array
+	 * @return Module[]|string[]
 	 */
 	public function getSaltModules( $bit, $modules=null )
 	{
@@ -193,7 +193,7 @@ class ModuleFinder
 	 * @param int  $bit
 	 * @param null $modules
 	 *
-	 * @return bool
+	 * @return Module|string|false
 	 */
 	public function getSaltModule( $bit, $modules=null )
 	{

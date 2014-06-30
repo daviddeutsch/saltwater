@@ -62,7 +62,7 @@ class ModuleStack extends MagicArrayObject
 	 *
 	 * @param string $name
 	 *
-	 * @return Module
+	 * @return Module|string
 	 */
 	public function get( $name )
 	{

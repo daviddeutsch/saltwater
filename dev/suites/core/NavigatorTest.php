@@ -107,4 +107,20 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 	{
 		S::$n->modules->nope();
 	}
+
+	/**
+	 * @runInSeparateProcess
+	 *
+	 * @requires PHP 5.4
+	 */
+	public function testMissingProvider()
+	{
+		S::destroy();
+
+		S::init('Saltwater\Root\Root');
+
+		S::$n->nosuchprovider;
+
+		$this->assertEquals(500, http_response_code());
+	}
 }
