@@ -2,7 +2,7 @@
 
 use Saltwater\Server as S;
 
-class RedBeanProviderTest extends \PHPUnit_Framework_TestCase
+class DbTest extends \PHPUnit_Framework_TestCase
 {
 	protected function setUp()
 	{

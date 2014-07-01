@@ -109,12 +109,13 @@ class Server
 	 * Proxy for Saltwater\Navigator::addModule()
 	 *
 	 * @param string $class
+	 * @param bool   $master
 	 *
 	 * @return bool|null
 	 */
-	public static function addModule( $class )
+	public static function addModule( $class, $master=true )
 	{
-		return self::$n->modules->append($class);
+		return self::$n->modules->append($class, $master);
 	}
 
 	/**

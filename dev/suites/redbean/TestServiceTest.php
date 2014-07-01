@@ -3,7 +3,7 @@
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 
-class RedBeanServiceTest extends \PHPUnit_Framework_TestCase
+class TestServiceTest extends \PHPUnit_Framework_TestCase
 {
 	protected function setUp()
 	{

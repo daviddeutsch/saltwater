@@ -18,7 +18,7 @@ class Entity extends Provider
 	 */
 	public function get( $name )
 	{
-		$entity = $this->formatEntity($name);
+		$entity = $this->format($name);
 
 		if ( !empty($entity) ) return $entity;
 
@@ -32,13 +32,13 @@ class Entity extends Provider
 	 *
 	 * @return string|null
 	 */
-	private function formatEntity( $name )
+	private function format( $name )
 	{
 		$bit = S::$n->registry->bit('entity.' . $name);
 
 		if ( !$bit ) return null;
 
-		return $this->findEntity($name, $bit);
+		return $this->find($name, $bit);
 	}
 
 	/**
@@ -49,10 +49,10 @@ class Entity extends Provider
 	 *
 	 * @return bool|null|string
 	 */
-	private function findEntity( $name, $bit )
+	private function find( $name, $bit )
 	{
 		// Try to find the entity within the module that is calling us
-		if ( $class = $this->entityFromModule(self::$caller, $name, $bit) ) {
+		if ( $class = $this->fromModule(self::$caller, $name, $bit) ) {
 			return $class;
 		}
 
@@ -60,7 +60,7 @@ class Entity extends Provider
 		$modules = S::$n->modules->finder->modulesBySalt('entity.' . $name);
 
 		foreach ( $modules as $module ) {
-			if ( $class = $this->entityFromModule($module, $name, $bit) ) {
+			if ( $class = $this->fromModule($module, $name, $bit) ) {
 				return $class;
 			}
 		}
@@ -78,7 +78,7 @@ class Entity extends Provider
 	 *
 	 * @return bool|string
 	 */
-	private function entityFromModule( $module, $name, $bit )
+	private function fromModule( $module, $name, $bit )
 	{
 		$module = S::$n->modules->get($module);
 
