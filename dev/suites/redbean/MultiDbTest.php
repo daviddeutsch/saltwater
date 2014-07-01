@@ -13,6 +13,14 @@ class MultiDbTest extends \PHPUnit_Framework_TestCase
 
 	protected function tearDown()
 	{
+		S::$n->db->selectDatabase('overload');
+
+		S::$n->db->nuke();
+
+		S::$n->db->selectDatabase('default');
+
+		S::$n->db->nuke();
+
 		S::destroy();
 	}
 
