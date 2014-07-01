@@ -12,6 +12,7 @@ class TestService extends Module
 
 	protected $provide = array(
 		'context' => array('TestService'),
+		'provider' => array('dummy'),
 		'service' => array('lacking', 'extensive')
 	);
 }
