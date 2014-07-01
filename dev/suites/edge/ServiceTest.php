@@ -38,7 +38,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
 		$extensive = S::$n->service->get('extensive', $context);
 
-		$test = array( 'one' => 'two' );
+		$test = array('one' => 'two');
 
 		$path = 'providers';
 

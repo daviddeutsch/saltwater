@@ -147,4 +147,28 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(200, http_response_code());
 	}
+
+
+
+	/**
+	 * @runInSeparateProcess
+	 *
+	 * @requires PHP 5.4
+	 */
+	public function testNumericConversions()
+	{
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
+
+		$test = (object) array(
+			'integer' => '100',
+			'float' => '100.42',
+			'float2' => '.42'
+		);
+
+		$this->assertEquals(
+			'{"integer":100,"float":100.42,"float2":0.42}',
+			S::$n->response->json($test)
+		);
+	}
+
 }

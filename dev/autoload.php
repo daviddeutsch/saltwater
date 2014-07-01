@@ -54,5 +54,3 @@ spl_autoload_register('sw_autoloader');
 
 $GLOBALS['IS_HHVM'] = (getenv('TRAVIS_PHP_VERSION') == 'hhvm')
 	|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly');
-
-var_dump($GLOBALS['IS_HHVM']);exit;
