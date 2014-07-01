@@ -12,6 +12,10 @@
 			<directory>./suites/root</directory>
 		</testsuite>
 
+		<testsuite name="App Module">
+			<directory>./suites/app</directory>
+		</testsuite>
+
 		<testsuite name="RedBean Module">
 			<directory>./suites/redbean</directory>
 		</testsuite>

@@ -40,7 +40,7 @@ class Response extends Provider
 	/**
 	 * Output data as a plain text or JSON, depending on its type
 	 *
-	 * @param object|array|string $data
+	 * @param object|object[]|string $data
 	 */
 	public function response( $data )
 	{

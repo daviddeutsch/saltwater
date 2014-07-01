@@ -4,7 +4,7 @@ use Saltwater\Server as S;
 
 class RedBeanDbTest extends \PHPUnit_Framework_TestCase
 {
-	public static function setUpBeforeClass()
+	protected function setUp()
 	{
 		S::destroy();
 
