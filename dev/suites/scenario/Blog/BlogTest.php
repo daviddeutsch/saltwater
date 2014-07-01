@@ -95,7 +95,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 	{
 		$content = array(
 			'title' => 'Brine',
-			'content' => 'I think that is too salty.'
+			'content' => 'Too salty!'
 		);
 
 		$results = array();
