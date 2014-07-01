@@ -11,8 +11,6 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
 	protected function tearDown()
 	{
-		S::$n->db->nuke();
-
 		S::destroy();
 	}
 
