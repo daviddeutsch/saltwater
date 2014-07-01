@@ -5,7 +5,7 @@ use Saltwater\Utils as U;
 
 class RedBeanServiceTest extends \PHPUnit_Framework_TestCase
 {
-	public static function setUpBeforeClass()
+	protected function setUp()
 	{
 		S::destroy();
 
@@ -34,6 +34,24 @@ class RedBeanServiceTest extends \PHPUnit_Framework_TestCase
 		$call = $this->makeCall($context, 'get', 'test', 'test');
 
 		$this->assertEmpty( $test->call($call) );
+	}
+
+	public function testProviderInjection()
+	{
+		$context = S::$n->context->get('red-bean-test');
+
+		$test = S::$n->service->get('test', $context);
+
+		$this->assertTrue( $test->isCallable('getProvider') );
+
+		$call = $this->makeCall($context, 'get', 'test', 'provider');
+
+		$entity = $test->call($call);
+
+		$this->assertEquals(
+			'Saltwater\RedBeanTest\Entity\Test',
+			$entity->get('test')
+		);
 	}
 
 	private function makeCall( $context, $cmd, $service, $path=null )

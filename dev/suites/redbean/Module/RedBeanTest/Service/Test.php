@@ -11,4 +11,9 @@ class Test extends Rest
 	{
 		return 'itWorked';
 	}
+
+	public function getProvider( $entity )
+	{
+		return $entity;
+	}
 }

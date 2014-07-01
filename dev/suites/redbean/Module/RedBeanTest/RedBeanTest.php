@@ -12,6 +12,7 @@ class RedBeanTest extends Module
 
 	protected $provide = array(
 		'context' => array('RedBeanTest'),
-		'service' => array('test')
+		'service' => array('test'),
+		'entity' => array('test', 'classless')
 	);
 }
