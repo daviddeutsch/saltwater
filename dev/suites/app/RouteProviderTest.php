@@ -23,7 +23,7 @@ class RouteProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testHalt()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		$_SERVER['REQUEST_METHOD'] = 'GET';
 		$_SERVER['REQUEST_URI'] = '/index.php';

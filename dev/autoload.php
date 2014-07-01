@@ -52,10 +52,7 @@ include_once __DIR__ . '/../vendor/autoload.php';
 
 spl_autoload_register('sw_autoloader');
 
-putenv(
-	'IS_HHVM=' .
-	(
-		(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-		|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-	) ? 1 : 0
-);
+$GLOBALS['IS_HHVM'] = (getenv('TRAVIS_PHP_VERSION') == 'hhvm')
+	|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly');
+
+var_dump($GLOBALS['IS_HHVM']);exit;

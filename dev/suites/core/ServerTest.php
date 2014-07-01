@@ -54,7 +54,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testHalt()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		S::halt('404', 'Not Found');
 

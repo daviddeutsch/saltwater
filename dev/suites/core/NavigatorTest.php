@@ -115,7 +115,7 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testMissingProvider()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		S::destroy();
 

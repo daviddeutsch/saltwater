@@ -23,7 +23,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirect()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		$url = 'https://github.com/daviddeutsch/saltwater';
 
@@ -41,7 +41,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testJSON()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		$test = (object) array('one' => 'two');
 
@@ -65,7 +65,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testPlain()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		$test = "test";
 
@@ -84,7 +84,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGenericToJSON()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		$test = (object) array('one' => 'two');
 
@@ -109,7 +109,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGenericToJSONArray()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		$test = array(
 			(object) array('one' => 'two'),
@@ -136,7 +136,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGenericToPlain()
 	{
-		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
+		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
 
 		$test = "test";
 
