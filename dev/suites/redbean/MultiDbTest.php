@@ -20,6 +20,6 @@ class MultiDbTest extends \PHPUnit_Framework_TestCase
 	{
 		S::addModule('Saltwater\Overload\Overload');
 
-		$this->assertContains('overload', S::$n->db->toolboxes);
+		$this->assertArrayHasKey('overload', S::$n->db->toolboxes);
 	}
 }
