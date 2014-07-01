@@ -115,12 +115,7 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testMissingProvider()
 	{
-		if (
-			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-		) {
-			$this->markTestSkipped(); return;
-		}
+		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
 
 		S::destroy();
 

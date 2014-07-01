@@ -23,12 +23,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testRedirect()
 	{
-		if (
-			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-		) {
-			$this->markTestSkipped(); return;
-		}
+		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
 
 		$url = 'https://github.com/daviddeutsch/saltwater';
 
@@ -46,12 +41,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testJSON()
 	{
-		if (
-			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-		) {
-			$this->markTestSkipped(); return;
-		}
+		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
 
 		$test = (object) array('one' => 'two');
 
@@ -75,12 +65,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testPlain()
 	{
-		if (
-			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-		) {
-			$this->markTestSkipped(); return;
-		}
+		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
 
 		$test = "test";
 
@@ -99,12 +84,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGenericToJSON()
 	{
-		if (
-			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-		) {
-			$this->markTestSkipped(); return;
-		}
+		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
 
 		$test = (object) array('one' => 'two');
 
@@ -129,12 +109,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGenericToJSONArray()
 	{
-		if (
-			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-		) {
-			$this->markTestSkipped(); return;
-		}
+		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
 
 		$test = array(
 			(object) array('one' => 'two'),
@@ -161,12 +136,7 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGenericToPlain()
 	{
-		if (
-			(getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-			|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly')
-		) {
-			$this->markTestSkipped(); return;
-		}
+		if ( getenv('IS_HHVM') ) { $this->markTestSkipped(); return; }
 
 		$test = "test";
 

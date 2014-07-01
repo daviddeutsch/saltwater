@@ -19,7 +19,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
 
 	public function testDummyProvider()
 	{
-		// Shamelessly increasing coverage
+		// ~Shamelessly~ Unapologetically increasing coverage
 		$this->assertEquals(
 			new stdClass(),
 			S::$n->dummy
