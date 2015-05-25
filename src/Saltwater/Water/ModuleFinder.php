@@ -23,7 +23,7 @@ class ModuleFinder
 
 		foreach ( S::$n->modules as $name => $module ) {
 			/** @var Module $module */
-			if ( $module->lacksContext() ) continue;
+			if ( !$module->doesProvide('context') ) continue;
 
 			$parent = S::$n->context->get($module->masterContext(), $parent);
 
@@ -138,22 +138,10 @@ class ModuleFinder
 	}
 
 	/**
-	 * Return top candidate Module for providing a Salt
-	 *
-	 * @param string $salt
-	 *
-	 * @return Module|string|false
-	 */
-	public function moduleBySalt( $salt )
-	{
-		return $this->modulesBySalt($salt, true);
-	}
-
-	/**
 	 * Return a list of Modules providing a Salt
 	 *
 	 * @param string $salt
-	 * @param bool   $first      only return the first item on the list
+	 * @param bool   $first only return the first item on the list
 	 *
 	 * @return Module[]|string[]|false
 	 */
@@ -161,47 +149,12 @@ class ModuleFinder
 	{
 		if ( !S::$n->registry->exists($salt) ) return false;
 
-		$call = $first ? 'getSaltModule' : 'getSaltModules';
-
-		return $this->$call(
-			S::$n->registry->bit($salt),
-			S::$n->modules->precedenceList()
+		$list = new ModuleList(
+			S::$n->modules->precedenceList() ?: S::$n->modules
 		);
-	}
 
-	/**
-	 * Find all the modules that provide a bit
-	 *
-	 * @param int  $bit
-	 * @param null $modules
-	 *
-	 * @return Module[]|string[]
-	 */
-	public function getSaltModules( $bit, $modules=null )
-	{
-		$return = array();
-		foreach ( $modules ?: S::$n->modules as $module ) {
-			/** @var Module $module */
-			if ( $module->has($bit) ) $return[] = $module::getName();
-		}
+		$call = $first ? 'filterOneBit' : 'filterByBit';
 
-		return $return;
-	}
-
-	/**
-	 * Find the most likely module to provide a bit
-	 * @param int  $bit
-	 * @param null $modules
-	 *
-	 * @return Module|string|false
-	 */
-	public function getSaltModule( $bit, $modules=null )
-	{
-		foreach ( $modules ?: S::$n->modules as $module ) {
-			/** @var Module $module */
-			if ( $module->has($bit) ) return $module::getName();
-		}
-
-		return false;
+		return $list->$call( S::$n->registry->bit($salt) );
 	}
 }

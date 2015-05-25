@@ -3,7 +3,7 @@
 namespace Saltwater\Salt;
 
 /**
- * Class Provider
+ * Providers encapsulate business logic
  *
  * @package Saltwater\Salt
  */

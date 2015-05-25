@@ -5,7 +5,9 @@ namespace Saltwater\Salt;
 use Saltwater\Server as S;
 
 /**
- * Services provide data or functionality
+ * Services encapsulate application logic
+ *
+ * @package Saltwater\Salt
  */
 class Service
 {

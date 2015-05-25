@@ -5,7 +5,7 @@ namespace Saltwater\Salt;
 /**
  * Context
  *
- * @package Saltwater\Salt
+ * @package Saltwater\Bus
  *
  * A context accepts and returns services, decides provider priority through
  * module stacking.

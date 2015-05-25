@@ -7,7 +7,9 @@
 saltwater
 =========
 
-You should not necessarily drink this.
+"Sure, it's nice when you can set up your whole environment... But what if *everything is terrible*?"
+
+Tagline: You should not necessarily drink this.
 
 License: GPLv3 or later
 

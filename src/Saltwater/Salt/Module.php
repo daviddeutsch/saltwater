@@ -7,11 +7,9 @@ use Saltwater\Utils as U;
 use Saltwater\Salt\Provider;
 
 /**
- * Module
+ * Modules encapsulate salts
  *
  * @package Saltwater\Salt
- *
- * An object that can register and return salts
  */
 class Module
 {
@@ -145,13 +143,13 @@ class Module
 	}
 
 	/**
-	 * Check whether this module provides a context
+	 * Check whether this module provides a salt
 	 *
 	 * @return bool
 	 */
-	public function lacksContext()
+	public function doesProvide( $salt )
 	{
-		return empty($this->provide['context']);
+		return !empty($this->provide[$salt]);
 	}
 
 	/**
@@ -161,7 +159,7 @@ class Module
 	 */
 	public function masterContext()
 	{
-		if ( $this->lacksContext() ) return null;
+		if ( !$this->doesProvide('context') ) return null;
 
 		return U::camelTodashed( $this->provide['context'][0] );
 	}

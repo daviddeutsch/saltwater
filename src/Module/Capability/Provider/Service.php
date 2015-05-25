@@ -1,6 +1,6 @@
 <?php
 
-namespace Saltwater\Root\Provider;
+namespace Saltwater\Capability\Provider;
 
 use Saltwater\Utils as U;
 use Saltwater\Salt\Provider;

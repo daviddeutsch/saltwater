@@ -55,8 +55,8 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals( 'root', $module->masterContext() );
 
 		$this->assertEquals(
-			'root',
-			S::$n->modules->finder->moduleBySalt('provider.context')
+			array('root'),
+			S::$n->modules->finder->modulesBySalt('provider.context')
 		);
 
 		$this->assertEquals(
