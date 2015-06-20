@@ -7,8 +7,6 @@ use Saltwater\App\Common\Log as AbstractLog;
 
 class Log extends AbstractLog
 {
-	public static function getProvider() { return new Log; }
-
 	/**
 	 * @param mixed  $level
 	 * @param string $message

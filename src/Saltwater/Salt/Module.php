@@ -127,7 +127,7 @@ class Module
 
 		$class::setCaller($caller);
 
-		return $class::getProvider();
+		return new $class;
 	}
 
 	/**

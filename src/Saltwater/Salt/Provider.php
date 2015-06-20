@@ -16,11 +16,6 @@ abstract class Provider
 	protected static $caller;
 
 	/**
-	 * Protected constructor, instantiate through ::getProvider()
-	 */
-	protected function __construct() {}
-
-	/**
 	 * @param string $module
 	 */
 	public static function setModule( $module )
@@ -34,13 +29,5 @@ abstract class Provider
 	public static function setCaller( $caller )
 	{
 		self::$caller = empty($caller) ? 'root' : $caller;
-	}
-
-	/**
-	 * @return Provider
-	 */
-	public static function getProvider()
-	{
-		return new \stdClass();
 	}
 }

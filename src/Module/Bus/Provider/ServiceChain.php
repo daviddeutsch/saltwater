@@ -2,33 +2,23 @@
 
 namespace Saltwater\App\Provider;
 
+use Saltwater\Bus\Water\Chain;
+use Saltwater\Salt\Provider;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
-use Saltwater\App\Common\Route as AbstractRoute;
 use Saltwater\Salt\Service;
 use Saltwater\Salt\Context;
 
-class Route extends AbstractRoute
+class ServiceChain extends Provider
 {
-	protected function __construct()
+	private $chain;
+
+	public function __construct(  )
 	{
-		$context = S::$n->modules->finder->masterContext();
-
-		if ( empty($context) ) return;
-
-		$this->explode( $context, $this->http, explode('/', $this->uri) );
+		$this->chain = new Chain();
 	}
 
-	public static function getProvider()
-	{
-		$module = S::$n->modules->get(self::$module);
-
-		$class = U::className($module::getNamespace(), 'provider', 'route');
-
-		return new $class;
-	}
-
-	protected function resolve( $input, $result=null )
+	public function resolve( $input, $result=null )
 	{
 		$length = count($this->chain);
 

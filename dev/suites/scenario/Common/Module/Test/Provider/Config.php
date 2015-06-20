@@ -6,7 +6,7 @@ use Saltwater\App\Common\Config as AbstractConfig;
 
 class Config extends AbstractConfig
 {
-	public static function getProvider()
+	public function __construct()
 	{
 		return (object) array(
 			'database' => (object) array(

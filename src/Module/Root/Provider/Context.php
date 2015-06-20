@@ -10,11 +10,6 @@ use Saltwater\Salt\Module;
 
 class Context extends Provider
 {
-	public static function getProvider()
-	{
-		return new Context;
-	}
-
 	/**
 	 * @param string         $name
 	 * @param SwContext|null $parent

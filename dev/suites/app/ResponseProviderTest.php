@@ -148,8 +148,6 @@ class ResponseProviderTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(200, http_response_code());
 	}
 
-
-
 	/**
 	 * @runInSeparateProcess
 	 *

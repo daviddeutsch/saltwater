@@ -9,8 +9,6 @@ use Saltwater\Salt\Service as SwService;
 
 class Service extends Provider
 {
-	public static function getProvider() { return new Service; }
-
 	/**
 	 * @param string  $name
 	 * @param SwContext $context

@@ -5,12 +5,10 @@ namespace Saltwater\App\Provider;
 use Saltwater\Server as S;
 use Saltwater\Utils as U;
 use Saltwater\App\Common\Route as AbstractRoute;
-use Saltwater\Salt\Service;
-use Saltwater\Salt\Context;
 
 class Route extends AbstractRoute
 {
-	protected function __construct()
+	public function __construct()
 	{
 		$this->uri = $this->getURI();
 
@@ -21,15 +19,6 @@ class Route extends AbstractRoute
 		if ( empty($context) ) return;
 
 		$this->explode( $context, $this->http, explode('/', $this->uri) );
-	}
-
-	public static function getProvider()
-	{
-		$module = S::$n->modules->get(self::$module);
-
-		$class = U::className($module::getNamespace(), 'provider', 'route');
-
-		return new $class;
 	}
 
 	/**
@@ -59,6 +48,7 @@ class Route extends AbstractRoute
 
 		$path = preg_replace('`[^a-z0-9/._-]+`', '', strtolower($path));
 
+		// TODO: Temp measure, should be possible to achieve in routing (?)
 		if ( strpos($path, '.zip') ) {
 			$path = str_replace('.zip', '', $path);
 		}
@@ -71,11 +61,14 @@ class Route extends AbstractRoute
 		return strtolower($_SERVER['REQUEST_METHOD']);
 	}
 
-	public function go()
+	/**
+	 * @param Response $response
+	 * @param ServiceChain $serviceChain
+	 */
+	public function go( $response, $serviceChain )
 	{
-		$chain = S::$n->service_chain->resolve( $this->getInput() );
-		echo S::$n->response->response(
-			S::$n->service_chain->resolve( $this->getInput() )
+		echo $response->response(
+			$serviceChain->resolve( $this->getInput() )
 		);
 	}
 

@@ -4,15 +4,9 @@ namespace Saltwater\TestService;
 
 use Saltwater\Salt\Module;
 
-class TestService extends Module
-{
-	protected $require = array(
-		'module' => array('Saltwater\Root\Root')
-	);
-
-	protected $provide = array(
-		'context' => array('TestService'),
-		'provider' => array('dummy'),
-		'service' => array('lacking', 'extensive')
-	);
-}
+/**
+ * Class TestService
+ *
+ * @require Saltwater\Root\Root
+ */
+class TestService extends Module {}

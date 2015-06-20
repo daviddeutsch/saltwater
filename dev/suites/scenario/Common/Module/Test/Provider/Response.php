@@ -6,8 +6,6 @@ use Saltwater\App\Provider\Response as AppResponse;
 
 class Response extends AppResponse
 {
-	public static function getProvider() { return new Response; }
-
 	/**
 	 * Redirect the client to a different URL
 	 *

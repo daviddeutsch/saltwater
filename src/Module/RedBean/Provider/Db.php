@@ -12,6 +12,18 @@ class Db extends Provider
 	 */
 	private static $r;
 
+	/**
+	 * @return \RedBean_Instance
+	 */
+	public function __construct()
+	{
+		if ( empty(self::$r) ) {
+			self::makeDB();
+		}
+
+		return self::$r;
+	}
+
 	protected static function makeDB()
 	{
 		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
@@ -89,17 +101,5 @@ class Db extends Provider
 	private static function makeDSN( $type, $host, $name )
 	{
 		return $type . ':host=' . $host . ';' . 'dbname=' . $name;
-	}
-
-	/**
-	 * @return \RedBean_Instance
-	 */
-	public static function getProvider()
-	{
-		if ( empty(self::$r) ) {
-			self::makeDB();
-		}
-
-		return self::$r;
 	}
 }

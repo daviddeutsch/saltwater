@@ -9,8 +9,6 @@ use Saltwater\Salt\Module;
 
 class Entity extends Provider
 {
-	public static function getProvider() { return new Entity; }
-
 	/**
 	 * @param string $name
 	 *
