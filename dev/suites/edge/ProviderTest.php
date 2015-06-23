@@ -9,7 +9,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
 	{
 		S::destroy();
 
-		S::init('Saltwater\TestService\TestService');
+		S::bootstrap('Saltwater\TestService\TestService');
 	}
 
 	public static function tearDownAfterClass()

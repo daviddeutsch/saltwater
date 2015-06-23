@@ -16,7 +16,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
 	public function testServiceProvider()
 	{
-		S::init('Saltwater\Root\Root');
+		S::bootstrap('Saltwater\Root\Root');
 
 		S::$n->modules->append('Saltwater\RedBean\RedBean', true);
 

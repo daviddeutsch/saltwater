@@ -18,13 +18,13 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 	{
 		$path = __DIR__ . '/cache/cache.cache';
 
-		S::init('Saltwater\Root\Root', $path);
+		S::bootstrap('Saltwater\Root\Root', $path);
 
 		$navigator = clone S::$n;
 
 		S::destroy();
 
-		S::init('Saltwater\Root\Root', $path);
+		S::bootstrap('Saltwater\Root\Root', $path);
 
 		$this->assertEquals($navigator, S::$n);
 
@@ -35,7 +35,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
 	public function testModuleActions()
 	{
-		S::init('Saltwater\Root\Root');
+		S::bootstrap('Saltwater\Root\Root');
 
 		S::addModules(
 			array('Saltwater\RedBean\RedBean', 'Saltwater\App\App')

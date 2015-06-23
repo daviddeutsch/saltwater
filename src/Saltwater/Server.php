@@ -25,7 +25,7 @@ class Server
 	 *
 	 * @return void
 	 */
-	public static function init( $modules=array(), $cache=null )
+	public static function bootstrap( $modules=array(), $cache=null )
 	{
 		self::start();
 
@@ -94,7 +94,7 @@ class Server
 	 */
 	public static function addModules( $array )
 	{
-		if ( empty(self::$start) ) self::init();
+		if ( empty(self::$start) ) self::bootstrap();
 
 		if ( !is_array($array) ) $array = array($array);
 

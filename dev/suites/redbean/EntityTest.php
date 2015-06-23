@@ -9,7 +9,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 	{
 		S::destroy();
 
-		S::init('Saltwater\RedBeanTest\RedBeanTest');
+		S::bootstrap('Saltwater\RedBeanTest\RedBeanTest');
 	}
 
 	protected function tearDown()

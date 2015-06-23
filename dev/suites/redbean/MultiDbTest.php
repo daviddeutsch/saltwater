@@ -8,7 +8,7 @@ class MultiDbTest extends \PHPUnit_Framework_TestCase
 	{
 		S::destroy();
 
-		S::init('Saltwater\Test\Test');
+		S::bootstrap('Saltwater\Test\Test');
 	}
 
 	protected function tearDown()

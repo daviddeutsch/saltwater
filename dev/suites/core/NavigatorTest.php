@@ -16,7 +16,7 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		S::init();
+		S::bootstrap();
 	}
 
 	public function testSaltHandling()
@@ -119,7 +119,7 @@ class NavigatorTest extends \PHPUnit_Framework_TestCase
 
 		S::destroy();
 
-		S::init('Saltwater\Root\Root');
+		S::bootstrap('Saltwater\Root\Root');
 
 		S::$n->nosuchprovider;
 

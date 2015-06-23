@@ -8,7 +8,7 @@ class RouteProviderTest extends \PHPUnit_Framework_TestCase
 	{
 		S::destroy();
 
-		S::init('Saltwater\AppTest\AppTest');
+		S::bootstrap('Saltwater\AppTest\AppTest');
 	}
 
 	protected function tearDown()

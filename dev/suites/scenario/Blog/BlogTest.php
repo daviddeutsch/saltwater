@@ -8,7 +8,7 @@ class BlogTest extends \PHPUnit_Framework_TestCase
 	{
 		S::destroy();
 
-		S::init('Saltwater\Blog\Blog');
+		S::bootstrap('Saltwater\Blog\Blog');
 
 		S::$n->db->nuke();
 	}
