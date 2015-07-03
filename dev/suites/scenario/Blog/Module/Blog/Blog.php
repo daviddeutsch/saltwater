@@ -19,6 +19,9 @@ use Saltwater\Salt\Module;
  * Defining something as an entity is a signal for the RedBean module to
  * track its lifecycle in an update stream
  *
- * @provide {'service': ['article', 'comment'], 'entity': 'comment'}
+ * @provide {
+ *    'service': ['article', 'comment'],
+ *    'entity': ['article', 'comment']
+ * }
  */
 class Blog extends Module {}

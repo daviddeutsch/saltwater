@@ -154,7 +154,7 @@ class Utils
 	 */
 	public static function storeJSON( $path, $content )
 	{
-		if ( S::$gt['54'] ) {
+		if ( S::$env['gt54'] ) {
 			return file_put_contents(
 				$path,
 				json_encode(

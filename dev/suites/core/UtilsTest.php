@@ -136,15 +136,15 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
 			U::storeJSON($path, $content)
 		);
 
-		$store = S::$gt['54'];
+		$store = S::$env['gt54'];
 
-		S::$gt['54'] = false;
+		S::$env['gt54'] = false;
 
 		$this->assertNotFalse(
 			U::storeJSON($path, $content)
 		);
 
-		S::$gt['54'] = $store;
+		S::$env['gt54'] = $store;
 
 		$this->assertEquals(
 			(object) $content,

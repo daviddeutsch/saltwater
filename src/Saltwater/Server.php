@@ -13,30 +13,40 @@ class Server
 	public static $start;
 
 	/** @var array */
-	public static $gt = array();
+	public static $env = array();
 
 	/**
 	 * Kick off the server with a set of modules.
 	 *
 	 * The first module is automatically the root module.
 	 *
+	 * @param string   $path filepath to deployment directory
 	 * @param string[] $modules array of class names of modules to include
-	 * @param string   $cache   filepath to a navigator cache file
 	 *
 	 * @return void
 	 */
-	public static function bootstrap( $modules=array(), $cache=null )
+	public static function bootstrap( $path=null, $modules=array() )
 	{
 		self::start();
 
-		self::$gt['36'] = version_compare(phpversion(), '5.3.6', '>=');
-		self::$gt['54'] = version_compare(phpversion(), '5.4.0', '>=');
+		self::$env['name'] = basename($path);
 
-		if ( empty($cache) ) {
-			self::addModules($modules);
-		} else {
-			self::initCached($modules, $cache);
-		}
+		self::$env['root-path'] = $path;
+
+		self::detectEnv();
+
+		if ($modules) self::addModules($modules);
+	}
+
+	/**
+	 * Detect some basic information about our deployment
+	 *
+	 * @return void
+	 */
+	private static function detectEnv()
+	{
+		self::$env['gt36'] = version_compare(phpversion(), '5.3.6', '>=');
+		self::$env['gt54'] = version_compare(phpversion(), '5.4.0', '>=');
 	}
 
 	/**
@@ -92,7 +102,7 @@ class Server
 	 *
 	 * @return bool|null
 	 */
-	public static function addModules( $array )
+	private static function addModules( $array )
 	{
 		if ( empty(self::$start) ) self::bootstrap();
 

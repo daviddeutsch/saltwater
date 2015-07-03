@@ -7,12 +7,6 @@ use Saltwater\Salt\Module;
 /**
  * Class Capability
  *
- * @package Saltwater\Capability
- * @Require {'module': 'Saltwater\Root\Root'}
- * @Provide {'provider': 'capability'}
+ * @require {'module': 'Saltwater\Root\Root'}
  */
-class Capability extends Module
-{
-	protected $require = array( 'module' => array('Saltwater\Root\Root') );
-	protected $provide = array( 'provider' => array('capability') );
-}
+class Capability extends Module {}

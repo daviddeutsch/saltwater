@@ -15,7 +15,7 @@ class Backtrace extends \ArrayIterator
 	public function __construct()
 	{
 		// Let me tell you about my boat
-		if ( S::$gt['54'] ) {
+		if ( S::$env['gt54'] ) {
 			return parent::__construct( debug_backtrace(2, 22) );
 		} else {
 			return parent::__construct( debug_backtrace(false) );

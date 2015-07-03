@@ -7,10 +7,14 @@ use Saltwater\App\Provider\Route as AppRoute;
 
 class Route extends AppRoute
 {
-	public function go()
+	/**
+	 * @param Response $response
+	 * @param ServiceChain $serviceChain
+	 */
+	public function go($response, $serviceChain)
 	{
-		return S::$n->response('test')->response(
-			$this->resolveChain( json_decode($GLOBALS['mock_input']) )
+		return $response->response(
+			$serviceChain->resolveChain( json_decode($GLOBALS['mock_input']) )
 		);
 	}
 

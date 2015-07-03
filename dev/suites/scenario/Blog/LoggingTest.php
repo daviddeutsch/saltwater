@@ -8,7 +8,10 @@ class LoggingTest extends \PHPUnit_Framework_TestCase
 	{
 		S::destroy();
 
-		S::bootstrap('Saltwater\Blog\Blog');
+		S::bootstrap(
+			__DIR__ . '/deploy',
+			'Saltwater\Blog\Blog'
+		);
 
 		S::$n->db->nuke();
 	}

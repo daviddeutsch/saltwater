@@ -15,20 +15,20 @@ class Db extends Provider
 	/**
 	 * @return \RedBean_Instance
 	 */
-	public function __construct()
+	public function __construct( $config )
 	{
 		if ( empty(self::$r) ) {
-			self::makeDB();
+			self::makeDB($config);
 		}
 
 		return self::$r;
 	}
 
-	protected static function makeDB()
+	protected static function makeDB( $config )
 	{
-		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
+		$cfg = $config->database;
 
-		$cfg = S::$n->config->database;
+		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
 
 		if ( !isset($cfg->type) ) $cfg->type = 'mysql';
 
