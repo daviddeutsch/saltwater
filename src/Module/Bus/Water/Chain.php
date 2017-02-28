@@ -4,10 +4,10 @@ namespace Saltwater\Bus\Water;
 
 class Chain
 {
-	private $chain;
+    private $chain;
 
-	public function push( $call )
-	{
-		$this->chain[] = $call;
-	}
+    public function push($call)
+    {
+        $this->chain[] = $call;
+    }
 }

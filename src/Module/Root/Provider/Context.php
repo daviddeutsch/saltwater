@@ -10,34 +10,38 @@ use Saltwater\Salt\Module;
 
 class Context extends Provider
 {
-	/**
-	 * @param string         $name
-	 * @param SwContext|null $parent
-	 *
-	 * @return SwContext|null
-	 */
-	public function get( $name, $parent=null )
-	{
-		$module = S::$n->getContextModule($name);
+    /**
+     * @param string         $name
+     * @param SwContext|null $parent
+     *
+     * @return SwContext|null
+     */
+    public function get($name, $parent = null)
+    {
+        $module = S::$n->getContextModule($name);
 
-		if ( empty($module) ) return null;
+        if (empty($module)) {
+            return null;
+        }
 
-		$class = U::className($module::getNamespace(), 'context', $name);
+        $class = U::className($module::getNamespace(), 'context', $name);
 
-		if ( !class_exists($class) ) return null;
+        if (!class_exists($class)) {
+            return null;
+        }
 
-		return $this->newContext($class, $parent, $module);
-	}
+        return $this->newContext($class, $parent, $module);
+    }
 
-	/**
-	 * @param string         $class
-	 * @param SwContext|null $parent
-	 * @param Module         $module
-	 *
-	 * @return SwContext
-	 */
-	private function newContext( $class, $parent, $module )
-	{
-		return new $class($parent, $module);
-	}
+    /**
+     * @param string         $class
+     * @param SwContext|null $parent
+     * @param Module         $module
+     *
+     * @return SwContext
+     */
+    private function newContext($class, $parent, $module)
+    {
+        return new $class($parent, $module);
+    }
 }

@@ -7,8 +7,8 @@ use Saltwater\Salt\Service;
 
 class Extensive extends Service
 {
-	public function getProviders( $data, $path, $context )
-	{
-		return array($data, $path, $context);
-	}
+    public function getProviders($data, $path, $context)
+    {
+        return array($data, $path, $context);
+    }
 }

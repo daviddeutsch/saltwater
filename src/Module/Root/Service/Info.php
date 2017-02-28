@@ -5,8 +5,8 @@ use Saltwater\Salt\Service;
 
 class Info extends Service
 {
-	public function getInfo()
-	{
-		return $this->context->getInfo();
-	}
+    public function getInfo()
+    {
+        return $this->context->getInfo();
+    }
 }

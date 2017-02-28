@@ -24,4 +24,6 @@ use Saltwater\Salt\Module;
  *    'entity': ['article', 'comment']
  * }
  */
-class Blog extends Module {}
+class Blog extends Module
+{
+}

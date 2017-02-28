@@ -10,11 +10,11 @@ use Saltwater\Salt\Provider;
  */
 abstract class Route extends Provider
 {
-	public $http;
+    public $http;
 
-	public $uri;
+    public $uri;
 
-	public $chain = array();
+    public $chain = array();
 
-	public function go() {}
+    public function go() { }
 }

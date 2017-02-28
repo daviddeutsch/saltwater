@@ -7,99 +7,109 @@ use Saltwater\Salt\Provider;
 
 class Db extends Provider
 {
-	/**
-	 * @var \RedBean_Instance
-	 */
-	private static $r;
+    /**
+     * @var \RedBean_Instance
+     */
+    private static $r;
 
-	/**
-	 * @return \RedBean_Instance
-	 */
-	public function __construct( $config )
-	{
-		if ( empty(self::$r) ) {
-			self::makeDB($config);
-		}
+    /**
+     * @return \RedBean_Instance
+     */
+    public function __construct($config)
+    {
+        if (empty(self::$r)) {
+            self::makeDB($config);
+        }
 
-		return self::$r;
-	}
+        return self::$r;
+    }
 
-	protected static function makeDB( $config )
-	{
-		$cfg = $config->database;
+    protected static function makeDB($config)
+    {
+        $cfg = $config->database;
 
-		if ( empty(self::$r) ) self::$r = new \RedBean_Instance();
+        if (empty(self::$r)) {
+            self::$r = new \RedBean_Instance();
+        }
 
-		if ( !isset($cfg->type) ) $cfg->type = 'mysql';
+        if (!isset($cfg->type)) {
+            $cfg->type = 'mysql';
+        }
 
-		self::setupDB($cfg);
+        self::setupDB($cfg);
 
-		self::addDB($cfg);
+        self::addDB($cfg);
 
-		self::configureDB($cfg);
-	}
+        self::configureDB($cfg);
+    }
 
-	private static function setupDB( $cfg )
-	{
-		if ( !empty(self::$r->toolboxes) ) return;
+    private static function setupDB($cfg)
+    {
+        if (!empty(self::$r->toolboxes)) {
+            return;
+        }
 
-		self::$r->setup(
-			self::cfgToDSN($cfg),
-			$cfg->user,
-			$cfg->password
-		);
+        self::$r->setup(
+            self::cfgToDSN($cfg),
+            $cfg->user,
+            $cfg->password
+        );
 
-		self::$r->setupPipeline();
-	}
+        self::$r->setupPipeline();
+    }
 
-	private static function addDB( $cfg )
-	{
-		if ( isset(self::$r->toolboxes[$cfg->name]) ) return;
+    private static function addDB($cfg)
+    {
+        if (isset(self::$r->toolboxes[$cfg->name])) {
+            return;
+        }
 
-		self::$r->addDatabase(
-			$cfg->name,
-			self::cfgToDSN($cfg),
-			$cfg->user,
-			$cfg->password
-		);
-	}
+        self::$r->addDatabase(
+            $cfg->name,
+            self::cfgToDSN($cfg),
+            $cfg->user,
+            $cfg->password
+        );
+    }
 
-	private static function configureDB( $cfg )
-	{
-		self::$r->selectDatabase($cfg->name);
+    private static function configureDB($cfg)
+    {
+        self::$r->selectDatabase($cfg->name);
 
-		if ( !empty($cfg->prefix) ) {
-			self::$r->prefix($cfg->prefix);
-		}
+        if (!empty($cfg->prefix)) {
+            self::$r->prefix($cfg->prefix);
+        }
 
-		self::$r->redbean->beanhelper->setModelFormatter(
-			'Saltwater\RedBean\Provider\Db::entity'
-		);
+        self::$r->redbean->beanhelper->setModelFormatter(
+            'Saltwater\RedBean\Provider\Db::entity'
+        );
 
-		self::$r->useWriterCache(true);
-	}
+        self::$r->useWriterCache(true);
+    }
 
-	/**
-	 * Return an Entity class name from the EntityProvider
-	 *
-	 * @param string $name
-	 *
-	 * @return string
-	 */
-	public static function entity( $name )
-	{
-		return S::$n->entity->get($name);
-	}
+    /**
+     * Return an Entity class name from the EntityProvider
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function entity($name)
+    {
+        return S::$n->entity->get($name);
+    }
 
-	private static function cfgToDSN( $cfg )
-	{
-		if ( isset($cfg->dsn) ) return $cfg->dsn;
+    private static function cfgToDSN($cfg)
+    {
+        if (isset($cfg->dsn)) {
+            return $cfg->dsn;
+        }
 
-		return self::makeDSN($cfg->type, $cfg->host, $cfg->name);
-	}
+        return self::makeDSN($cfg->type, $cfg->host, $cfg->name);
+    }
 
-	private static function makeDSN( $type, $host, $name )
-	{
-		return $type . ':host=' . $host . ';' . 'dbname=' . $name;
-	}
+    private static function makeDSN($type, $host, $name)
+    {
+        return $type . ':host=' . $host . ';' . 'dbname=' . $name;
+    }
 }

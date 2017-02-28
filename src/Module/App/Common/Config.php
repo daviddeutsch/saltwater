@@ -6,5 +6,5 @@ use Saltwater\Salt\Provider;
 
 abstract class Config extends Provider
 {
-	public $database;
+    public $database;
 }

@@ -107,33 +107,33 @@ namespace Saltwater\Water;
  */
 class MagicArrayObject extends \ArrayObject
 {
-	/**
-	 * @param string $func
-	 * @param array $argv
-	 *
-	 * @return mixed
-	 *
-	 * @throws \BadMethodCallException
-	 */
-	public function __call( $func, $argv )
-	{
-		$func = 'array_' . $func;
+    /**
+     * @param string $func
+     * @param array  $argv
+     *
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public function __call($func, $argv)
+    {
+        $func = 'array_' . $func;
 
-		if ( !is_callable($func) ) {
-			throw new \BadMethodCallException(__CLASS__ . '->' . $func);
-		}
+        if (!is_callable($func)) {
+            throw new \BadMethodCallException(__CLASS__ . '->' . $func);
+        }
 
-		if ( $func == 'array_search' ) {
-			return call_user_func_array(
-				$func,
-				array_merge( $argv, array( (array) $this ) )
-			);
-		} else {
-			return call_user_func_array(
-				$func,
-				array_merge( array( (array) $this ), $argv )
-			);
-		}
-	}
+        if ($func == 'array_search') {
+            return call_user_func_array(
+                $func,
+                array_merge($argv, array((array) $this))
+            );
+        } else {
+            return call_user_func_array(
+                $func,
+                array_merge(array((array) $this), $argv)
+            );
+        }
+    }
 
 }

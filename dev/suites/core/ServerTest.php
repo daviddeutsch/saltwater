@@ -4,60 +4,57 @@ use Saltwater\Server as S;
 
 class ServerTest extends \PHPUnit_Framework_TestCase
 {
-	public static function setUpBeforeClass()
-	{
-		S::destroy();
-	}
+    public static function setUpBeforeClass()
+    {
+        S::destroy();
+    }
 
-	protected function tearDown()
-	{
-		S::destroy();
-	}
+    protected function tearDown()
+    {
+        S::destroy();
+    }
 
-	public function testCache()
-	{
-		$path = __DIR__ . '/cache/cache.cache';
+    public function testCache()
+    {
+        $path = __DIR__ . '/cache/cache.cache';
 
-		S::bootstrap('Saltwater\Root\Root', $path);
+        S::bootstrap('Saltwater\Root\Root', $path);
 
-		$navigator = clone S::$n;
+        $navigator = clone S::$n;
 
-		S::destroy();
+        S::destroy();
 
-		S::bootstrap('Saltwater\Root\Root', $path);
+        S::bootstrap('Saltwater\Root\Root', $path);
 
-		$this->assertEquals($navigator, S::$n);
+        $this->assertEquals($navigator, S::$n);
 
-		unlink($path);
+        unlink($path);
 
-		rmdir(__DIR__.'/cache');
-	}
+        rmdir(__DIR__ . '/cache');
+    }
 
-	public function testModuleActions()
-	{
-		S::bootstrap('Saltwater\Root\Root');
+    public function testModuleActions()
+    {
+        S::bootstrap(
+            'Saltwater\Root\Root',
+            array('Saltwater\RedBean\RedBean', 'Saltwater\App\App')
+        );
 
-		S::addModules(
-			array('Saltwater\RedBean\RedBean', 'Saltwater\App\App')
-		);
+        $this->assertEquals(
+            'Saltwater\RedBean\RedBean',
+            get_class(S::$n->modules->get('redbean'))
+        );
+    }
 
-		$this->assertEquals(
-			'Saltwater\RedBean\RedBean',
-			get_class( S::$n->modules->get('redbean') )
-		);
-	}
+    /**
+     * @runInSeparateProcess
+     *
+     * @requires PHP 5.4
+     */
+    public function testHalt()
+    {
+        S::halt('404', 'Not Found');
 
-	/**
-	 * @runInSeparateProcess
-	 *
-	 * @requires PHP 5.4
-	 */
-	public function testHalt()
-	{
-		if ( $GLOBALS['IS_HHVM'] ) { $this->markTestSkipped(); return; }
-
-		S::halt('404', 'Not Found');
-
-		$this->assertEquals(404, http_response_code());
-	}
+        $this->assertEquals(404, http_response_code());
+    }
 }

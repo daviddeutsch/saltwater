@@ -2,55 +2,54 @@
 
 function get_scenarios()
 {
-	static $scenarios;
+    static $scenarios;
 
-	if ( empty($scenarios) ) {
-		$scenarios = glob(__DIR__.'/suites/scenario/*', GLOB_ONLYDIR);
-	}
+    if (empty($scenarios)) {
+        $scenarios = glob(__DIR__ . '/suites/scenario/*', GLOB_ONLYDIR);
+    }
 
-	return $scenarios;
+    return $scenarios;
 }
 
-function sw_autoloader($class) {
-	// Base classes
-	$class = str_replace( array('\\', '_'), '/', $class );
+function sw_autoloader($class)
+{
+    // Base classes
+    $class = str_replace(array('\\', '_'), '/', $class);
 
-	$path = __DIR__ . '/../src/' . $class . '.php';
+    $path = __DIR__ . '/../src/' . $class . '.php';
 
-	if ( file_exists($path) ) {
-		return include_once $path;
-	}
+    if (file_exists($path)) {
+        return include_once $path;
+    }
 
-	// Core Modules
-	$class = str_replace('Saltwater/', '', $class);
+    // Core Modules
+    $class = str_replace('Saltwater/', '', $class);
 
-	$path = __DIR__ . '/../src/Module/' . $class . '.php';
+    $path = __DIR__ . '/../src/Module/' . $class . '.php';
 
-	if ( file_exists($path) ) {
-		return include_once $path;
-	}
+    if (file_exists($path)) {
+        return include_once $path;
+    }
 
-	$path = __DIR__ . '/suites/edge/Module/' . $class . '.php';
+    $path = __DIR__ . '/suites/edge/Module/' . $class . '.php';
 
-	if ( file_exists($path) ) {
-		return include_once $path;
-	}
+    if (file_exists($path)) {
+        return include_once $path;
+    }
 
-	// Scenario Modules
-	foreach ( get_scenarios() as $scenario ) {
-		$path = $scenario . '/Module/' . $class . '.php';
+    // Scenario Modules
+    foreach (get_scenarios() as $scenario) {
+        $path = $scenario . '/Module/' . $class . '.php';
 
-		if ( file_exists($path) ) {
-			return include_once $path;
-		}
-	}
+        if (file_exists($path)) {
+            return include_once $path;
+        }
+    }
 
-	return false;
+    return false;
 }
 
-include_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 spl_autoload_register('sw_autoloader');
 
-$GLOBALS['IS_HHVM'] = (getenv('TRAVIS_PHP_VERSION') == 'hhvm')
-	|| (getenv('TRAVIS_PHP_VERSION') == 'hhvm-nightly');

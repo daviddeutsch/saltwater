@@ -4,26 +4,26 @@ namespace Saltwater\Bus\Water;
 
 class Call
 {
-	public $context;
+    public $context;
 
-	public $service;
+    public $service;
 
-	public $method;
+    public $method;
 
-	public $path;
+    public $path;
 
-	public $meta;
+    public $meta;
 
-	public function __construct( $context, $service, $method, $path, $meta )
-	{
-		$this->context = $context;
+    public function __construct($context, $service, $method, $path, $meta)
+    {
+        $this->context = $context;
 
-		$this->service = $service;
+        $this->service = $service;
 
-		$this->method = $method;
+        $this->method = $method;
 
-		$this->path = $path;
+        $this->path = $path;
 
-		$this->meta = $meta;
-	}
+        $this->meta = $meta;
+    }
 }

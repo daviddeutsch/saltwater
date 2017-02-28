@@ -5,8 +5,8 @@ use Saltwater\Salt\Service;
 
 class Lacking extends Service
 {
-	public function getTrue()
-	{
-		return true;
-	}
+    public function getTrue()
+    {
+        return true;
+    }
 }

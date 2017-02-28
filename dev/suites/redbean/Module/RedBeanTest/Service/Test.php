@@ -7,13 +7,13 @@ use Saltwater\RedBean\Service\Rest;
 
 class Test extends Rest
 {
-	public function getCustom()
-	{
-		return 'itWorked';
-	}
+    public function getCustom()
+    {
+        return 'itWorked';
+    }
 
-	public function getProvider( $entity )
-	{
-		return $entity;
-	}
+    public function getProvider($entity)
+    {
+        return $entity;
+    }
 }
